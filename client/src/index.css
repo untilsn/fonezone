@@ -35,3 +35,11 @@
 .swiper-button-prev::after {
   @apply text-xl right-3 !important;
 }
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-opacity-25 bg-gray rounded-lg;
+}

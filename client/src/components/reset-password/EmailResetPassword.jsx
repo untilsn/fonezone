@@ -7,7 +7,7 @@ import { FaArrowRight } from 'react-icons/fa';
 import { CiMail } from 'react-icons/ci';
 
 import InputField from '../input/InputField';
-import Logo from '../common/Logo';
+import Logo from '../ui/Logo';
 
 const EmailResetPassword = () => {
   const navigate = useNavigate();

@@ -1,6 +1,6 @@
 import React from "react";
 import { FaPhoneAlt } from "react-icons/fa";
-import Logo from "../common/Logo";
+import Logo from "../ui/Logo";
 
 const FooterLinkGroup = ({ title, links }) => (
   <div>

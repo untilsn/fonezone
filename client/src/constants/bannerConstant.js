@@ -1,18 +1,20 @@
 export const DAILY_DEALS = [
   {
     id: 1,
-    title: "Daily Deals",
+    title: "Ưu đãi hàng ngày",
     subTitle: "AirPods Earphones",
-    price: "$247.99",
+    price: "$247",
+    subPrice: "$199",
     image: "/banner/banner1.jpg", // Đường dẫn đến hình ảnh
     buttonText: "Click Here",
     url: "/daily-deals/airpods",
   },
   {
     id: 2,
-    title: "Daily Deals",
-    subTitle: "Wireless Headphones",
-    price: "$129.99",
+    title: "Ưu đãi và khuyến mãi",
+    subTitle: "Echo Dot 3rd Gen",
+    price: "$49",
+    subPrice: "$29",
     image: "/banner/banner2.jpg",
     buttonText: "Click Here",
     url: "/daily-deals/headphones",

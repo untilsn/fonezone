@@ -62,7 +62,7 @@ const ProductCard = ({ item, classes, size = "normal" }) => {
         <button className="absolute bottom-0 left-0 right-0 flex items-center opacity-20 hover:bg-yellow-dark justify-center gap-3 h-[40px] bg-dark-primary text-light text-sm translate-y-[100%] group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition duration-300">
           <FaCartPlus className={`${isCart ? "text-yellow" : "text-white"} hover:text-yellow text-sm`} />
           <div>
-            Thêm vào giỏ hàng
+            Thêm giỏ hàng
           </div>
         </button>
       </div>
@@ -71,10 +71,14 @@ const ProductCard = ({ item, classes, size = "normal" }) => {
         {/* <div className="capitalize text-dark text-opacity-80 font-normal text-[13px] truncate">Điện thoại, Ipad, Tai Nghe</div> */}
         <div>
           <NavLink to={`/product?id=${item?._id}`}
-            className="overflow-hidden text-darkPrimary text-center text-xs font-medium overflow-ellipsis h-[16px] line-clamp-2 mb-1">
+            className="overflow-hidden text-darkPrimary text-center text-sm font-medium overflow-ellipsis h-[16px] line-clamp-2 mb-1">
             SAMSUNG GALAXY J7 PRIME
           </NavLink>
-          <h2 className={`text-yellowColor font-semibold text-center ${textStyles[size]}`}>{formatPrice(20000000)}</h2>
+          <div className="flex items-center gap-2 justify-center ">
+
+            <h2 className={`text-yellow-accent text-sm text-center ${textStyles[size]}`}>{formatPrice(20000000)}</h2>
+            <h2 className={`text-gray text-sm line-through text-center ${textStyles[size]}`}>{formatPrice(100000)}</h2>
+          </div>
         </div>
         <div className="flex items-center justify-center gap-3 text-nowrap overflow-ellipsis">
           <div className="flex items-center gap-1">

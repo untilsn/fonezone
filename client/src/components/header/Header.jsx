@@ -1,6 +1,6 @@
 import React from 'react';
 import HeaderTop from './HeaderTop';
-import Logo from '../common/Logo';
+import Logo from '../ui/Logo';
 import HeaderSearch from './HeaderSearch';
 import HeaderAction from './HeaderAction';
 import HeaderNavbar from './HeaderNavbar';

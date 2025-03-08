@@ -29,6 +29,7 @@
     "redux-persist": "^6.0.0",
     "slugify": "^1.6.6",
     "swiper": "^11.2.5",
+    "use-react-router-breadcrumbs": "^4.0.1",
     "uuid": "^11.1.0",
     "yup": "^1.6.1"
   },

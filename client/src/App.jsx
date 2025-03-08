@@ -7,6 +7,7 @@ import Footer from './components/footer/Footer'
 import RegisterPage from './pages/RegisterPage'
 import ResetPasswordPage from './pages/ResetPasswordPage'
 import NotFoundPage from './pages/NotFoundPage'
+import ShopPage from './pages/ShopPage'
 
 const App = () => {
   return (
@@ -17,6 +18,7 @@ const App = () => {
         <Route path='/login' element={<LoginPage />} />
         <Route path='/register' element={<RegisterPage />} />
         <Route path='/reset-password' element={<ResetPasswordPage />} />
+        <Route path='/shop' element={<ShopPage />} />
         <Route path='*' element={<NotFoundPage />} />
       </Routes>
       <Footer></Footer>

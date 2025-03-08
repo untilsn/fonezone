@@ -6,7 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Link } from 'react-router-dom';
 import { FaArrowRight } from 'react-icons/fa';
 
-import Logo from '../common/Logo';
+import Logo from '../ui/Logo';
 import InputOtp from '../input/InputOtp';
 
 

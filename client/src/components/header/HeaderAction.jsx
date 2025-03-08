@@ -1,7 +1,7 @@
 import React, { useMemo, useCallback } from 'react';
 import { Link } from 'react-router-dom'; // Nếu sử dụng React Router, nếu không thì điều chỉnh phù hợp
 import { useSelector } from 'react-redux'; // Nếu sử dụng Redux để quản lý trạng thái, tùy chọn
-import IconButton from '../common/IconButton';
+import IconButton from '../ui/IconButton';
 import { MdAccountCircle, MdFavoriteBorder, MdOutlineAccountCircle, MdOutlineMessage, MdOutlineShoppingBag, MdShoppingBag } from "react-icons/md";
 
 const HeaderAction = () => {

@@ -9,6 +9,7 @@ import {
 import FeaturedProduct from "./category/FeaturedProduct";
 import OnSaleProduct from "./category/OnSaleProduct";
 import TopRatedProduct from "./category/TopRatedProduct";
+import SectionTitle from "../ui/SectionTitle";
 
 
 // Định nghĩa trước componentsMap để tránh tạo lại khi component re-render
@@ -32,6 +33,7 @@ const ProductTabs = () => {
 
   return (
     <div className="w-full">
+      <SectionTitle title="Xu hướng sản phẩm"></SectionTitle>
       <Tabs className="" value={activeTab}>
         <TabsHeader
           className="rounded-none bg-transparent p-2 max-w-[600px] w-full mx-auto mb-10"
@@ -44,7 +46,7 @@ const ProductTabs = () => {
               key={value}
               value={value}
               onClick={() => setActiveTab(value)}
-              className={`text-gray-900 text-xl capitalize font-bold transition-all ${
+              className={`text-gray-900 text-base uppercase transition-all ${
                 activeTab === value ? "" : "text-gray-500 hover:text-yellow"
               }`}
             >

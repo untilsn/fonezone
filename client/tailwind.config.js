@@ -31,7 +31,7 @@ module.exports = withMT({
         yellow: {
           DEFAULT: "#fcb941",
           dark: "#c96",
-          accent: "#FF5049",
+          accent: "#ef837b",
         },
         cyan: "#17a2b8",
         teal: "#20c997",

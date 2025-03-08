@@ -1,11 +1,14 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import ERROR_IMAGE from "/banner/error_bg.webp"
 
 const NotFoundPage = () => {
   return (
     <div className="relative min-h-screen flex items-center justify-center bg-gray-900 text-white">
       {/* Background */}
-      <div className="absolute inset-0 bg-[url('/banner/error-bg.webp')] bg-center bg-cover bg-no-repeat opacity-50"></div>
+      <div
+        style={{ backgroundImage: "url('/banner/error_bg.webp')" }}
+        className="absolute inset-0  bg-center bg-cover bg-no-repeat opacity-50"></div>
 
       {/* Nội dung */}
       <div className="relative z-10 max-w-xl text-center p-6">

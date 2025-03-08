@@ -1,12 +1,14 @@
 import React from 'react'
 import CustomSwiper from '../../swiper/CustomSwiper'
-import { SwiperSlide } from 'swiper/react'
 import ProductCard from '../ProductCard'
+import { SwiperSlide } from 'swiper/react'
+import SectionTitle from '../../ui/SectionTitle'
 
-const FeaturedProduct = () => {
+const SignatureProduct = () => {
   return (
     <div>
-      <CustomSwiper >
+      <SectionTitle title='Sản Phẩm Đặt Trưng' subTitle='ưu đãi hôm nay và nhiều hơn nữa'></SectionTitle>
+      <CustomSwiper>
         {Array(6).fill(0).map((_, index) => (
           <SwiperSlide key={index}>
             <ProductCard />
@@ -17,4 +19,4 @@ const FeaturedProduct = () => {
   )
 }
 
-export default FeaturedProduct
+export default SignatureProduct

@@ -7,7 +7,7 @@ import { FaArrowRight } from 'react-icons/fa';
 import { CiLock, CiMail } from 'react-icons/ci';
 
 import InputField from '../components/input/InputField';
-import Logo from '../components/common/Logo';
+import Logo from '../components/ui/Logo';
 
 const LoginPage = () => {
   const { control, handleSubmit } = useForm({
