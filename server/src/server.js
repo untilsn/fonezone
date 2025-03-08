@@ -1,31 +1,32 @@
-import express from "express"
-import cors from "cors"
-import cookieParser from "cookie-parser"
-import dotenv from "dotenv"
-import connectDB from "./config/database.js"
-import mainRouter from "./routes/mainRouter.js"
-import config from "./config/env.js"
-dotenv.config()
+import express from "express";
+import cors from "cors";
+import cookieParser from "cookie-parser";
+import dotenv from "dotenv";
+import connectDB from "./config/database.js";
+import mainRouter from "./routes/mainRouter.js";
+import config from "./config/env.js";
+import errorHandler from "./middlewares/errorHandler.js";
 
+dotenv.config();
 
-const app = express()
+const app = express();
+
 app.use(cors({
   origin: config.CLIENT_URL,
   methods: "GET,POST,PUT,DELETE",
   credentials: true
-}))
-app.use(express.json())
-app.use(cookieParser())
-mainRouter(app)
-const port = config.PORT || 5000
+}));
 
+app.use(express.json());
+app.use(cookieParser());
 
-app.get('/', (req, res) => {
-  res.send('Hello World!')
-})
+mainRouter(app);
 
+app.use(errorHandler);  
+
+const port = config.PORT || 5000;
 
 app.listen(port, () => {
-  connectDB()
-  console.log(`Example app listening on port ${port}`)
-})
+  connectDB();
+  console.log(`Example app listening on port ${port}`);
+});

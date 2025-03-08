@@ -28,4 +28,3 @@ const BreadcrumbPage = () => {
 };
 
 export default BreadcrumbPage;
- 

@@ -1,19 +1,20 @@
 import bcrypt from "bcryptjs";
 import Otp from "../models/Otp.js";
 import User from "../models/User.js";
+import config from "../config/env.js";
 import sendEmail from "../utils/sendEmail.js";
+import CustomError from "../utils/customError.js";
 import { EMAIL_VERIFY_TEMPLATE, PASSWORD_RESET_TEMPLATE } from "../mail/emailTemplates.js";
 import { generateAccessToken, generateRefreshToken } from "../config/jwtUtils.js";
-import config from "../config/env.js";
 
 
 // * create user
-export const registerUser = async (name, emailNormalized, password) => {
-  let user = await User.findOne({ email: emailNormalized });
+export const registerUser = async (name, email, password) => {
+  let user = await User.findOne({ email });
 
   if (user) {
     if (user.isAccountVerify) {
-      throw new Error("Email đã được đăng ký và xác minh.");
+      throw new CustomError("Email đã được đăng ký và xác minh.");
     }
   } else {
     const saltRounds = Number(config.SALT);
@@ -21,7 +22,7 @@ export const registerUser = async (name, emailNormalized, password) => {
 
     user = await User.create({
       name,
-      email: emailNormalized,
+      email,
       password: hashPassword,
       loginMethod: "email",
     });
@@ -33,9 +34,9 @@ export const registerUser = async (name, emailNormalized, password) => {
   await Otp.create({ userId: user._id, otp, type: "verify" });
 
   await sendEmail(
-    emailNormalized,
+    email,
     "Mã OTP xác minh tài khoản",
-    EMAIL_VERIFY_TEMPLATE.replace("{{otp}}", otp).replace("{{email}}", emailNormalized)
+    EMAIL_VERIFY_TEMPLATE.replace("{{otp}}", otp).replace("{{email}}", email)
   );
 };
 
@@ -44,16 +45,16 @@ export const registerUser = async (name, emailNormalized, password) => {
 export const loginUser = async (email, password) => {
   const user = await User.findOne({ email });
   if (!user) {
-    throw new Error("Người dùng không tồn tại.");
-  }
-
-  if (!user.isAccountVerify) {
-    throw new Error("Tài khoản của bạn chưa được xác minh. Vui lòng xác minh email trước khi đăng nhập.");
+    throw new CustomError(404, "Người dùng không tồn tại.");
   }
 
   const validPassword = await bcrypt.compare(password, user.password);
   if (!validPassword) {
-    throw new Error("Email hoặc mật khẩu không đúng!");
+    throw new CustomError(401, "Email hoặc mật khẩu không đúng!");
+  }
+
+  if (!user.isAccountVerify) {
+    throw new CustomError(403, "Tài khoản của bạn chưa được xác minh. Vui lòng xác minh email trước khi đăng nhập.");
   }
 
   const access_token = generateAccessToken({ id: user._id, isAdmin: user.role === "admin" });
@@ -68,16 +69,16 @@ export const verifyAccount = async (email, otpCode) => {
 
   const user = await User.findOne({ email })
   if (!user) {
-    throw new Error("Người dùng không tồn tại!");
+    throw new CustomError("Người dùng không tồn tại!");
   }
 
   if (user.isAccountVerify) {
-    throw new Error("Tài khoản đã được xác minh trước đó!");
+    throw new CustomError("Tài khoản đã được xác minh trước đó!");
   }
 
   const otp = await Otp.findOne({ userId: user._id, otp: otpCode, type: "verify" });
   if (!otp) {
-    throw new Error("OTP không hợp lệ hoặc đã hết hạn!");
+    throw new CustomError("OTP không hợp lệ hoặc đã hết hạn!");
   }
 
   user.isAccountVerify = true;
