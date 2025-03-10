@@ -68,7 +68,14 @@ export const verifyEmailSchema = Joi.object({
 });
 
 
-// Schema xác thực reset mật khẩu (Reset Password)
+export const sendResetOtpSchema = Joi.object({
+  email: Joi.string().email().required().messages({
+    "string.email": "Email không hợp lệ!",
+    "any.required": "Thiếu địa chỉ email!",
+  }),
+});
+
+
 export const resetPasswordSchema = Joi.object({
   email: Joi.string().email().trim().required().messages({
     "string.email": "Email không hợp lệ",

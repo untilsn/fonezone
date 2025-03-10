@@ -55,7 +55,7 @@ const ProductCard = ({ item, classes, size = "normal" }) => {
           </div>
         </NavLink>
         {/* Favorite */}
-        <div className="absolute w-7 h-7 right-4 top-4 flex items-center justify-center rounded-full text-light text-sm bg-dark-primary transition duration-300 opacity-0 group-hover:opacity-100 -translate-x-[50%] group-hover:translate-x-[5%]">
+        <div className="absolute w-7 h-7 right-4 top-4 flex items-center justify-center rounded-full text-light text-sm bg-dark-primary transition duration-300 opacity-0 group-hover:opacity-100 -translate-x-4 group-hover:translate-x-[5%]">
           {isFavorite ? <FaHeart /> : <FaRegHeart />}
         </div>
         {/* Add to Cart */}

@@ -5,7 +5,8 @@ import config from "../config/env.js";
 import sendEmail from "../utils/sendEmail.js";
 import CustomError from "../utils/customError.js";
 import { EMAIL_VERIFY_TEMPLATE, PASSWORD_RESET_TEMPLATE } from "../mail/emailTemplates.js";
-import { generateAccessToken, generateRefreshToken } from "../config/jwtUtils.js";
+import { generateOtp, verifyOtp } from "./otpService.js";
+import { generateAccessToken, generateRefreshToken } from "./jwtService.js";
 
 
 // * create user
@@ -14,7 +15,7 @@ export const registerUser = async (name, email, password) => {
 
   if (user) {
     if (user.isAccountVerify) {
-      throw new CustomError("Email đã được đăng ký và xác minh.");
+      throw new CustomError(409, "Email đã được đăng ký và xác minh.");
     }
   } else {
     const saltRounds = Number(config.SALT);
@@ -28,10 +29,7 @@ export const registerUser = async (name, email, password) => {
     });
   }
 
-  await Otp.deleteMany({ userId: user._id, type: "verify" });
-
-  const otp = Math.floor(100000 + Math.random() * 900000).toString();
-  await Otp.create({ userId: user._id, otp, type: "verify" });
+  const otp = await generateOtp(user._id, "verify")
 
   await sendEmail(
     email,
@@ -65,26 +63,17 @@ export const loginUser = async (email, password) => {
 
 
 // * verify account
-export const verifyAccount = async (email, otpCode) => {
+export const verifyAccount = async (email, otp) => {
+  await verifyOtp(email, otp, "verify")
 
-  const user = await User.findOne({ email })
-  if (!user) {
-    throw new CustomError("Người dùng không tồn tại!");
-  }
+  const user = await User.findOne({ email }); 
 
   if (user.isAccountVerify) {
-    throw new CustomError("Tài khoản đã được xác minh trước đó!");
-  }
-
-  const otp = await Otp.findOne({ userId: user._id, otp: otpCode, type: "verify" });
-  if (!otp) {
-    throw new CustomError("OTP không hợp lệ hoặc đã hết hạn!");
+    throw new CustomError(400, "Tài khoản đã được xác minh trước đó!");
   }
 
   user.isAccountVerify = true;
   await user.save();
-
-  await Otp.deleteOne({ _id: otp._id });
 
   const access_token = generateAccessToken({ id: user._id, isAdmin: false });
   const refresh_token = generateRefreshToken({ id: user._id, isAdmin: false });
@@ -97,13 +86,10 @@ export const verifyAccount = async (email, otpCode) => {
 export const sendOtpReset = async (email) => {
   const user = await User.findOne({ email })
   if (!user) {
-    throw new Error("Người dùng không tồn tại.");
+    throw new CustomError(404, "Người dùng không tồn tại.");
   }
 
-  await Otp.deleteMany({ userId: user._id, type: "reset" });
-
-  const otp = String(Math.floor(100000 + Math.random() * 900000))
-  await Otp.create({ userId: user._id, otp, type: "reset" })
+  const otp = await generateOtp(user._id, "reset")
 
   await sendEmail(
     email,
@@ -115,16 +101,10 @@ export const sendOtpReset = async (email) => {
 
 
 
-export const resetOtpPassword = async (email, otpCode, newPassword) => {
-  const user = await User.findOne({ email });
-  if (!user) {
-    throw new Error("Người dùng không tồn tại.");
-  }
+export const resetOtpPassword = async (email, otp, newPassword) => {
+  await verifyOtp(email, otp, "reset")
 
-  const otp = await Otp.findOne({ userId: user._id, otp: otpCode });
-  if (!otp) {
-    throw new Error("OTP không hợp lệ hoặc đã hết hạn.");
-  }
+  const user = await User.findOne({ email });
 
   const isSamePassword = await bcrypt.compare(newPassword, user.password);
   if (isSamePassword) {
@@ -134,7 +114,5 @@ export const resetOtpPassword = async (email, otpCode, newPassword) => {
   const hashNewPassword = await bcrypt.hash(newPassword, 10);
   user.password = hashNewPassword;
   await user.save();
-
-  await Otp.deleteOne({ _id: otp._id });
 };
 
