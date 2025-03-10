@@ -8,6 +8,7 @@ import RegisterPage from './pages/RegisterPage'
 import ResetPasswordPage from './pages/ResetPasswordPage'
 import NotFoundPage from './pages/NotFoundPage'
 import ShopPage from './pages/ShopPage'
+import ProductDetailsPage from './pages/ProductDetailsPage'
 
 const App = () => {
   return (
@@ -19,6 +20,7 @@ const App = () => {
         <Route path='/register' element={<RegisterPage />} />
         <Route path='/reset-password' element={<ResetPasswordPage />} />
         <Route path='/shop' element={<ShopPage />} />
+        <Route path='/product' element={<ProductDetailsPage />} />
         <Route path='*' element={<NotFoundPage />} />
       </Routes>
       <Footer></Footer>

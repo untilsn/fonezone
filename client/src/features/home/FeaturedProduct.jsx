@@ -1,7 +1,7 @@
 import React from 'react'
-import CustomSwiper from '../../swiper/CustomSwiper'
 import { SwiperSlide } from 'swiper/react'
-import ProductCard from '../ProductCard'
+import ProductCard from '../../components/card/ProductCard'
+import CustomSwiper from '../../components/swiper/CustomSwiper'
 
 const FeaturedProduct = () => {
   return (

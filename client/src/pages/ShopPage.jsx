@@ -1,7 +1,7 @@
 import React from 'react'
 import HeaderPage from '../components/layout/HeaderPage'
 import BreadcrumbPage from '../components/layout/BreadcrumbPage'
-import ShopFilter from '../components/shop/ShopFilter'
+import ProductGrid from '../features/shop/ProductGrid'
 
 const ShopPage = () => {
   return (
@@ -9,10 +9,11 @@ const ShopPage = () => {
       <HeaderPage></HeaderPage>
       <BreadcrumbPage></BreadcrumbPage>
       <div className='container grid grid-cols-[270px_minmax(0,_1fr)] gap-8 my-10'>
-        <ShopFilter></ShopFilter>
-        <div className=''>
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Consequatur necessitatibus eaque ipsam. Aut iure maxime totam culpa, obcaecati, labore deserunt unde asperiores nam nobis ipsa neque suscipit tenetur, vitae minima.
+        {/* <ShopFilter></ShopFilter> */}
+        <div>
+          shopfilter
         </div>
+        <ProductGrid></ProductGrid>
       </div>
     </div>
   )
