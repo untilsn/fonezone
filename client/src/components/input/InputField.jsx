@@ -16,7 +16,7 @@ const InputField = ({ name, control, label, type = "text", placeholder, icon, ..
       {label && <label className="block text-gray mb-1 ml-1 capitalize text-[13px] ">{label}</label>}
 
       {/* Input + Icon */}
-      <div className="relative border w-full px-5 py-2.5  rounded-lg  flex items-center gap-3">
+      <div className="relative border w-full px-5 py-2.5   flex items-center gap-3">
         {icon && <i className="text-lg">{icon}</i>}
         <input
           {...field}

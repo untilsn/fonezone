@@ -30,7 +30,7 @@ const OtpResetPassword = () => {
 
     <div className="relative container flex items-center justify-center">
       {/* Card login */}
-      <div className="max-w-[500px] w-full px-12 py-5 bg-white shadow-lg rounded-xl">
+      <div className="max-w-[500px] w-full px-12 py-5 bg-white shadow-lg rounded-sm">
         <Link to="/" className="mb-10 block">
           <Logo width="100px" subColor="#FFD700" />
         </Link>
