@@ -1,95 +1,67 @@
-import Category from "../models/Category.js";
-import { addCategory } from "../services/categoryService.js";
+import { getAllCategories, getCategoryById, createCategory, updateCategory, deleteCategory } from "../services/categoryService.js";
 
-export const getAllCategoryController = async (req, res) => {
+export const getAllCategoriesController = async (req, res, next) => {
   try {
-    const result = await Category.find()
-
-    return res.status(200).json({
-      success: true,
-      message: "Thành công",
-      data: result
-    });
+    const categories = await getAllCategories();
+    return res.status(200).json({ success: true, data: categories, message: "Lấy danh sách danh mục thành công!" });
   } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: error.message || "Lỗi máy chủ"
-    });
+    next(error);
   }
 };
 
-export const getCategoryByIdController = async (req, res) => {
+export const getCategoryByIdController = async (req, res, next) => {
   try {
-    const categoryId = req.params.id
+    const { id } = req.params;
 
-    if (!categoryId) {
-      return res.status(400).json({ success: false, message: "Thiếu id của danh mục!" });
-    }
-    return res.status(200).json({
-      success: true,
-      message: "Thành công",
-      data: null
-    });
-  } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: error.message || "Lỗi máy chủ"
-    });
-  }
-};
-
-
-export const addCategoryController = async (req, res) => {
-  try {
-    const { name } = req.body
-
-    if (!name) {
-      return res.status(400).json({ success: false, message: "Bổ sung tên danh mục!" });
+    if (!id) {
+      return res.status(400).json({ success: false, message: "Thiếu mã danh mục" });
     }
 
-    const result = await addCategory(name)
-
-    return res.status(200).json({
-      success: true,
-      message: "Thêm danh mục thành công",
-      data: result
-    });
+    const category = await getCategoryById(id);
+    return res.status(200).json({ success: true, data: category, message: "Lấy thông tin danh mục thành công!" });
   } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: error.message || "Lỗi máy chủ"
-    });
+    next(error);
   }
 };
 
-
-
-export const updateCategoryController = async (req, res) => {
+export const createCategoryController = async (req, res, next) => {
   try {
-    return res.status(200).json({
-      success: true,
-      message: "Thành công",
-      data: null
-    });
+    const { name } = req.body;
+
+    const newCategory = await createCategory(name);
+    return res.status(201).json({ success: true, data: newCategory, message: "Thêm danh mục thành công!" });
   } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: error.message || "Lỗi máy chủ"
-    });
+    next(error);
   }
 };
 
-export const deleteCategoryController = async (req, res) => {
+export const updateCategoryController = async (req, res, next) => {
   try {
-    return res.status(200).json({
-      success: true,
-      message: "Thành công",
-      data: null
-    });
+    const { id } = req.params;
+    const { name } = req.body;
+
+    if (!id || !name) {
+      return res.status(400).json({ success: false, message: "Thiếu thông tin cập nhật" });
+    }
+
+    const updatedCategory = await updateCategory(id, name);
+    return res.status(200).json({ success: true, data: updatedCategory, message: "Cập nhật danh mục thành công!" });
   } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: error.message || "Lỗi máy chủ"
-    });
+    next(error);
+  }
+};
+
+export const deleteCategoryController = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    if (!id) {
+      return res.status(400).json({ success: false, message: "Thiếu mã danh mục" });
+    }
+
+    await deleteCategory(id);
+    return res.status(200).json({ success: true, message: "Xóa danh mục thành công!" });
+  } catch (error) {
+    next(error);
   }
 };

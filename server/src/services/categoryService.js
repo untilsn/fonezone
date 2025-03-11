@@ -1,40 +1,39 @@
-import Category from "../models/Category.js"
-import latinize from "latinize"
-import slugify from "slugify"
+import Category from "../models/Category.js";
+import CustomError from "../utils/customError.js";
 
+export const getAllCategories = async () => {
+  return await Category.find();
+};
 
+export const getCategoryById = async (id) => {
+  const category = await Category.findById(id);
+  if (!category) {
+    throw new CustomError(404, "Danh mục không tồn tại.");
+  }
+  return category;
+};
 
-
-
-
-
-
-export const getByIdCategory = async (name) => {
-  if (!name.trim()) throw new Error("Tên danh mục không được để trống.");
-
-  const normalizedName = latinize(name).trim().replace(/\s+/g, " ").toLowerCase();
-  const slug = slugify(normalizedName, { lower: true, strict: true });
-
-  const existingCategory = await Category.findOne({ slug });
+export const createCategory = async (name) => {
+  const existingCategory = await Category.findOne({ name });
   if (existingCategory) {
-    throw new Error("Danh mục đã tồn tại.");
+    throw new CustomError(400, "Danh mục đã tồn tại.");
   }
 
-  await Category.create({ name: name.trim(), slug });
-}
+  const newCategory = new Category({ name });
+  return await newCategory.save();
+};
 
-export const addCategory = async (name) => {
-  if (!name.trim()) throw new Error("Tên danh mục không được để trống.");
-
-  const normalizedName = latinize(name).trim().replace(/\s+/g, " ").toLowerCase();
-  const slug = slugify(normalizedName, { lower: true, strict: true });
-
-  const existingCategory = await Category.findOne({ slug });
-  if (existingCategory) {
-    throw new Error("Danh mục đã tồn tại.");
+export const updateCategory = async (id, name) => {
+  const category = await Category.findByIdAndUpdate(id, { name }, { new: true });
+  if (!category) {
+    throw new CustomError(404, "Danh mục không tồn tại.");
   }
+  return category;
+};
 
-  const category = await Category.create({ name: name.trim(), slug });
-  return { category }
-}
-
+export const deleteCategory = async (id) => {
+  const category = await Category.findByIdAndDelete(id);
+  if (!category) {
+    throw new CustomError(404, "Danh mục không tồn tại.");
+  }
+};

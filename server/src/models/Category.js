@@ -13,6 +13,6 @@ categorySchema.pre("save", function (next) {
   next();
 });
 
-const Category = mongoose.model('brand', categorySchema);
+const Category = mongoose.model('category', categorySchema);
 
 export default Category

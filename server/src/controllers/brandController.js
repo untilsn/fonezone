@@ -3,74 +3,71 @@ import {
   getBrandById,
   createBrand,
   updateBrand,
-  deleteBrand,
+  deleteBrand
 } from "../services/brandService.js";
 
-
-export const getAllBrandsController = async (req, res) => {
+export const getAllBrandsController = async (req, res, next) => {
   try {
     const brands = await getAllBrands();
-    res.status(200).json({ success: true, message: "Thành công", data: brands });
+    return res.status(200).json({ success: true, data: brands, message: "Lấy danh sách thương hiệu thành công!" });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message || "Lỗi máy chủ" });
+    next(error);
   }
 };
 
-
-export const getBrandByIdController = async (req, res) => {
+export const getBrandByIdController = async (req, res, next) => {
   try {
-    const brand = await getBrandById(req.params.id);
-    if (!brand) {
-      return res.status(404).json({ success: false, message: "Không tìm thấy thương hiệu" });
+    const { id } = req.params;
+
+    if (!id) {
+      return res.status(400).json({ success: false, message: "Thiếu mã thương hiệu" });
     }
-    res.status(200).json({ success: true, message: "Thành công", data: brand });
+
+    const brand = await getBrandById(id);
+    return res.status(200).json({ success: true, data: brand, message: "Lấy thông tin thương hiệu thành công!" });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message || "Lỗi máy chủ" });
+    next(error);
   }
 };
 
-
-export const createBrandController = async (req, res) => {
+export const createBrandController = async (req, res, next) => {
   try {
     const { name } = req.body;
-    if (!name) {
-      return res.status(400).json({ success: false, message: "Tên thương hiệu là bắt buộc" });
-    }
 
     const newBrand = await createBrand(name);
-    res.status(201).json({ success: true, message: "Tạo thành công", data: newBrand });
+    return res.status(201).json({ success: true, data: newBrand, message: "Thêm thương hiệu thành công!" });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message || "Lỗi máy chủ" });
+    next(error);
   }
 };
 
-
-export const updateBrandController = async (req, res) => {
+export const updateBrandController = async (req, res, next) => {
   try {
+    const { id } = req.params;
     const { name } = req.body;
-    const updatedBrand = await updateBrand(req.params.id, name);
 
-    if (!updatedBrand) {
-      return res.status(404).json({ success: false, message: "Không tìm thấy thương hiệu" });
+    if (!id || !name) {
+      return res.status(400).json({ success: false, message: "Thiếu thông tin cập nhật" });
     }
 
-    res.status(200).json({ success: true, message: "Cập nhật thành công", data: updatedBrand });
+    const updatedBrand = await updateBrand(id, name);
+    return res.status(200).json({ success: true, data: updatedBrand, message: "Cập nhật thương hiệu thành công!" });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message || "Lỗi máy chủ" });
+    next(error);
   }
 };
 
-
-export const deleteBrandController = async (req, res) => {
+export const deleteBrandController = async (req, res, next) => {
   try {
-    const deletedBrand = await deleteBrand(req.params.id);
+    const { id } = req.params;
 
-    if (!deletedBrand) {
-      return res.status(404).json({ success: false, message: "Không tìm thấy thương hiệu" });
+    if (!id) {
+      return res.status(400).json({ success: false, message: "Thiếu mã thương hiệu" });
     }
 
-    res.status(200).json({ success: true, message: "Xóa thành công" });
+    await deleteBrand(id);
+    return res.status(200).json({ success: true, message: "Xóa thương hiệu thành công!" });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message || "Lỗi máy chủ" });
+    next(error);
   }
 };

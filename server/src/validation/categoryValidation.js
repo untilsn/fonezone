@@ -5,10 +5,10 @@ export const categorySchema = Joi.object({
     .trim()
     .min(2)
     .max(50)
-    .pattern(/^[\p{L}0-9\s]+$/u) // Chỉ chấp nhận chữ cái (có dấu), số, và dấu cách
+    .pattern(/^[\p{L}0-9\s]+$/u)
     .required()
     .custom((value, helpers) => {
-      const formattedValue = value.replace(/\s+/g, " ").trim(); // Chuẩn hóa khoảng trắng
+      const formattedValue = value.replace(/\s+/g, " ").trim();
       if (formattedValue !== value) return helpers.error("string.invalidSpace");
       return formattedValue;
     })

@@ -1,13 +1,34 @@
-import { getAllProducts } from "../services/productService.js";
+import {
+  getAllProduct, getProductById
+} from "../services/productService.js";
 
 
-export const getAllProductsController = async (req, res, next) => {
+
+export const getProductsController = async (req, res, next) => {
   try {
-    const { page, limit, sort, search } = req.query;
+    const { page = 1, limit = 10, sort, search, brand, category, ram, storage, color, minPrice, maxPrice } = req.query;
 
-    const data = await getAllProducts({ page, limit, sort, search });
+    const result = await getAllProduct({
+      page: parseInt(page),
+      limit: parseInt(limit),
+      sort,
+      search,
+      brand,
+      category,
+      ram,
+      storage,
+      color,
+      minPrice,
+      maxPrice
+    });
 
-    return res.status(200).json({ success: true, ...data });
+    return res.status(200).json({
+      success: true,
+      data: result.products,
+      total: result.total,
+      totalPages: result.totalPages,
+      message: "Lấy danh sách sản phẩm thành công!"
+    });
   } catch (error) {
     next(error);
   }
@@ -18,19 +39,23 @@ export const getAllProductsController = async (req, res, next) => {
 
 export const getProductByIdController = async (req, res, next) => {
   try {
-    const { someData } = req.body;
+    const { productId } = req.params;
 
-    const result = await someServiceFunction(someData);
+    if (!productId) {
+      return res.status(404).json({ success: false, message: "Thiếu mã sản phẩm" })
+    }
 
-    return res.status(200).json({
-      success: true,
-      data: result,
-      message: "Xử lý thành công!",
-    });
+    const result = await getProductById(productId);
+
+    return res.status(200).json({ success: true, data: result, message: "Lấy thông tin sản phẩm thành công!" });
   } catch (error) {
-    next(error); 
+    next(error);
   }
 };
+
+
+
+
 
 
 export const createProductController = async (req, res, next) => {
@@ -45,6 +70,52 @@ export const createProductController = async (req, res, next) => {
       message: "Xử lý thành công!",
     });
   } catch (error) {
-    next(error); 
+    next(error);
   }
 };
+
+export const updateProductController = async (req, res, next) => {
+  try {
+    const { someData } = req.body;
+
+    const result = await someServiceFunction(someData);
+
+    return res.status(200).json({
+      success: true,
+      data: result,
+      message: "Xử lý thành công!",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteProductController = async (req, res, next) => {
+  try {
+    const { someData } = req.body;
+
+    const result = await someServiceFunction(someData);
+
+    return res.status(200).json({
+      success: true,
+      data: result,
+      message: "Xử lý thành công!",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+
+
+// export const getProductController = async (req, res, next) => {
+//   try {
+//     const { page, limit, sort, search } = req.query;
+
+//     const data = await getProduct({ page, limit, sort, search });
+
+//     return res.status(200).json({ success: true, ...data, message: "Lấy sản phẩm thành công!" });
+//   } catch (error) {
+//     next(error);
+//   }
+// };
