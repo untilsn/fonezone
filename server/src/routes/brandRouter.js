@@ -13,8 +13,8 @@ const brandRouter = express.Router();
 
 brandRouter.get('/', getAllBrandsController);
 brandRouter.get('/:id', getBrandByIdController);
-brandRouter.post('/', validateMiddleware(brandValidationSchema) , createBrandController);
-brandRouter.put('/:id', updateBrandController);
-brandRouter.delete('/:id', deleteBrandController);
+brandRouter.post('/create', validateMiddleware(brandValidationSchema) , createBrandController);
+brandRouter.put('/update/:id', updateBrandController);
+brandRouter.delete('/delete/:id', deleteBrandController);
 
 export default brandRouter;

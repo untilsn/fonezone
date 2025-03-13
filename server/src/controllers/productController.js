@@ -1,5 +1,7 @@
 import {
-  getAllProduct, getProductById
+  createProduct,
+  getAllProduct, getProductById,
+  updateProduct
 } from "../services/productService.js";
 
 
@@ -54,20 +56,16 @@ export const getProductByIdController = async (req, res, next) => {
 };
 
 
-
-
-
-
 export const createProductController = async (req, res, next) => {
   try {
-    const { someData } = req.body;
+    const { productData } = req.body;
 
-    const result = await someServiceFunction(someData);
+    const result = await createProduct(productData);
 
     return res.status(200).json({
       success: true,
       data: result,
-      message: "Xử lý thành công!",
+      message: "Sản phẩm đã lưu thành công!",
     });
   } catch (error) {
     next(error);
@@ -76,14 +74,14 @@ export const createProductController = async (req, res, next) => {
 
 export const updateProductController = async (req, res, next) => {
   try {
-    const { someData } = req.body;
-
-    const result = await someServiceFunction(someData);
+    const { id } = req.params;
+    const updateData = req.body
+    const result = await updateProduct(id, updateData);
 
     return res.status(200).json({
       success: true,
       data: result,
-      message: "Xử lý thành công!",
+      message: "Cập nhập sản phẩm thành công!",
     });
   } catch (error) {
     next(error);

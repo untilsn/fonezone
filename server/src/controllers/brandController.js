@@ -33,7 +33,7 @@ export const getBrandByIdController = async (req, res, next) => {
 export const createBrandController = async (req, res, next) => {
   try {
     const { name } = req.body;
-
+    
     const newBrand = await createBrand(name);
     return res.status(201).json({ success: true, data: newBrand, message: "Thêm thương hiệu thành công!" });
   } catch (error) {

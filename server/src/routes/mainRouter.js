@@ -1,4 +1,6 @@
+import adminRouter from "./adminRouter.js"
 import authRouter from "./authRouter.js"
+import brandRouter from "./brandRouter.js"
 import categoryRouter from "./categoryRouter.js"
 import productRouter from "./productRouter.js"
 
@@ -7,7 +9,8 @@ const mainRouter = (app) => {
   app.use("/api/auth", authRouter)
   app.use("/api/products", productRouter)
   app.use("/api/category", categoryRouter)
-  app.use("/api/brand", authRouter)
+  app.use("/api/brand", brandRouter)
+  app.use("/api/admin", adminRouter)
 }
 
 export default mainRouter

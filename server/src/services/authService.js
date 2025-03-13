@@ -2,11 +2,11 @@ import bcrypt from "bcryptjs";
 import Otp from "../models/Otp.js";
 import User from "../models/User.js";
 import config from "../config/env.js";
-import sendEmail from "../utils/sendEmail.js";
 import CustomError from "../utils/customError.js";
 import { EMAIL_VERIFY_TEMPLATE, PASSWORD_RESET_TEMPLATE } from "../mail/emailTemplates.js";
 import { generateOtp, verifyOtp } from "./otpService.js";
 import { generateAccessToken, generateRefreshToken } from "./jwtService.js";
+import sendEmail from "../utils/emailHelper.js";
 
 
 // * create user

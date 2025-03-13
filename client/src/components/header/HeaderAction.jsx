@@ -1,10 +1,11 @@
 import React, { useMemo, useCallback } from 'react';
-import { Link } from 'react-router-dom'; // Nếu sử dụng React Router, nếu không thì điều chỉnh phù hợp
+import { Link, useNavigate } from 'react-router-dom'; // Nếu sử dụng React Router, nếu không thì điều chỉnh phù hợp
 import { useSelector } from 'react-redux'; // Nếu sử dụng Redux để quản lý trạng thái, tùy chọn
 import IconButton from '../ui/IconButton';
 import { MdAccountCircle, MdFavoriteBorder, MdOutlineAccountCircle, MdOutlineMessage, MdOutlineShoppingBag, MdShoppingBag } from "react-icons/md";
 
 const HeaderAction = () => {
+  const navigate = useNavigate()
   // Ví dụ: Lấy số lượng sản phẩm trong giỏ hàng từ Redux store hoặc context (nếu áp dụng)
   // const cartCount = useSelector((state) => state.cart.items.length) || 0;
 
@@ -18,7 +19,7 @@ const HeaderAction = () => {
   // Xử lý sự kiện nhấp chuột một cách hiệu quả với useCallback
   const handleActionClick = useCallback((path) => {
     // Thêm logic điều hướng hoặc khác ở đây (ví dụ: sử dụng React Router)
-    console.log(`Đang điều hướng đến ${path}`);
+    navigate(path)
   }, []);
 
   return (

@@ -9,6 +9,8 @@ import ResetPasswordPage from './pages/ResetPasswordPage'
 import NotFoundPage from './pages/NotFoundPage'
 import ShopPage from './pages/ShopPage'
 import ProductDetailsPage from './pages/ProductDetailsPage'
+import WishlistPage from './pages/WishlistPage'
+import CartPage from './pages/CartPage'
 
 const App = () => {
   return (
@@ -21,6 +23,8 @@ const App = () => {
         <Route path='/reset-password' element={<ResetPasswordPage />} />
         <Route path='/shop' element={<ShopPage />} />
         <Route path='/product' element={<ProductDetailsPage />} />
+        <Route path='/wishlist' element={<WishlistPage />} />
+        <Route path='/cart' element={<CartPage />} />
         <Route path='*' element={<NotFoundPage />} />
       </Routes>
       <Footer></Footer>

@@ -75,6 +75,37 @@ export const getProductById = async (productId) => {
 };
 
 
+
+export const createProduct = async (productData) => {
+  const existingProduct = await Product.findOne({ name: productData.name });
+  if (existingProduct) {
+    throw new CustomError(409, "Sản phẩm đã tồn tại.");
+  }
+
+  const newProduct = new Product(productData);
+  const savedProduct = await newProduct.save();
+
+  return savedProduct;
+};
+
+
+export const updateProduct = async (productId, updateData) => {
+
+  const product = await Product.findById(productId)
+  if (!product) {
+    throw new CustomError(404, "Sản phẩm không tồn tại.");
+  }
+
+  Object.assign(product, updateData);
+
+  const updatedProduct = await product.save()
+  return updateProduct;
+};
+
+
+
+
+
 // export const getProduct = async ({ page = 1, limit = 10, sort, search }) => {
 //   const filter = {};
 //   if (search) {

@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { calculateDiscountPrice, generateSlug, validateFlashSale } from "../utils/mongooseHooks.js";
 
 const productSchema = new mongoose.Schema(
   {
@@ -14,16 +15,21 @@ const productSchema = new mongoose.Schema(
       type: [String],
       validate: { validator: (v) => v.length > 0, message: "Phải có ít nhất một hình ảnh" },
     },
+    colors: { type: [String], required: true },
+    ram: [{
+      size: { type: String, required: true },
+      priceDifference: { type: Number, default: 0 }
+    }],
+    storage: [{
+      capacity: { type: String, required: true },
+      priceDifference: { type: Number, default: 0 }
+    }],
     description: { type: String, required: true },
-    specifications: {
-      screen: { type: String, required: true }, processor: { type: String, required: true },
-      ram: { type: String, required: true }, storage: { type: String, required: true },
-      battery: { type: String, required: true }, camera: { type: String, required: true },
-      os: { type: String, required: true },
-    },
+    specifications: { type: Object, required: true },
     rating: { type: Number, default: 0, min: 0, max: 5 },
     reviews: [
-      { user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+      {
+        user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
         rating: { type: Number, required: true, min: 1, max: 5 },
         comment: { type: String, required: true },
         createdAt: { type: Date, default: Date.now },
@@ -36,12 +42,14 @@ const productSchema = new mongoose.Schema(
       flashSaleStart: { type: Date },
       flashSaleEnd: { type: Date }
     },
-    createdAt: { type: Date, default: Date.now },
-    updatedAt: { type: Date, default: Date.now },
   },
   { timestamps: true }
 );
 
-const Product =  mongoose.model("Product", productSchema);
+productSchema.pre("save", generateSlug);
+productSchema.pre("save", calculateDiscountPrice);
+productSchema.pre("save", validateFlashSale);
+
+const Product = mongoose.model("Product", productSchema);
 
 export default Product
