@@ -7,21 +7,21 @@ import HeaderNavbar from './HeaderNavbar';
 
 const Header = () => {
   return (
-    <header className="bg-dark-primary" role="banner">
-      <div className="container mx-auto">
-        <HeaderTop />
-        <div className="grid grid-cols-4 items-center py-4 ">
-          <Logo color='white' subColor="#fcb941" />
-          <HeaderSearch />
-          <HeaderAction />
+    <>
+      <div className="bg-dark-primary overflow-visible">
+        <div className="container mx-auto">
+          <HeaderTop />
+          <div className="grid grid-cols-4 items-center py-4 ">
+            <Logo color='white' subColor="#fcb941" />
+            <HeaderSearch />
+            <HeaderAction />
+          </div>
         </div>
       </div>
-      <div className='bg-white shadow-sm'>
-        <div className='container'>
-          <HeaderNavbar />
-        </div>
+      <div className='bg-white shadow-item sticky -top-1 z-50 w-full'>
+        <HeaderNavbar />
       </div>
-    </header>
+    </>
   );
 };
 

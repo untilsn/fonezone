@@ -7,7 +7,7 @@
 
 @layer base {
   body {
-    @apply font-sans text-dark-primary bg-white;
+    @apply font-sans text-dark-primary bg-white ;
   }
 }
 

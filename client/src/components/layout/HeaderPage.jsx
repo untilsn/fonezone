@@ -4,7 +4,7 @@ const HeaderPage = ({ title = "List", subtitle = "Very us more blessed multiphy 
   return (
     <div className='border-b border-gray-100'>
       <div
-        className="py-10"
+        className="py-14"
         style={{
           backgroundImage: `url('/banner/page_header.jpg')`,
           backgroundPosition: "center",

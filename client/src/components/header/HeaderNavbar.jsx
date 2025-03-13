@@ -10,7 +10,7 @@ const HeaderNavbar = () => {
   const currentPath = useMemo(() => location.pathname, [location.pathname]);
 
   return (
-    <div className='grid grid-cols-4 items-center'>
+    <div className='grid grid-cols-4 items-center container'>
       <HeaderLeft></HeaderLeft>
       <nav className='flex items-center px-2 border-x border-darkGray border-opacity-10 col-span-2' role="navigation" aria-label="Main navigation">
         {HEADER_NAVBAR.length > 0 ? (

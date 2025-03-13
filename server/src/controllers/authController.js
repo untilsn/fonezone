@@ -37,6 +37,18 @@ export const loginUserController = async (req, res, next) => {
 };
 
 
+// *get current user
+export const getCurrentUserController = async (req, res, next) => {
+  try {
+    const result = await verifyAccount(email, otp);
+
+    return res.status(200).json({ success: true, user: result, message: "Lấy thông tin người dùng thành công!" });
+  } catch (error) {
+    next(error)
+  }
+};
+
+
 // * verify account
 export const verifyEmailController = async (req, res, next) => {
   try {
