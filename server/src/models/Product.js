@@ -1,10 +1,17 @@
 import mongoose from "mongoose";
-import { calculateDiscountPrice, generateSlug, validateFlashSale } from "../utils/mongooseHooks.js";
+import {
+  calculateDiscountPrice,
+  calculateDiscountPriceOnUpdate,
+  generateSlug,
+  generateSlugOnUpdate,
+  validateFlashSale,
+  validateFlashSaleOnUpdate
+} from "../utils/mongooseHooks.js";
 
 const productSchema = new mongoose.Schema(
   {
     name: { type: String, required: true, trim: true },
-    slug: { type: String, required: true, unique: true, lowercase: true },
+    slug: { type: String, required: false, unique: true, lowercase: true },
     price: { type: Number, required: true, min: 0 },
     discount: { type: Number, default: 0 },
     discountPrice: { type: Number, min: 0 },
@@ -15,7 +22,7 @@ const productSchema = new mongoose.Schema(
       type: [String],
       validate: { validator: (v) => v.length > 0, message: "Phải có ít nhất một hình ảnh" },
     },
-    colors: { type: [String], required: true },
+    colors: { type: [String], required: false },
     ram: [{
       size: { type: String, required: true },
       priceDifference: { type: Number, default: 0 }
@@ -46,9 +53,15 @@ const productSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+// Middleware xử lý khi lưu mới
 productSchema.pre("save", generateSlug);
 productSchema.pre("save", calculateDiscountPrice);
 productSchema.pre("save", validateFlashSale);
+
+// Middleware xử lý khi update
+productSchema.pre("findOneAndUpdate", generateSlugOnUpdate);
+productSchema.pre("findOneAndUpdate", calculateDiscountPriceOnUpdate);
+productSchema.pre("findOneAndUpdate", validateFlashSaleOnUpdate);
 
 const Product = mongoose.model("Product", productSchema);
 

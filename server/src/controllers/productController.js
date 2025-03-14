@@ -1,5 +1,6 @@
 import {
   createProduct,
+  deleteProduct,
   getAllProduct, getProductById,
   updateProduct
 } from "../services/productService.js";
@@ -58,8 +59,7 @@ export const getProductByIdController = async (req, res, next) => {
 
 export const createProductController = async (req, res, next) => {
   try {
-    const { productData } = req.body;
-
+    const productData = req.body;
     const result = await createProduct(productData);
 
     return res.status(200).json({
@@ -90,14 +90,14 @@ export const updateProductController = async (req, res, next) => {
 
 export const deleteProductController = async (req, res, next) => {
   try {
-    const { someData } = req.body;
+    const { id } = req.params;
 
-    const result = await someServiceFunction(someData);
+    const result = await deleteProduct(id);
 
     return res.status(200).json({
       success: true,
       data: result,
-      message: "Xử lý thành công!",
+      message: "Xóa sản phẩm thành công!",
     });
   } catch (error) {
     next(error);

@@ -1,10 +1,12 @@
 import express from 'express';
 import validateMiddleware from '../middlewares/validateMiddleware.js';
-import { productSchema } from '../validation/productSchema.js';
+import { productSchema, updateProductSchema } from '../validation/productSchema.js';
 import {
   createProductController,
+  deleteProductController,
   updateProductController
 } from '../controllers/productController.js';
+import { verifyAdminToken } from '../middlewares/authMiddleware.js';
 
 const adminRouter = express.Router();
 
@@ -19,9 +21,17 @@ const adminRouter = express.Router();
 // adminRouter.post("/:userId/notify", isAdmin, sendNotification);
 // adminRouter.delete("/:userId", isAdmin, deleteUser);
 //product
-adminRouter.post('/product/create', validateMiddleware(productSchema), createProductController);
-adminRouter.put('/product/update/:id', validateMiddleware(productSchema), updateProductController);
-adminRouter.delete('/product/delete/:id', createProductController);
+adminRouter.post('/product/create', verifyAdminToken, validateMiddleware(productSchema), createProductController);
+adminRouter.patch('/product/update/:id', verifyAdminToken, validateMiddleware(updateProductSchema), updateProductController);
+adminRouter.delete('/product/delete/:id', verifyAdminToken, deleteProductController);
+
+//coupon
+adminRouter.patch('/coupon/', verifyAdminToken, updateProductController);
+adminRouter.patch('/coupon/:id', verifyAdminToken, updateProductController);
+adminRouter.post('/coupon/update/:id', verifyAdminToken, createProductController);
+adminRouter.delete('/coupon/delete/:id', verifyAdminToken, deleteProductController);
+
+
 //category
 adminRouter.post('/',);
 adminRouter.put('/:id',);

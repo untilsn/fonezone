@@ -5,8 +5,8 @@ import config from "../config/env.js";
 import CustomError from "../utils/customError.js";
 import { EMAIL_VERIFY_TEMPLATE, PASSWORD_RESET_TEMPLATE } from "../mail/emailTemplates.js";
 import { generateOtp, verifyOtp } from "./otpService.js";
-import { generateAccessToken, generateRefreshToken } from "./jwtService.js";
 import sendEmail from "../utils/emailHelper.js";
+import { generateAccessToken, generateRefreshToken } from "../utils/jwt.js";
 
 
 // * create user
@@ -46,7 +46,7 @@ export const loginUser = async (email, password) => {
     throw new CustomError(404, "Người dùng không tồn tại.");
   }
 
-  const validPassword = await bcrypt.compare(password, user.password);
+  const validPassword = bcrypt.compare(password, user.password);
   if (!validPassword) {
     throw new CustomError(401, "Email hoặc mật khẩu không đúng!");
   }
@@ -55,18 +55,26 @@ export const loginUser = async (email, password) => {
     throw new CustomError(403, "Tài khoản của bạn chưa được xác minh. Vui lòng xác minh email trước khi đăng nhập.");
   }
 
-  const access_token = generateAccessToken({ id: user._id, isAdmin: user.role === "admin" });
-  const refresh_token = generateRefreshToken({ id: user._id, isAdmin: user.role === "admin" });
+  const access_token = generateAccessToken({ id: user._id, role: user.role });
+  const refresh_token = generateRefreshToken({ id: user._id, role: user.role });
 
   return { access_token, refresh_token };
 };
 
 
+export const getUserProfile = async (userId) => {
+  const user = await User.findById(userId).select("-password")
+  if (!user) {
+    throw new CustomError(404, "Tài khoản người dùng không tồn tại!");
+  }
+  return user
+}
+
 // * verify account
 export const verifyAccount = async (email, otp) => {
   await verifyOtp(email, otp, "verify")
 
-  const user = await User.findOne({ email }); 
+  const user = await User.findOne({ email });
 
   if (user.isAccountVerify) {
     throw new CustomError(400, "Tài khoản đã được xác minh trước đó!");
@@ -75,8 +83,8 @@ export const verifyAccount = async (email, otp) => {
   user.isAccountVerify = true;
   await user.save();
 
-  const access_token = generateAccessToken({ id: user._id, isAdmin: false });
-  const refresh_token = generateRefreshToken({ id: user._id, isAdmin: false });
+  const access_token = generateAccessToken({ id: user._id, role: user.role });
+  const refresh_token = generateRefreshToken({ id: user._id, role: user.role });
 
   return { access_token, refresh_token };
 };

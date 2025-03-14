@@ -11,8 +11,5 @@ const productRouter = express.Router();
 
 productRouter.get('/', getProductsController);
 productRouter.get('/:id', getProductByIdController);
-productRouter.post('/create', createProductController);
-productRouter.put('/update/:id', updateProductController);
-productRouter.delete('/delete/:id', deleteProductController);
 
 export default productRouter;

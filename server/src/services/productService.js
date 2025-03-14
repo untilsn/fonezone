@@ -99,11 +99,19 @@ export const updateProduct = async (productId, updateData) => {
   Object.assign(product, updateData);
 
   const updatedProduct = await product.save()
-  return updateProduct;
+  return updatedProduct;
 };
 
 
+export const deleteProduct = async (productId) => {
+  const deletedProduct = await Product.findByIdAndDelete(productId);
 
+  if (!deletedProduct) {
+    throw new Error("Sản phẩm không tồn tại!");
+  }
+
+  return deletedProduct
+};
 
 
 // export const getProduct = async ({ page = 1, limit = 10, sort, search }) => {

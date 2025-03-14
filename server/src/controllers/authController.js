@@ -1,8 +1,9 @@
-import { loginUser, registerUser, resetOtpPassword, sendOtpReset, verifyAccount } from "../services/authService.js";
+import config from "../config/env.js";
+import { getUserProfile, loginUser, registerUser, resetOtpPassword, sendOtpReset, verifyAccount } from "../services/authService.js";
 import { verifyRefreshToken } from "../services/jwtService.js";
 import { setRefreshTokenCookie } from "../utils/cookieHelper.js";
 
-
+const isProduction = config.NODE_ENV === "production";
 
 // * create user
 export const registerUserController = async (req, res, next) => {
@@ -38,9 +39,11 @@ export const loginUserController = async (req, res, next) => {
 
 
 // *get current user
-export const getCurrentUserController = async (req, res, next) => {
+export const getUserProfileController = async (req, res, next) => {
   try {
-    const result = await verifyAccount(email, otp);
+    const userId = req.user.id
+
+    const result = await getUserProfile(userId);
 
     return res.status(200).json({ success: true, user: result, message: "Lấy thông tin người dùng thành công!" });
   } catch (error) {
@@ -66,7 +69,7 @@ export const verifyEmailController = async (req, res, next) => {
 
 
 //* Send email otp reset password
-export const sendResetOtpController = async (req, res, next) => {
+export const forgetPasswordController = async (req, res, next) => {
   try {
     const { email } = req.body
     await sendOtpReset(email)
@@ -94,7 +97,7 @@ export const resetPasswordController = async (req, res, next) => {
 // * refresh token
 export const refreshTokenController = async (req, res, next) => {
   try {
-    const refreshToken = req.cookies.token;
+    const refreshToken = req.cookies.refresh_token;
     if (!refreshToken) {
       return res.status(401).json({
         success: false,
@@ -117,7 +120,7 @@ export const refreshTokenController = async (req, res, next) => {
 // * logout
 export const logoutController = async (req, res, next) => {
   try {
-    res.clearCookie('token', {
+    res.clearCookie('refresh_token', {
       httpOnly: true,
       secure: isProduction,
       sameSite: isProduction ? "none" : "strict",
