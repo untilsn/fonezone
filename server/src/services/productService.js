@@ -1,7 +1,7 @@
+import errorHandle from "../middlewares/errorMiddleware.js";
 import Brand from "../models/Brand.js";
 import Category from "../models/Category.js";
 import Product from "../models/Product.js";
-import CustomError from "../utils/customError.js";
 import { calculateDiscountPrice } from "../utils/productHelper.js";
 import { generalSlug } from "../utils/slugHelper.js";
 
@@ -70,7 +70,7 @@ export const getProductById = async (productId) => {
   const product = await Product.findById(productId);
 
   if (!product) {
-    throw new CustomError(404, "Sản phẩm không tồn tại hoặc đã bị xoá.");
+    throw new errorHandle(404, "Sản phẩm không tồn tại hoặc đã bị xoá.");
   }
 
   return product;
@@ -81,29 +81,27 @@ export const getProductById = async (productId) => {
 export const createProduct = async (productData) => {
   const existingProduct = await Product.findOne({ name: productData.name });
   if (existingProduct) {
-    throw new CustomError(409, "Sản phẩm đã tồn tại.");
+    throw new errorHandle(409, "Sản phẩm đã tồn tại.");
   }
 
   productData.slug = generalSlug(productData.name);
+  productData.discountPrice = calculateDiscountPrice(productData.price, productData.discount);
 
-  productData.discountPrice = calculateDiscountPrice(productData.price, productData.discount)
-
-  if (productData.flashSaleStart && productData.flashSaleEnd) {
-    if (!isValidFlashSale(productData.flashSaleStart, productData.flashSaleEnd)) {
-      throw new CustomError(400, "Thời gian Flash Sale không hợp lệ.");
+  if (productData.flashSale?.start && productData.flashSale?.end) {
+    if (!isValidFlashSale(productData.flashSale.start, productData.flashSale.end)) {
+      throw new errorHandle(400, "Thời gian Flash Sale không hợp lệ.");
     }
   }
 
   const newProduct = new Product(productData);
   return await newProduct.save();
-}
-
+};
 
 
 export const updateProduct = async (productId, updateData) => {
   const product = await Product.findById(productId)
   if (!product) {
-    throw new CustomError(404, "Sản phẩm không tồn tại.");
+    throw new errorHandle(404, "Sản phẩm không tồn tại.");
   }
 
   if (updateData.name) {
@@ -119,7 +117,7 @@ export const updateProduct = async (productId, updateData) => {
 
   if (updateData.flashSaleStart || updateData.flashSaleEnd) {
     if (!isValidFlashSale(updateData.flashSaleStart ?? product.flashSaleStart, updateData.flashSaleEnd ?? product.flashSaleEnd)) {
-      throw new CustomError(400, "Thời gian Flash Sale không hợp lệ.");
+      throw new errorHandle(400, "Thời gian Flash Sale không hợp lệ.");
     }
   }
 
