@@ -1,7 +1,7 @@
 import Joi from "joi";
 
-// Schema xác thực đăng ký (Register)
-export const registerSchema = Joi.object({
+// Validation xác thực đăng ký (Register)
+export const registerValidation = Joi.object({
   name: Joi.string().trim().min(2).max(15).required().messages({
     "string.empty": "Tên không được để trống",
     "string.min": "Tên phải có ít nhất 2 ký tự",
@@ -29,8 +29,8 @@ export const registerSchema = Joi.object({
     }),
 });
 
-// Schema xác thực đăng nhập (Login)
-export const loginSchema = Joi.object({
+// Validation xác thực đăng nhập (Login)
+export const loginValidation = Joi.object({
   email: Joi.string().email().trim().required().messages({
     "string.email": "Email không hợp lệ",
     "string.empty": "Email không được để trống",
@@ -45,7 +45,7 @@ export const loginSchema = Joi.object({
 });
 
 
-export const verifyEmailSchema = Joi.object({
+export const verifyEmailValidation = Joi.object({
   email: Joi.string()
     .email({ tlds: { allow: false } }) // Validate email
     .required()
@@ -68,7 +68,7 @@ export const verifyEmailSchema = Joi.object({
 });
 
 
-export const sendResetOtpSchema = Joi.object({
+export const forgetPasswordValidation = Joi.object({
   email: Joi.string().email().required().messages({
     "string.email": "Email không hợp lệ!",
     "any.required": "Thiếu địa chỉ email!",
@@ -76,7 +76,7 @@ export const sendResetOtpSchema = Joi.object({
 });
 
 
-export const resetPasswordSchema = Joi.object({
+export const resetPasswordValidation = Joi.object({
   email: Joi.string().email().trim().required().messages({
     "string.email": "Email không hợp lệ",
     "string.empty": "Email không được để trống",

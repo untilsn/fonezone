@@ -7,14 +7,14 @@ import {
   getCategoryByIdController,
   updateCategoryController
 } from '../controllers/categoryController.js';
-import { categorySchema } from '../validation/categoryValidation.js';
+import { categoryValidation, updateCategoryValidation } from '../validation/categoryValidation.js';
 
 const categoryRouter = express.Router();
 
 categoryRouter.get('/', getAllCategoriesController);
 categoryRouter.get('/:id', getCategoryByIdController);
-categoryRouter.post('/create', validateMiddleware(categorySchema), createCategoryController);
-categoryRouter.put('/update/:id', updateCategoryController);
+categoryRouter.post('/create', validateMiddleware(categoryValidation), createCategoryController);
+categoryRouter.patch('/update/:id', validateMiddleware(updateCategoryValidation), updateCategoryController);
 categoryRouter.delete('/delete/:id', deleteCategoryController);
 
 export default categoryRouter;

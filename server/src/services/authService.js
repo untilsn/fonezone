@@ -6,7 +6,7 @@ import CustomError from "../utils/customError.js";
 import { EMAIL_VERIFY_TEMPLATE, PASSWORD_RESET_TEMPLATE } from "../mail/emailTemplates.js";
 import { generateOtp, verifyOtp } from "./otpService.js";
 import sendEmail from "../utils/emailHelper.js";
-import { generateAccessToken, generateRefreshToken } from "../utils/jwt.js";
+import { generateAccessToken, generateRefreshToken } from "../utils/jwtGeneral.js";
 
 
 // * create user

@@ -1,6 +1,6 @@
 import express from 'express';
 import validateMiddleware from '../middlewares/validateMiddleware.js';
-import { productSchema, updateProductSchema } from '../validation/productSchema.js';
+import { productValidation, updateProductValidation } from '../validation/productValidation.js';
 import {
   createProductController,
   deleteProductController,
@@ -21,8 +21,8 @@ const adminRouter = express.Router();
 // adminRouter.post("/:userId/notify", isAdmin, sendNotification);
 // adminRouter.delete("/:userId", isAdmin, deleteUser);
 //product
-adminRouter.post('/product/create', verifyAdminToken, validateMiddleware(productSchema), createProductController);
-adminRouter.patch('/product/update/:id', verifyAdminToken, validateMiddleware(updateProductSchema), updateProductController);
+adminRouter.post('/product/create', verifyAdminToken, validateMiddleware(productValidation), createProductController);
+adminRouter.patch('/product/update/:id', verifyAdminToken, validateMiddleware(updateProductValidation), updateProductController);
 adminRouter.delete('/product/delete/:id', verifyAdminToken, deleteProductController);
 
 //coupon

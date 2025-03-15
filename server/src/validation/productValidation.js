@@ -1,6 +1,6 @@
 import Joi from "joi";
 
-export const productSchema = Joi.object({
+export const productValidation = Joi.object({
   name: Joi.string().trim().required().messages({
     "string.empty": "Tên sản phẩm không được để trống.",
     "any.required": "Tên sản phẩm là bắt buộc.",
@@ -38,11 +38,6 @@ export const productSchema = Joi.object({
   images: Joi.array().items(Joi.string()).min(1).required().messages({
     "array.min": "Phải có ít nhất một hình ảnh.",
     "any.required": "Hình ảnh là bắt buộc.",
-  }),
-
-  colors: Joi.array().items(Joi.string()).optional().messages({
-    "array.min": "Phải có ít nhất một màu sắc.",
-    "any.required": "Danh sách màu sắc là bắt buộc.",
   }),
 
   ram: Joi.array()
@@ -128,8 +123,8 @@ export const productSchema = Joi.object({
 });
 
 
-export const updateProductSchema = productSchema.fork(
-  Object.keys(productSchema.describe().keys),
-  (schema) => schema.optional().default(null)
+export const updateProductValidation = productValidation.fork(
+  Object.keys(productValidation.describe().keys),
+  (validation) => validation.optional().default(null)
 );
 

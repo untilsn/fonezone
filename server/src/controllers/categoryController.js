@@ -26,9 +26,9 @@ export const getCategoryByIdController = async (req, res, next) => {
 
 export const createCategoryController = async (req, res, next) => {
   try {
-    const { name } = req.body;
+    const { name, type } = req.body;
 
-    const newCategory = await createCategory(name);
+    const newCategory = await createCategory(name, type);
     return res.status(201).json({ success: true, data: newCategory, message: "Thêm danh mục thành công!" });
   } catch (error) {
     next(error);
@@ -38,13 +38,9 @@ export const createCategoryController = async (req, res, next) => {
 export const updateCategoryController = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { name } = req.body;
+    const updateData = req.body;
 
-    if (!id || !name) {
-      return res.status(400).json({ success: false, message: "Thiếu thông tin cập nhật" });
-    }
-
-    const updatedCategory = await updateCategory(id, name);
+    const updatedCategory = await updateCategory(id, updateData);
     return res.status(200).json({ success: true, data: updatedCategory, message: "Cập nhật danh mục thành công!" });
   } catch (error) {
     next(error);

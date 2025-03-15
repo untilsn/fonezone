@@ -1,6 +1,6 @@
 import Joi from "joi";
 
-export const brandValidationSchema = Joi.object({
+export const brandValidation = Joi.object({
   name: Joi.string()
     .trim()
     .lowercase()

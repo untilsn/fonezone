@@ -5,7 +5,7 @@ import dotenv from "dotenv";
 import connectDB from "./config/database.js";
 import mainRouter from "./routes/mainRouter.js";
 import config from "./config/env.js";
-import errorHandler from "./middlewares/errorHandler.js";
+import errorMiddleware from "./middlewares/errorMiddleware.js";
 
 dotenv.config();
 
@@ -22,7 +22,7 @@ app.use(cookieParser());
 
 mainRouter(app);
 
-app.use(errorHandler);  
+app.use(errorMiddleware);  
 
 const port = config.PORT || 5000;
 

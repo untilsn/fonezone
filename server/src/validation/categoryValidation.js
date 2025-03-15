@@ -1,6 +1,6 @@
 import Joi from "joi";
 
-export const categorySchema = Joi.object({
+export const categoryValidation = Joi.object({
   name: Joi.string()
     .trim()
     .min(2)
@@ -20,4 +20,16 @@ export const categorySchema = Joi.object({
       "string.invalidSpace": "Tên danh mục không được có khoảng trắng thừa",
       "any.required": "Tên danh mục là bắt buộc",
     }),
+
+  type: Joi.string()
+    .valid("blog", "product")
+    .required()
+    .messages({
+      "any.only": "Loại danh mục chỉ có thể là 'blog' hoặc 'product'",
+      "any.required": "Loại danh mục là bắt buộc",
+    }),
 });
+
+export const updateCategoryValidation = categoryValidation.fork(["name", "type"], (schema) =>
+  schema.optional()
+);

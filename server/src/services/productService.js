@@ -2,6 +2,8 @@ import Brand from "../models/Brand.js";
 import Category from "../models/Category.js";
 import Product from "../models/Product.js";
 import CustomError from "../utils/customError.js";
+import { calculateDiscountPrice } from "../utils/productHelper.js";
+import { generalSlug } from "../utils/slugHelper.js";
 
 
 
@@ -82,24 +84,47 @@ export const createProduct = async (productData) => {
     throw new CustomError(409, "Sản phẩm đã tồn tại.");
   }
 
-  const newProduct = new Product(productData);
-  const savedProduct = await newProduct.save();
+  productData.slug = generalSlug(productData.name);
 
-  return savedProduct;
-};
+  productData.discountPrice = calculateDiscountPrice(productData.price, productData.discount)
+
+  if (productData.flashSaleStart && productData.flashSaleEnd) {
+    if (!isValidFlashSale(productData.flashSaleStart, productData.flashSaleEnd)) {
+      throw new CustomError(400, "Thời gian Flash Sale không hợp lệ.");
+    }
+  }
+
+  const newProduct = new Product(productData);
+  return await newProduct.save();
+}
+
 
 
 export const updateProduct = async (productId, updateData) => {
-
   const product = await Product.findById(productId)
   if (!product) {
     throw new CustomError(404, "Sản phẩm không tồn tại.");
   }
 
-  Object.assign(product, updateData);
+  if (updateData.name) {
+    updateData.slug = generalSlug(updateData.name);
+  }
 
-  const updatedProduct = await product.save()
-  return updatedProduct;
+  if (updateData.price !== undefined || updateData.discount !== undefined) {
+    updateData.discountPrice = calculateDiscountPrice(
+      updateData.price ?? product.price,
+      updateData.discount ?? product.discount
+    );
+  }
+
+  if (updateData.flashSaleStart || updateData.flashSaleEnd) {
+    if (!isValidFlashSale(updateData.flashSaleStart ?? product.flashSaleStart, updateData.flashSaleEnd ?? product.flashSaleEnd)) {
+      throw new CustomError(400, "Thời gian Flash Sale không hợp lệ.");
+    }
+  }
+
+  Object.assign(product, updateData);
+  return await product.save();
 };
 
 

@@ -11,6 +11,8 @@ import ShopPage from './pages/ShopPage'
 import ProductDetailsPage from './pages/ProductDetailsPage'
 import WishlistPage from './pages/WishlistPage'
 import CartPage from './pages/CartPage'
+import ScrollTopButton from './components/button/ScrollTopButton'
+import BlogPage from './pages/BlogPage'
 
 const App = () => {
   return (
@@ -25,9 +27,11 @@ const App = () => {
         <Route path='/product' element={<ProductDetailsPage />} />
         <Route path='/wishlist' element={<WishlistPage />} />
         <Route path='/cart' element={<CartPage />} />
+        <Route path='/blog' element={<BlogPage />} />
         <Route path='*' element={<NotFoundPage />} />
       </Routes>
       <Footer></Footer>
+      <ScrollTopButton></ScrollTopButton>  
     </div>
   )
 }

@@ -1,12 +1,4 @@
 import mongoose from "mongoose";
-import {
-  calculateDiscountPrice,
-  calculateDiscountPriceOnUpdate,
-  generateSlug,
-  generateSlugOnUpdate,
-  validateFlashSale,
-  validateFlashSaleOnUpdate
-} from "../utils/mongooseHooks.js";
 
 const productSchema = new mongoose.Schema(
   {
@@ -44,24 +36,18 @@ const productSchema = new mongoose.Schema(
     ],
     isFeatured: { type: Boolean, default: false },
     view: { type: Number, default: 0, min: 0 },
-    flashSale: {
-      flashSalePrice: { type: Number, min: 0 },
-      flashSaleStart: { type: Date },
-      flashSaleEnd: { type: Date }
-    },
   },
   { timestamps: true }
 );
 
-// Middleware xử lý khi lưu mới
-productSchema.pre("save", generateSlug);
-productSchema.pre("save", calculateDiscountPrice);
-productSchema.pre("save", validateFlashSale);
 
-// Middleware xử lý khi update
-productSchema.pre("findOneAndUpdate", generateSlugOnUpdate);
-productSchema.pre("findOneAndUpdate", calculateDiscountPriceOnUpdate);
-productSchema.pre("findOneAndUpdate", validateFlashSaleOnUpdate);
+// // Middleware xử lý khi lưu mới
+// productSchema.pre("save", calculateDiscountPrice);
+// productSchema.pre("save", validateFlashSale);
+
+// // Middleware xử lý khi update
+// productSchema.pre("findOneAndUpdate", calculateDiscountPriceOnUpdate);
+// productSchema.pre("findOneAndUpdate", validateFlashSaleOnUpdate);
 
 const Product = mongoose.model("Product", productSchema);
 

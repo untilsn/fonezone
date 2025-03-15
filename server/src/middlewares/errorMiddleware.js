@@ -1,6 +1,6 @@
 import CustomError from "../utils/customError.js";
 
-const errorHandler = (err, req, res, next) => {
+const errorMiddleware = (err, req, res, next) => {
   console.error(err)
 
   if (err instanceof CustomError) {
@@ -10,4 +10,4 @@ const errorHandler = (err, req, res, next) => {
   return res.status(500).json({ success: false, message: "Lỗi máy chủ!", error: err });
 };
 
-export default errorHandler;
+export default errorMiddleware;
