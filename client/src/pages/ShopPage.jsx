@@ -2,6 +2,7 @@ import React from 'react'
 import HeaderPage from '../components/layout/HeaderPage'
 import BreadcrumbPage from '../components/layout/BreadcrumbPage'
 import ProductGrid from '../features/shop/ProductGrid'
+import ProductFilter from '../features/shop/ProductFilter'
 
 const ShopPage = () => {
   return (
@@ -9,7 +10,7 @@ const ShopPage = () => {
       <HeaderPage></HeaderPage>
       <BreadcrumbPage></BreadcrumbPage>
       <div className='container grid grid-cols-[270px_minmax(0,_1fr)] gap-8 my-10'>
-        {/* <ShopFilter></ShopFilter> */}
+        {/* <ProductFilter></ProductFilter> */}
         <div>
           shopfilter
         </div>

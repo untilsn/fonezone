@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import { FILTERLIST } from "../../constants/filterList";
 import FilterOption from "./filter/FilterOption";
-
+import { FILTERLIST } from "../../constants/filterList"
 const ProductFilter = () => {
   const [openAcc, setOpenAcc] = useState({
     brand: false,
@@ -36,10 +35,12 @@ const ProductFilter = () => {
             filter={{
               ...filter,
               isOpen: openAcc[filter.key],
+              options: filter.options || [], // Đảm bảo luôn là mảng
             }}
             onToggle={() => toggleAccordion(filter.key)}
           />
         ))}
+
       </div>
     </div>
   );
