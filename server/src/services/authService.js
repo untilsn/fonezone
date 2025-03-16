@@ -16,6 +16,11 @@ export const registerUser = async (name, email, password) => {
   if (user) {
     if (user.isAccountVerify) {
       throw new errorHandle(409, "Email đã được đăng ký và xác minh.");
+    } else {
+      const saltRounds = Number(config.SALT);
+      user.name = name;
+      user.password = await bcrypt.hash(password, saltRounds);
+      await user.save();
     }
   } else {
     const saltRounds = Number(config.SALT);
@@ -32,7 +37,7 @@ export const registerUser = async (name, email, password) => {
   const otp = await generateOtp(user._id, "verify")
 
   await sendEmail(
-    email,
+    user.email,
     "Mã OTP xác minh tài khoản",
     EMAIL_VERIFY_TEMPLATE.replace("{{otp}}", otp).replace("{{email}}", email)
   );

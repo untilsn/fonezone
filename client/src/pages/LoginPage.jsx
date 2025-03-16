@@ -5,23 +5,35 @@ import { Link } from 'react-router-dom';
 import { Button } from '@material-tailwind/react';
 import { FaArrowRight } from 'react-icons/fa';
 import { CiLock, CiMail } from 'react-icons/ci';
-
 import InputField from '../components/input/InputField';
 import Logo from '../components/ui/Logo';
+import { loginSchema } from '../utils/authSchema';
+
+
+
+const formFields = [
+  { name: 'email', label: 'Địa chỉ email', icon: <CiMail />, placeholder: 'your@gmail.com' },
+  { name: 'password', label: 'Mật khẩu', icon: <CiLock />, placeholder: '••••••', type: 'password' },
+];
+
+
 
 const LoginPage = () => {
   const { control, handleSubmit } = useForm({
     defaultValues: { email: '', password: '' },
-    mode: 'onSubmit',
-    resolver: yupResolver(),
+    mode: 'onChange',
+    resolver: yupResolver(loginSchema),
   });
 
-  const handleLoginUser = () => { };
+  const handleLoginUser = (values) => {
 
-  const formFields = [
-    { name: 'email', label: 'Địa chỉ email', icon: <CiMail />, placeholder: 'your@gmail.com' },
-    { name: 'password', label: 'Mật khẩu', icon: <CiLock />, placeholder: '••••••', type: 'password' },
-  ];
+    console.log(values)
+  };
+
+
+
+
+
 
   return (
     <div className="relative py-20">
@@ -44,6 +56,7 @@ const LoginPage = () => {
           <form onSubmit={handleSubmit(handleLoginUser)} className="flex flex-col gap-5">
             {formFields.map(({ name, label, icon, placeholder, type }) => (
               <InputField
+                id={name}
                 key={name}
                 name={name}
                 control={control}

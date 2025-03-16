@@ -1,29 +1,44 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Link } from 'react-router-dom';
 import { Button } from '@material-tailwind/react';
 import { FaArrowRight } from 'react-icons/fa';
 import { CiLock, CiMail, CiUser } from 'react-icons/ci';
-
 import InputField from '../components/input/InputField';
 import Logo from '../components/ui/Logo';
+import { registerSchema } from '../utils/authSchema';
+import { registerUser } from '../api/authApi';
+import { useMutationHook } from '../hooks/useMutation';
+
+const formFields = [
+  { name: 'name', label: 'tên người dùng', icon: <CiUser />, placeholder: 'username' },
+  { name: 'email', label: 'Địa chỉ email', icon: <CiMail />, placeholder: 'your@gmail.com' },
+  { name: 'password', label: 'Mật khẩu', icon: <CiLock />, placeholder: '••••••', type: 'password' },
+  { name: 'confirmPassword', label: 'Xác nhận mật khẩu', icon: <CiLock />, placeholder: '••••••', type: 'password' },
+];
 
 const RegisterPage = () => {
   const { control, handleSubmit } = useForm({
     defaultValues: { email: '', password: '' },
     mode: 'onSubmit',
-    resolver: yupResolver(),
+    resolver: yupResolver(registerSchema),
   });
 
-  const handleLoginUser = () => { };
+  const { mutate, data, isSuccess, isPending } = useMutationHook(registerUser)
 
-  const formFields = [
-    { name: 'name', label: 'tên người dùng', icon: <CiUser />, placeholder: 'username' },
-    { name: 'email', label: 'Địa chỉ email', icon: <CiMail />, placeholder: 'your@gmail.com' },
-    { name: 'password', label: 'Mật khẩu', icon: <CiLock />, placeholder: '••••••', type: 'password' },
-    { name: 'comfirnPassword', label: 'Xác nhận mật khẩu', icon: <CiLock />, placeholder: '••••••', type: 'password' },
-  ];
+  const handleLoginUser = (values) => {
+    mutate(values, {
+      onSuccess: (data) => {
+        console.log("Đăng ký thành công:", data);
+      },
+      onError: (err) => {
+        console.error("Đăng ký thất bại:", err.response?.data || err.message);
+      }
+    });
+  };
+
+
 
 
   return (
@@ -66,6 +81,7 @@ const RegisterPage = () => {
             {/* Login Google */}
             <Button
               type="button"
+              loading={false}
               variant="outlined"
               className="flex w-full items-center justify-center gap-2 rounded-lg">
               <img src="https://docs.material-tailwind.com/icons/google.svg" alt="google" className="h-4 w-4" />

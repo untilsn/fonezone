@@ -2,10 +2,10 @@ import Joi from "joi";
 
 // Validation xác thực đăng ký (Register)
 export const registerValidation = Joi.object({
-  name: Joi.string().trim().min(2).max(15).required().messages({
+  name: Joi.string().trim().min(2).max(24).required().messages({
     "string.empty": "Tên không được để trống",
     "string.min": "Tên phải có ít nhất 2 ký tự",
-    "string.max": "Tên không được vượt quá 15 ký tự",
+    "string.max": "Tên không được vượt quá 24 ký tự",
     "any.required": "Tên là bắt buộc",
   }),
   email: Joi.string().email().trim().required().messages({
