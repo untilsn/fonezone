@@ -17,7 +17,6 @@ export const verifyAdminToken = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, config.ACCESS_TOKEN_SECRET);
-    console.log(decoded)
     if (decoded.role !== "admin") {
       return res.status(403).json({ success: false, message: "Bạn không có quyền truy cập!" });
     }
@@ -37,7 +36,6 @@ export const verifyUserToken = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, config.ACCESS_TOKEN_SECRET);
-    console.log(decoded)
     req.user = { id: decoded.id, role: decoded.role };
     next();
   } catch (err) {
