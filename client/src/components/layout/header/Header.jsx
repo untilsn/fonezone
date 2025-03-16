@@ -1,9 +1,9 @@
 import React from 'react';
 import HeaderTop from './HeaderTop';
-import Logo from '../ui/Logo';
 import HeaderSearch from './HeaderSearch';
 import HeaderAction from './HeaderAction';
 import HeaderNavbar from './HeaderNavbar';
+import Logo from '../../ui/Logo';
 
 const Header = () => {
   return (

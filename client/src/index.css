@@ -7,7 +7,7 @@
 
 @layer base {
   body {
-    @apply font-sans text-dark-primary bg-white ;
+    @apply font-sans text-dark-primary bg-white;
   }
 }
 
@@ -15,8 +15,13 @@
   .container {
     @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
   }
+
   .bg-gradian {
     @apply absolute inset-0 bg-gradient-to-r from-[#fff6dd] to-[#fee2c5] before:absolute before:inset-0 before:bg-gray-100/10
+  }
+
+  .grid-layout {
+    @apply grid grid-cols-12 gap-8 my-10;
   }
 }
 

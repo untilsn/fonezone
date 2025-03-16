@@ -7,9 +7,13 @@ const BlogPage = () => {
   return (
     <div>
       <BreadcrumbPage></BreadcrumbPage>
-      <div className='flex items-center gap-5 container py-10'>
-        <BlogList></BlogList>
-        <BlogSidebar></BlogSidebar>
+      <div className=' container grid-layout'>
+        <div className='col-span-9'>
+          <BlogList></BlogList>
+        </div>
+        <div className='col-span-3'>
+          <BlogSidebar></BlogSidebar>
+        </div>
       </div>
     </div>
   )

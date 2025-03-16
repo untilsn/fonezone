@@ -1,9 +1,9 @@
 import React from 'react'
-import Header from './components/Header/Header'
+import Header from './components/layout/header/Header'
 import HomePage from './pages/HomePage'
 import { Route, Routes } from 'react-router-dom'
 import LoginPage from './pages/LoginPage'
-import Footer from './components/footer/Footer'
+import Footer from './components/layout/Footer'
 import RegisterPage from './pages/RegisterPage'
 import ResetPasswordPage from './pages/ResetPasswordPage'
 import NotFoundPage from './pages/NotFoundPage'
@@ -13,6 +13,8 @@ import WishlistPage from './pages/WishlistPage'
 import CartPage from './pages/CartPage'
 import ScrollTopButton from './components/button/ScrollTopButton'
 import BlogPage from './pages/BlogPage'
+import AboutPage from './pages/AboutPage'
+import ProfilePage from './pages/ProfilePage'
 
 const App = () => {
   return (
@@ -28,6 +30,8 @@ const App = () => {
         <Route path='/wishlist' element={<WishlistPage />} />
         <Route path='/cart' element={<CartPage />} />
         <Route path='/blog' element={<BlogPage />} />
+        <Route path='/about' element={<AboutPage />} />
+        <Route path='/profile' element={<ProfilePage />} />
         <Route path='*' element={<NotFoundPage />} />
       </Routes>
       <Footer></Footer>

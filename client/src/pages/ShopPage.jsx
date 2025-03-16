@@ -9,12 +9,14 @@ const ShopPage = () => {
     <div>
       <HeaderPage></HeaderPage>
       <BreadcrumbPage></BreadcrumbPage>
-      <div className='container grid grid-cols-[270px_minmax(0,_1fr)] gap-8 my-10'>
+      <div className='container grid-layout'>
         {/* <ProductFilter></ProductFilter> */}
-        <div>
-          shopfilter
+        <div className='col-span-3'>
+          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Minus repellat voluptas architecto laudantium doloribus natus ut quas nesciunt eius animi, est sunt praesentium laborum ipsa beatae veniam, velit ullam? Incidunt.
         </div>
-        <ProductGrid></ProductGrid>
+        <div className='col-span-9'>
+          <ProductGrid></ProductGrid>
+        </div>
       </div>
     </div>
   )

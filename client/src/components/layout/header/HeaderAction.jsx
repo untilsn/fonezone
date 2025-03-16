@@ -1,8 +1,8 @@
 import React, { useMemo, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom'; // Nếu sử dụng React Router, nếu không thì điều chỉnh phù hợp
 import { useSelector } from 'react-redux'; // Nếu sử dụng Redux để quản lý trạng thái, tùy chọn
-import IconButton from '../ui/IconButton';
 import { MdAccountCircle, MdFavoriteBorder, MdOutlineAccountCircle, MdOutlineMessage, MdOutlineShoppingBag, MdShoppingBag } from "react-icons/md";
+import IconButton from '../../ui/IconButton';
 
 const HeaderAction = () => {
   const navigate = useNavigate()
@@ -11,7 +11,7 @@ const HeaderAction = () => {
 
   // Memoize các mục hành động để ngăn re-render không cần thiết
   const actionItems = useMemo(() => [
-    { id: 'account', icon: <MdOutlineAccountCircle size={22} />, label: 'account', path: '/account' },
+    { id: 'account', icon: <MdOutlineAccountCircle size={22} />, label: 'account', path: '/profile' },
     { id: 'wishlist', icon: <MdFavoriteBorder size={22} />, label: 'yêu thích', path: '/wishlist' },
     { id: 'cart', icon: <MdOutlineShoppingBag size={22} />, label: 'giỏ hàng', path: '/cart', count: 10 },
   ], []); // Chỉ tính toán lại nếu cartCount thay đổi
