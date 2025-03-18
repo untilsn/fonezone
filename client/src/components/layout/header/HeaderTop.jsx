@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 
 const HeaderTop = () => {
   const user = useSelector((state) => state.user);
+  console.log(user)
   const isAuthenticated = user?.isAuthenticated; 
   return (
     <div className="flex items-center justify-between py-3 border-b border-gray-dark">

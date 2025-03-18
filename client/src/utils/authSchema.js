@@ -25,8 +25,17 @@ export const registerSchema = yup.object({
     .string()
     .required("Vui lòng nhập mật khẩu")
     .min(8, "Mật khẩu phải có ít nhất 8 ký tự"),
-    confirmPassword: yup
+  confirmPassword: yup
     .string()
     .required("Vui lòng nhập lại mật khẩu")
     .oneOf([yup.ref("password"), null], "Mật khẩu nhập lại không khớp"),
+});
+
+
+export const verifySchema = yup.object().shape({
+  otp: yup
+    .string()
+    .length(6, 'OTP phải có 6 chữ số')
+    .matches(/^[0-9]+$/, 'OTP chỉ được chứa số')
+    .required('OTP là bắt buộc'),
 });

@@ -5,22 +5,6 @@ import { setRefreshTokenCookie } from "../utils/cookieHelper.js";
 
 const isProduction = config.NODE_ENV === "production";
 
-// * create user
-export const registerUserController = async (req, res, next) => {
-  try {
-    const { name, email, password } = req.body;
-
-    await registerUser(name, email, password);
-
-    return res.status(201).json({
-      success: true,
-      message: "Mã OTP đã được gửi. Vui lòng kiểm tra email để xác minh tài khoản."
-    });
-  } catch (error) {
-    next(error);
-  }
-};
-
 
 // * login user
 export const loginUserController = async (req, res, next) => {
@@ -38,16 +22,20 @@ export const loginUserController = async (req, res, next) => {
 };
 
 
-// *get current user
-export const getUserProfileController = async (req, res, next) => {
+// * create user
+export const registerUserController = async (req, res, next) => {
   try {
-    const userId = req.user.id
+    const { name, email, password } = req.body;
 
-    const result = await getUserProfile(userId);
+    const result = await registerUser(name, email, password);
 
-    return res.status(200).json({ success: true, user: result, message: "Lấy thông tin người dùng thành công!" });
+    return res.status(201).json({
+      success: true,
+      email: result.email,
+      message: "Mã OTP đã được gửi. Vui lòng kiểm tra email để xác minh tài khoản."
+    });
   } catch (error) {
-    next(error)
+    next(error);
   }
 };
 
@@ -62,6 +50,20 @@ export const verifyEmailController = async (req, res, next) => {
     setRefreshTokenCookie(res, refresh_token)
 
     return res.status(200).json({ success: true, access_token, message: "Xác minh tài khoản thành công!" });
+  } catch (error) {
+    next(error)
+  }
+};
+
+
+// *get current user
+export const getUserProfileController = async (req, res, next) => {
+  try {
+    const userId = req.user.id
+
+    const result = await getUserProfile(userId);
+
+    return res.status(200).json({ success: true, data: result, message: "Lấy thông tin người dùng thành công!" });
   } catch (error) {
     next(error)
   }

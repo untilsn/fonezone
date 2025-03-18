@@ -41,6 +41,8 @@ export const registerUser = async (name, email, password) => {
     "Mã OTP xác minh tài khoản",
     EMAIL_VERIFY_TEMPLATE.replace("{{otp}}", otp).replace("{{email}}", email)
   );
+
+  return user
 };
 
 

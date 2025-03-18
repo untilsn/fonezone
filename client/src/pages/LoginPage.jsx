@@ -4,18 +4,10 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Link } from 'react-router-dom';
 import { Button } from '@material-tailwind/react';
 import { FaArrowRight } from 'react-icons/fa';
-import { CiLock, CiMail } from 'react-icons/ci';
 import InputField from '../components/input/InputField';
 import Logo from '../components/ui/Logo';
 import { loginSchema } from '../utils/authSchema';
-
-
-
-const formFields = [
-  { name: 'email', label: 'Địa chỉ email', icon: <CiMail />, placeholder: 'your@gmail.com' },
-  { name: 'password', label: 'Mật khẩu', icon: <CiLock />, placeholder: '••••••', type: 'password' },
-];
-
+import { loginFields } from '../utils/formField';
 
 
 const LoginPage = () => {
@@ -29,9 +21,6 @@ const LoginPage = () => {
 
     console.log(values)
   };
-
-
-
 
 
 
@@ -54,7 +43,7 @@ const LoginPage = () => {
 
           {/* Form login */}
           <form onSubmit={handleSubmit(handleLoginUser)} className="flex flex-col gap-5">
-            {formFields.map(({ name, label, icon, placeholder, type }) => (
+            {loginFields.map(({ name, label, icon, placeholder, type }) => (
               <InputField
                 id={name}
                 key={name}

@@ -1,51 +1,34 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@material-tailwind/react';
 import { FaArrowRight } from 'react-icons/fa';
-import { CiLock, CiMail, CiUser } from 'react-icons/ci';
 import InputField from '../components/input/InputField';
 import Logo from '../components/ui/Logo';
 import { registerSchema } from '../utils/authSchema';
 import { registerUser } from '../api/authApi';
 import { useMutationHook } from '../hooks/useMutation';
+import { registerFields } from '../utils/formField';
+import { handleRegisterUser } from '../services/authService';
 
-const formFields = [
-  { name: 'name', label: 'tên người dùng', icon: <CiUser />, placeholder: 'username' },
-  { name: 'email', label: 'Địa chỉ email', icon: <CiMail />, placeholder: 'your@gmail.com' },
-  { name: 'password', label: 'Mật khẩu', icon: <CiLock />, placeholder: '••••••', type: 'password' },
-  { name: 'confirmPassword', label: 'Xác nhận mật khẩu', icon: <CiLock />, placeholder: '••••••', type: 'password' },
-];
 
 const RegisterPage = () => {
+  const navigate = useNavigate()
   const { control, handleSubmit } = useForm({
     defaultValues: { email: '', password: '' },
     mode: 'onSubmit',
     resolver: yupResolver(registerSchema),
   });
 
-  const { mutate, data, isSuccess, isPending } = useMutationHook(registerUser)
-
-  const handleLoginUser = (values) => {
-    mutate(values, {
-      onSuccess: (data) => {
-        console.log("Đăng ký thành công:", data);
-      },
-      onError: (err) => {
-        console.error("Đăng ký thất bại:", err.response?.data || err.message);
-      }
-    });
-  };
-
-
+  const { mutate, data, isSuccess, isPending } =
+    useMutationHook((values) => handleRegisterUser(values, navigate))
 
 
   return (
     <div className="relative py-20">
       {/* Background với overlay */}
       <div className="bg-gradian"></div>
-
       <div className="relative container flex items-center justify-center">
         {/* Card login */}
         <div className="max-w-[500px] w-full px-12 py-5 bg-white shadow-lg rounded-sm">
@@ -55,8 +38,8 @@ const RegisterPage = () => {
 
           <h1 className="text-lg font-semibold text-dark mb-5">Đăng ký tài khoản!</h1>
           {/* Form login */}
-          <form onSubmit={handleSubmit(handleLoginUser)} className="flex flex-col gap-5">
-            {formFields.map(({ name, label, icon, placeholder, type }) => (
+          <form onSubmit={handleSubmit((values) => mutate(values))} className="flex flex-col gap-5">
+            {registerFields.map(({ name, label, icon, placeholder, type }) => (
               <InputField
                 key={name}
                 name={name}
@@ -67,17 +50,15 @@ const RegisterPage = () => {
                 type={type}
               />
             ))}
-
             <Button
               type="submit"
+              loading={isPending}
               className="flex items-center justify-center w-full mt-4 rounded-lg gap-3 bg-dark hover:bg-yellowDark text-light px-6 py-3">
               Đăng ký <FaArrowRight className="text-sm" />
             </Button>
-
             <div className="relative my-3 h-[1px] bg-gray-200">
               <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-3 text-sm">or</span>
             </div>
-
             {/* Login Google */}
             <Button
               type="button"
@@ -88,7 +69,6 @@ const RegisterPage = () => {
               Đăng ký bằng Google
             </Button>
           </form>
-
           {/* Register link */}
           <p className="text-center text-gray text-[13px] mt-7">
             Đã có tài khoản?

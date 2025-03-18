@@ -15,16 +15,20 @@ import ScrollTopButton from './components/button/ScrollTopButton'
 import BlogPage from './pages/BlogPage'
 import AboutPage from './pages/AboutPage'
 import ProfilePage from './pages/ProfilePage'
+import VerifyAccountPage from './pages/VerifyAccountPage'
+import CustomToastify from './components/ui/CustomToastify'
 
 const App = () => {
   return (
     <div>
+      <CustomToastify></CustomToastify>  
       <Header></Header>
       <Routes>
         <Route path='/' element={<HomePage />} />
         <Route path='/login' element={<LoginPage />} />
         <Route path='/register' element={<RegisterPage />} />
         <Route path='/reset-password' element={<ResetPasswordPage />} />
+        <Route path='/verify-account' element={<VerifyAccountPage />} />
         <Route path='/shop' element={<ShopPage />} />
         <Route path='/product' element={<ProductDetailsPage />} />
         <Route path='/wishlist' element={<WishlistPage />} />
