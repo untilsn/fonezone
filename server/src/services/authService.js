@@ -6,7 +6,8 @@ import { EMAIL_VERIFY_TEMPLATE, PASSWORD_RESET_TEMPLATE } from "../mail/emailTem
 import { generateOtp, verifyOtp } from "./otpService.js";
 import sendEmail from "../utils/emailHelper.js";
 import { generateAccessToken, generateRefreshToken } from "../utils/jwtGeneral.js";
-import errorHandle from "../middlewares/errorMiddleware.js";
+import CustomError from "../utils/customError.js";
+
 
 
 // * create user
@@ -15,7 +16,7 @@ export const registerUser = async (name, email, password) => {
 
   if (user) {
     if (user.isAccountVerify) {
-      throw new errorHandle(409, "Email đã được đăng ký và xác minh.");
+      throw new CustomError(409, "Email đã được đăng ký và xác minh.");
     } else {
       const saltRounds = Number(config.SALT);
       user.name = name;
@@ -36,11 +37,15 @@ export const registerUser = async (name, email, password) => {
 
   const otp = await generateOtp(user._id, "verify")
 
-  await sendEmail(
+  const emailResult = await sendEmail(
     user.email,
     "Mã OTP xác minh tài khoản",
     EMAIL_VERIFY_TEMPLATE.replace("{{otp}}", otp).replace("{{email}}", email)
   );
+
+  if (!emailResult.success) {
+    throw new CustomError(500, "Gửi email thất bại. Vui lòng thử lại.");
+  }
 
   return user
 };
@@ -50,16 +55,15 @@ export const registerUser = async (name, email, password) => {
 export const loginUser = async (email, password) => {
   const user = await User.findOne({ email });
   if (!user) {
-    throw new errorHandle(404, "Người dùng không tồn tại.");
+    throw new CustomError(404, "Người dùng không tồn tại.");
   }
-
-  const validPassword = bcrypt.compare(password, user.password);
+  const validPassword = await bcrypt.compare(password, user.password);
   if (!validPassword) {
-    throw new errorHandle(401, "Email hoặc mật khẩu không đúng!");
+    throw new CustomError(401, "Email hoặc mật khẩu không đúng!");
   }
 
   if (!user.isAccountVerify) {
-    throw new errorHandle(403, "Tài khoản của bạn chưa được xác minh. Vui lòng xác minh email trước khi đăng nhập.");
+    throw new CustomError(403, "Tài khoản của bạn chưa được xác minh. Vui lòng xác minh email trước khi đăng nhập.");
   }
 
   const access_token = generateAccessToken({ id: user._id, role: user.role });
@@ -72,7 +76,7 @@ export const loginUser = async (email, password) => {
 export const getUserProfile = async (userId) => {
   const user = await User.findById(userId).select("-password")
   if (!user) {
-    throw new errorHandle(404, "Tài khoản người dùng không tồn tại!");
+    throw new CustomError(404, "Tài khoản người dùng không tồn tại!");
   }
   return user
 }
@@ -84,7 +88,7 @@ export const verifyAccount = async (email, otp) => {
   const user = await User.findOne({ email });
 
   if (user.isAccountVerify) {
-    throw new errorHandle(400, "Tài khoản đã được xác minh trước đó!");
+    throw new CustomError(400, "Tài khoản đã được xác minh trước đó!");
   }
 
   user.isAccountVerify = true;
@@ -98,27 +102,37 @@ export const verifyAccount = async (email, otp) => {
 
 
 // * send otp reset
-export const sendOtpReset = async (email) => {
+export const forgotPassword = async (email) => {
   const user = await User.findOne({ email })
   if (!user) {
-    throw new errorHandle(404, "Người dùng không tồn tại.");
+    throw new CustomError(404, "Người dùng không tồn tại.");
   }
 
   const otp = await generateOtp(user._id, "reset")
 
-  await sendEmail(
+  const emailResult = await sendEmail(
     email,
     "Mã OTP reset mật khẩu",
     PASSWORD_RESET_TEMPLATE.replace("{{otp}}", otp).replace("{{email}}", { email: user.email })
   );
+
+  if (!emailResult.success) {
+    throw new CustomError(500, "Gửi email thất bại. Vui lòng thử lại.");
+  }
 };
 
 
+export const verifyOtpReset = async (email, otp) => {
+  const user = await User.findOne({ email })
+  if (!user) {
+    throw new CustomError(404, "Người dùng không tồn tại.");
+  }
 
-
-export const resetOtpPassword = async (email, otp, newPassword) => {
   await verifyOtp(email, otp, "reset")
+};
 
+
+export const resetOtpPassword = async (email, newPassword) => {
   const user = await User.findOne({ email });
 
   const isSamePassword = await bcrypt.compare(newPassword, user.password);

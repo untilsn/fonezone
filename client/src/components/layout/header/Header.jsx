@@ -18,7 +18,7 @@ const Header = () => {
           </div>
         </div>
       </div>
-      <div className='bg-white shadow-item sticky -top-1 z-50 w-full'>
+      <div className='bg-white shadow-item sticky -top-1 z-40 w-full'>
         <HeaderNavbar />
       </div>
     </>

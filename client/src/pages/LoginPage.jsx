@@ -1,26 +1,28 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@material-tailwind/react';
 import { FaArrowRight } from 'react-icons/fa';
 import InputField from '../components/input/InputField';
 import Logo from '../components/ui/Logo';
 import { loginSchema } from '../utils/authSchema';
 import { loginFields } from '../utils/formField';
+import { useMutationHook } from '../hooks/useMutation';
+import { handleLoginUser } from '../services/authService';
+import { useDispatch } from 'react-redux';
 
 
 const LoginPage = () => {
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
   const { control, handleSubmit } = useForm({
     defaultValues: { email: '', password: '' },
     mode: 'onChange',
     resolver: yupResolver(loginSchema),
   });
 
-  const handleLoginUser = (values) => {
-
-    console.log(values)
-  };
+  const { mutate, isPending } = useMutationHook((values) => handleLoginUser(values, navigate, dispatch))
 
 
 
@@ -42,7 +44,7 @@ const LoginPage = () => {
           </p>
 
           {/* Form login */}
-          <form onSubmit={handleSubmit(handleLoginUser)} className="flex flex-col gap-5">
+          <form onSubmit={handleSubmit((values) => mutate(values))} className="flex flex-col gap-5">
             {loginFields.map(({ name, label, icon, placeholder, type }) => (
               <InputField
                 id={name}
@@ -64,6 +66,7 @@ const LoginPage = () => {
 
             <Button
               type="submit"
+              loading={isPending}
               className="flex items-center justify-center w-full rounded-lg gap-3 bg-dark hover:bg-yellowDark text-light px-6 py-3">
               Đăng nhập <FaArrowRight className="text-sm" />
             </Button>

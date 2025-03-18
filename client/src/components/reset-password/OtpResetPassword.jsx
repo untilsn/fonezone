@@ -1,33 +1,25 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@material-tailwind/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Link } from 'react-router-dom';
 import { FaArrowRight } from 'react-icons/fa';
-
 import Logo from '../ui/Logo';
 import InputOtp from '../input/InputOtp';
+import { otpSchema } from '../../utils/authSchema';
+import { useMutationHook } from '../../hooks/useMutation';
+import { handleVerifyOtpReset } from '../../services/authService';
 
 
-const OtpResetPassword = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const email = location.state?.email || '';
-
-  const { control, handleSubmit } = useForm({
-    defaultValues: { email: '', password: '' },
+const OtpResetPassword = ({ email }) => {
+  const { control, handleSubmit, formState: { errors } } = useForm({
+    defaultValues: { otp: "" },
     mode: 'onSubmit',
-    resolver: yupResolver(),
+    resolver: yupResolver(otpSchema),
   });
 
-  const handleLoginUser = () => { };
-
-
-
+  const { mutate, isPending } = useMutationHook((values) => handleVerifyOtpReset({ ...values, email }))
   return (
-
-
     <div className="relative container flex items-center justify-center">
       {/* Card login */}
       <div className="max-w-[500px] w-full px-12 py-5 bg-white shadow-lg rounded-sm">
@@ -41,12 +33,12 @@ const OtpResetPassword = () => {
         </p>
 
         {/* Form login */}
-        <form onSubmit={handleSubmit(handleLoginUser)} className="flex flex-col gap-5">
-          <InputOtp></InputOtp>
+        <form onSubmit={handleSubmit((values) => mutate(values))} className="flex flex-col gap-5">
+          <InputOtp control={control} name="otp" errors={errors}></InputOtp>
           <Button
-            onClick={navigate("/reset-password")}
-            type="button"
-            className="flex items-center justify-center w-full rounded-lg gap-3 bg-dark hover:bg-yellowDark text-light px-6 py-3">
+            type="submit"
+            loading={isPending}
+            className="flex items-center justify-center w-full rounded-lg mt-5 gap-3 bg-dark hover:bg-yellowDark text-light px-6 py-3">
             Xác nhận mã OTP <FaArrowRight className="text-sm" />
           </Button>
         </form>

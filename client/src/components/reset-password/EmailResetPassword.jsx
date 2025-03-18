@@ -5,25 +5,28 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@material-tailwind/react';
 import { FaArrowRight } from 'react-icons/fa';
 import { CiMail } from 'react-icons/ci';
-
 import InputField from '../input/InputField';
 import Logo from '../ui/Logo';
+import { useMutationHook } from '../../hooks/useMutation';
+import { forgetPasswordSchema } from '../../utils/authSchema';
+import { handleForgetPassword } from '../../services/authService';
 
-const EmailResetPassword = () => {
+const EmailResetPassword = ({ setStep, setEmail }) => {
   const navigate = useNavigate();
 
   const { control, handleSubmit } = useForm({
-    defaultValues: { email: '', password: '' },
+    defaultValues: { email: '' },
     mode: 'onSubmit',
-    resolver: yupResolver(),
+    resolver: yupResolver(forgetPasswordSchema),
   });
 
-  const handleLoginUser = () => { };
+  const { mutate, isPending } = useMutationHook((values) => {
+    handleForgetPassword(values, setStep);
+    setEmail(values.email);
+  });
 
 
   return (
-    
-
     <div className="relative container flex items-center justify-center">
       {/* Card login */}
       <div className="max-w-[500px] w-full px-12 py-5 bg-white shadow-lg rounded-sm">
@@ -38,7 +41,7 @@ const EmailResetPassword = () => {
 
 
         {/* Form login */}
-        <form onSubmit={handleSubmit(handleLoginUser)} className="flex flex-col gap-5">
+        <form onSubmit={handleSubmit((values) => mutate(values))} className="flex flex-col gap-5">
           <InputField
             name="email"
             control={control}
@@ -46,11 +49,12 @@ const EmailResetPassword = () => {
             icon={<CiMail />}
             placeholder="your@gmail.com"
           />
-          <Link
-            to="/verify-otp"
-            className="flex items-center justify-center w-full rounded-lg gap-3 bg-dark hover:bg-yellowDark text-light px-6 py-3">
+          <Button
+            type='submit'
+            loading={isPending}
+            className="flex items-center justify-center w-full mt-5 rounded-lg gap-3 bg-dark hover:bg-yellowDark text-light px-6 py-3">
             Gửi mã OTP <FaArrowRight className="text-sm" />
-          </Link>
+          </Button>
         </form>
 
         {/* Register link */}

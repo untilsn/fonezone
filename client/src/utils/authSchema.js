@@ -32,10 +32,25 @@ export const registerSchema = yup.object({
 });
 
 
-export const verifySchema = yup.object().shape({
+export const otpSchema = yup.object().shape({
   otp: yup
     .string()
     .length(6, 'OTP phải có 6 chữ số')
     .matches(/^[0-9]+$/, 'OTP chỉ được chứa số')
     .required('OTP là bắt buộc'),
 });
+
+
+
+export const forgetPasswordSchema = yup.object().shape({
+  email: yup.string().required("Vui lòng nhập địa chỉ email").email("Email không hợp lệ"),
+});
+
+
+export const resetPasswordschema = yup.object().shape({
+  newPassword: yup.string().min(6, 'Mật khẩu phải có ít nhất 6 ký tự').required('Vui lòng nhập mật khẩu mới'),
+  confirmNewPassword: yup.string()
+    .oneOf([yup.ref('newPassword'), null], 'Mật khẩu không khớp')
+    .required('Vui lòng xác nhận mật khẩu mới'),
+});
+

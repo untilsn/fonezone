@@ -4,8 +4,9 @@ import { toast } from "react-toastify"
 export const useMutationHook = (fnCallback) => {
   const mutation = useMutation({
     mutationFn: fnCallback,
-    onSuccess: (data) => {
-      toast.success(data.message || "success")
+    onSuccess: (res) => {
+      console.log(res)
+      toast.success(res.message || "success")
     },
     onError: (e) => {
       const errorMessage = e?.response?.data?.message || "Có lỗi xảy ra, vui lòng thử lại"

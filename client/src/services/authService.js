@@ -1,14 +1,30 @@
-import { getUserProfile, registerUser, verifyAccount } from "../api/authApi"
-import { setUser } from "../redux/slice/userSlice"
+import { forgetPassword, getUserProfile, loginUser, logoutUser, registerUser, resetPassword, verifyAccount, verifyOtpReset } from "../api/authApi"
+import { logout, setUser } from "../redux/slice/userSlice"
+
+
+export const handleLoginUser = async (values, navigate, dispatch) => {
+  try {
+    const res = await loginUser(values)
+    if (res?.access_token) {
+      localStorage.setItem("access_token", JSON.stringify(res.access_token))
+      await handleGetUserProfile(res.access_token, dispatch)
+      navigate("/")
+    }
+    return res
+  } catch (err) {
+    console.error(err.response?.data || err.message);
+    throw err;
+  }
+}
 
 
 export const handleRegisterUser = async (values, navigate) => {
   try {
-    const data = await registerUser(values)
-    if (data?.email) {
-      navigate("/verify-account", { state: { email: data.email } })
+    const res = await registerUser(values)
+    if (res?.email) {
+      navigate("/verify-account", { state: { email: res.email } })
     }
-    return data
+    return res
   } catch (err) {
     console.error(err.response?.data || err.message);
     throw err;
@@ -18,13 +34,13 @@ export const handleRegisterUser = async (values, navigate) => {
 
 export const handleVerifyAccount = async (values, navigate, dispatch) => {
   try {
-    const data = await verifyAccount(values)
-    if (data?.access_token) {
-      localStorage.setItem("access_token", JSON.stringify(data.access_token))
-      await handleGetUserProfile(data.access_token, dispatch)
+    const res = await verifyAccount(values)
+    if (res?.access_token) {
+      localStorage.setItem("access_token", JSON.stringify(res.access_token))
+      await handleGetUserProfile(res.access_token, dispatch)
       navigate("/")
     }
-    return data
+    return res
   } catch (err) {
     console.error(err.response?.data || err.message);
     throw err;
@@ -34,17 +50,69 @@ export const handleVerifyAccount = async (values, navigate, dispatch) => {
 
 export const handleGetUserProfile = async (token, dispatch) => {
   try {
-    if (!token) {
-      console.error("Token không hợp lệ!");
-      return null;
+    if (!token) return null;
+    const res = await getUserProfile(token)
+    if (res?.data) {
+      dispatch(setUser(res.data))
     }
-    console.log(data)
-    const data = await getUserProfile(token)
-    if (data.user) {
-      dispatch(setUser(data))
+    return res
+  } catch (err) {
+    console.error(err.response?.data || err.message);
+    throw err;
+  }
+}
+
+
+
+export const handleForgetPassword = async (values, setStep) => {
+  try {
+    const res = await forgetPassword(values)
+    console.log(res)
+    if (res &&res?.step) {
+      setStep(res.step)
     }
-    console.log(data)
-    return data
+    return res
+  } catch (err) {
+    console.error(err.response?.data || err.message);
+    throw err;
+  }
+}
+
+
+export const handleVerifyOtpReset = async (values) => {
+  try {
+    const res = await verifyOtpReset(values)
+    if (res?.step) {
+      setStep(res.step)
+    }
+    return res
+  } catch (err) {
+    console.error(err.response?.data || err.message);
+    throw err;
+  }
+}
+
+
+export const handleResetPassword = async (values) => {
+  try {
+    const res = await resetPassword(values)
+    if (res?.step) {
+      setStep(res.step)
+    }
+    return res
+  } catch (err) {
+    console.error(err.response?.data || err.message);
+    throw err;
+  }
+}
+
+
+
+export const handleLogoutUser = async (dispatch) => {
+  try {
+    await logoutUser()
+    dispatch(logout())
+    localStorage.clear()
   } catch (err) {
     console.error(err.response?.data || err.message);
     throw err;

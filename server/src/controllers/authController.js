@@ -1,5 +1,13 @@
 import config from "../config/env.js";
-import { getUserProfile, loginUser, registerUser, resetOtpPassword, sendOtpReset, verifyAccount } from "../services/authService.js";
+import {
+  forgotPassword,
+  getUserProfile,
+  loginUser,
+  registerUser,
+  resetOtpPassword,
+  verifyAccount,
+  verifyOtpReset
+} from "../services/authService.js";
 import { verifyRefreshToken } from "../services/jwtService.js";
 import { setRefreshTokenCookie } from "../utils/cookieHelper.js";
 
@@ -41,7 +49,7 @@ export const registerUserController = async (req, res, next) => {
 
 
 // * verify account
-export const verifyEmailController = async (req, res, next) => {
+export const verifyAccountController = async (req, res, next) => {
   try {
     const { email, otp } = req.body;
 
@@ -74,8 +82,19 @@ export const getUserProfileController = async (req, res, next) => {
 export const forgetPasswordController = async (req, res, next) => {
   try {
     const { email } = req.body
-    await sendOtpReset(email)
-    return res.status(200).json({ success: true, message: "Otp reset mật khẩu đã được gửi!" })
+    await forgotPassword(email)
+    return res.status(200).json({ success: true, step: 2, message: "Otp reset mật khẩu đã được gửi!" })
+  } catch (error) {
+    next(error)
+  }
+}
+
+//* verify  otp reset password
+export const verifyOtpResetController = async (req, res, next) => {
+  try {
+    const { email, otp } = req.body
+    await verifyOtpReset(email, otp)
+    return res.status(200).json({ success: true, step: 3, message: "Xác nhận otp thành công" })
   } catch (error) {
     next(error)
   }

@@ -8,7 +8,7 @@ import { FaArrowRight } from 'react-icons/fa';
 import Logo from '../components/ui/Logo';
 import InputOtp from '../components/input/InputOtp';
 import { useMutationHook } from '../hooks/useMutation';
-import { verifySchema } from '../utils/authSchema';
+import { otpSchema } from '../utils/authSchema';
 import { handleVerifyAccount } from '../services/authService';
 import { useDispatch } from 'react-redux';
 
@@ -22,9 +22,9 @@ const VerifyAccountPage = () => {
   const { control, handleSubmit, formState: { errors } } = useForm({
     defaultValues: { otp: '' },
     mode: 'onSubmit',
-    resolver: yupResolver(verifySchema),
+    resolver: yupResolver(otpSchema),
   });
-
+  console.log(errors)
   const { mutate, isPending } = useMutationHook((values) => handleVerifyAccount({ ...values, email }, navigate, dispatch));
 
   return (
