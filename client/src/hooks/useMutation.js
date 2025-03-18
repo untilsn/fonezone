@@ -11,6 +11,7 @@ export const useMutationHook = (fnCallback) => {
     onError: (e) => {
       const errorMessage = e?.response?.data?.message || "Có lỗi xảy ra, vui lòng thử lại"
       toast.error(errorMessage)
+      console.log(e)
     }
   })
   return mutation

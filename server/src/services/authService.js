@@ -134,10 +134,13 @@ export const verifyOtpReset = async (email, otp) => {
 
 export const resetOtpPassword = async (email, newPassword) => {
   const user = await User.findOne({ email });
+  if (!user) {
+    throw new CustomError(404, "Người dùng không tồn tại.");
+  }
 
   const isSamePassword = await bcrypt.compare(newPassword, user.password);
   if (isSamePassword) {
-    throw new Error("Mật khẩu mới không được giống mật khẩu cũ.");
+    throw new CustomError(400, "Mật khẩu mới không được giống mật khẩu cũ.");
   }
 
   const hashNewPassword = await bcrypt.hash(newPassword, 10);

@@ -1,4 +1,4 @@
-import { forgetPassword, getUserProfile, loginUser, logoutUser, registerUser, resetPassword, verifyAccount, verifyOtpReset } from "../api/authApi"
+import { forgetPassword, getUserProfile, loginUser, logoutUser, refreshToken, registerUser, resetPassword, verifyAccount, verifyOtpReset } from "../api/authApi"
 import { logout, setUser } from "../redux/slice/userSlice"
 
 
@@ -67,8 +67,7 @@ export const handleGetUserProfile = async (token, dispatch) => {
 export const handleForgetPassword = async (values, setStep) => {
   try {
     const res = await forgetPassword(values)
-    console.log(res)
-    if (res &&res?.step) {
+    if (res && res?.step) {
       setStep(res.step)
     }
     return res
@@ -79,7 +78,7 @@ export const handleForgetPassword = async (values, setStep) => {
 }
 
 
-export const handleVerifyOtpReset = async (values) => {
+export const handleVerifyOtpReset = async (values, setStep) => {
   try {
     const res = await verifyOtpReset(values)
     if (res?.step) {
@@ -93,11 +92,11 @@ export const handleVerifyOtpReset = async (values) => {
 }
 
 
-export const handleResetPassword = async (values) => {
+export const handleResetPassword = async (values, navigate) => {
   try {
     const res = await resetPassword(values)
-    if (res?.step) {
-      setStep(res.step)
+    if (res.success) {
+      navigate("/login");
     }
     return res
   } catch (err) {
@@ -108,13 +107,16 @@ export const handleResetPassword = async (values) => {
 
 
 
-export const handleLogoutUser = async (dispatch) => {
+export const handleRefreshToken = async (dispatch) => {
   try {
-    await logoutUser()
-    dispatch(logout())
-    localStorage.clear()
+    
   } catch (err) {
     console.error(err.response?.data || err.message);
     throw err;
   }
 }
+
+
+
+
+

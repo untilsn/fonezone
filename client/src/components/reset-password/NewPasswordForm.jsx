@@ -9,15 +9,17 @@ import Logo from '../ui/Logo';
 import InputField from '../input/InputField';
 import { resetPasswordschema } from '../../utils/authSchema';
 import { handleResetPassword } from '../../services/authService';
+import { useMutationHook } from '../../hooks/useMutation';
 
 const NewPasswordForm = ({ email }) => {
+  const navigate = useNavigate()
   const { control, handleSubmit } = useForm({
     defaultValues: { newPassword: "", confirmNewPassword: "" },
     mode: 'onSubmit',
     resolver: yupResolver(resetPasswordschema),
   });
 
-  const { mutate, isPending } = useMutationHook((values) => handleResetPassword({ ...values, email }))
+  const { mutate, isPending } = useMutationHook((values) => handleResetPassword({ ...values, email }, navigate))
 
 
   return (

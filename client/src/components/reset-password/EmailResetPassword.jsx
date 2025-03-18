@@ -20,9 +20,10 @@ const EmailResetPassword = ({ setStep, setEmail }) => {
     resolver: yupResolver(forgetPasswordSchema),
   });
 
-  const { mutate, isPending } = useMutationHook((values) => {
-    handleForgetPassword(values, setStep);
+  const { mutate, isPending } = useMutationHook(async (values) => {
+    const res = await handleForgetPassword(values, setStep);
     setEmail(values.email);
+    return res;
   });
 
 

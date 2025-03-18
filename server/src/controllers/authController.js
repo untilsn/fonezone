@@ -104,9 +104,9 @@ export const verifyOtpResetController = async (req, res, next) => {
 //* Reset password action.
 export const resetPasswordController = async (req, res, next) => {
   try {
-    const { email, otp, newPassword } = req.body
+    const { email, newPassword } = req.body
 
-    await resetOtpPassword(email, otp, newPassword)
+    await resetOtpPassword(email, newPassword)
 
     return res.status(200).json({ success: true, message: "Mật khẩu đã được đặt lại thành công!" })
   } catch (error) {

@@ -11,14 +11,15 @@ import { useMutationHook } from '../../hooks/useMutation';
 import { handleVerifyOtpReset } from '../../services/authService';
 
 
-const OtpResetPassword = ({ email }) => {
+const OtpResetPassword = ({ setStep, email, }) => {
+  console.log(email)
   const { control, handleSubmit, formState: { errors } } = useForm({
     defaultValues: { otp: "" },
     mode: 'onSubmit',
     resolver: yupResolver(otpSchema),
   });
 
-  const { mutate, isPending } = useMutationHook((values) => handleVerifyOtpReset({ ...values, email }))
+  const { mutate, isPending } = useMutationHook((values) => handleVerifyOtpReset({ ...values, email }, setStep))
   return (
     <div className="relative container flex items-center justify-center">
       {/* Card login */}
