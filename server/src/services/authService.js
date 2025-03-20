@@ -1,12 +1,11 @@
 import bcrypt from "bcryptjs";
 import User from "../models/User.js";
 import config from "../config/env.js";
-
 import { EMAIL_VERIFY_TEMPLATE, PASSWORD_RESET_TEMPLATE } from "../mail/emailTemplates.js";
 import { generateOtp, verifyOtp } from "./otpService.js";
 import sendEmail from "../utils/emailHelper.js";
-import { generateAccessToken, generateRefreshToken } from "../utils/jwtGeneral.js";
 import CustomError from "../utils/customError.js";
+import generateTokens from "../utils/jwtGeneral.js";
 
 
 
@@ -66,10 +65,32 @@ export const loginUser = async (email, password) => {
     throw new CustomError(403, "Tài khoản của bạn chưa được xác minh. Vui lòng xác minh email trước khi đăng nhập.");
   }
 
-  const access_token = generateAccessToken({ id: user._id, role: user.role });
-  const refresh_token = generateRefreshToken({ id: user._id, role: user.role });
+  const { accessToken, refreshToken } = generateTokens(user);
 
-  return { access_token, refresh_token };
+  return { user, accessToken, refreshToken };
+};
+
+
+export const loginGoogle = async (profile) => {
+  let user = await User.findOne({ email: profile.emails[0].value });
+
+  if (user) {
+    if (user.loginMethod !== "google") {
+      return { error: "Tài khoản đã tồn tại với phương thức khác" };
+    }
+  } else {
+    user = await User.create({
+      name: profile.displayName,
+      email: profile.emails[0].value,
+      avatar: profile.photos[0].value,
+      googleId: profile.id,
+      isAccountVerify: true,
+      loginMethod: "google",
+    });
+  }
+  const { accessToken, refreshToken } = generateTokens(user);
+
+  return { user, accessToken, refreshToken };
 };
 
 
@@ -94,10 +115,9 @@ export const verifyAccount = async (email, otp) => {
   user.isAccountVerify = true;
   await user.save();
 
-  const access_token = generateAccessToken({ id: user._id, role: user.role });
-  const refresh_token = generateRefreshToken({ id: user._id, role: user.role });
+  const { accessToken, refreshToken } = generateTokens(user);
 
-  return { access_token, refresh_token };
+  return { user, accessToken, refreshToken };
 };
 
 
