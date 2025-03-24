@@ -11,6 +11,7 @@ import { loginFields } from '../utils/formField';
 import { useMutationHook } from '../hooks/useMutation';
 import { handleLoginUser } from '../services/authService';
 import { useDispatch } from 'react-redux';
+import { loginWithGoogle } from '../api/authApi';
 
 
 const LoginPage = () => {
@@ -24,14 +25,13 @@ const LoginPage = () => {
 
   const { mutate, isPending } = useMutationHook((values) => handleLoginUser(values, navigate, dispatch))
 
-
+  const handleGoogleLogin = () => {
+    loginWithGoogle();
+  };
 
   return (
-    <div className="relative py-20">
-      {/* Background với overlay */}
-      <div className="bg-gradian"></div>
-
-      <div className="relative container flex items-center justify-center">
+    <div className="bg-gradient py-20">
+      <div className=" container flex items-center justify-center">
         {/* Card login */}
         <div className="max-w-[500px] w-full px-12 py-5 bg-white shadow-lg rounded-sm">
           <Link to="/" className="mb-10 block">
@@ -78,6 +78,7 @@ const LoginPage = () => {
             {/* Login Google */}
             <Button
               type="button"
+              onClick={handleGoogleLogin}
               variant="outlined"
               className="flex w-full items-center justify-center gap-2 rounded-lg">
               <img src="https://docs.material-tailwind.com/icons/google.svg" alt="google" className="h-4 w-4" />

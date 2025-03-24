@@ -65,32 +65,33 @@ export const loginUser = async (email, password) => {
     throw new CustomError(403, "Tài khoản của bạn chưa được xác minh. Vui lòng xác minh email trước khi đăng nhập.");
   }
 
-  const { accessToken, refreshToken } = generateTokens(user);
-
-  return { user, accessToken, refreshToken };
+  return { access_token, refresh_token } = generateTokens(user);
 };
 
 
 export const loginGoogle = async (profile) => {
+  if (!profile || !profile.emails || profile.emails.length === 0) {
+    throw new Error("Google profile không hợp lệ!");
+  }
+
   let user = await User.findOne({ email: profile.emails[0].value });
 
   if (user) {
     if (user.loginMethod !== "google") {
-      return { error: "Tài khoản đã tồn tại với phương thức khác" };
+      throw new CustomError(401, "Tài khoản đã tồn tại với phương thức khá");
     }
   } else {
     user = await User.create({
-      name: profile.displayName,
+      name: profile.displayName || "User google",
       email: profile.emails[0].value,
-      avatar: profile.photos[0].value,
+      avatar: profile.photos[0].value || "",
       googleId: profile.id,
       isAccountVerify: true,
       loginMethod: "google",
     });
   }
-  const { accessToken, refreshToken } = generateTokens(user);
 
-  return { user, accessToken, refreshToken };
+  return { access_token, refresh_token } = generateTokens(user);
 };
 
 

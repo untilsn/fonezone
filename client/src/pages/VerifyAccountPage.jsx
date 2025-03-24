@@ -28,8 +28,7 @@ const VerifyAccountPage = () => {
   const { mutate, isPending } = useMutationHook((values) => handleVerifyAccount({ ...values, email }, navigate, dispatch));
 
   return (
-    <div className="min-h-screen flex items-center justify-center relative">
-      <div className="bg-gradian"></div>
+    <div className="bg-gradient">
       <div className="relative container flex items-center justify-center">
         <div className="max-w-[500px] w-full px-12 py-5 bg-white shadow-lg rounded-sm">
           <Link to="/" className="mb-10 block">

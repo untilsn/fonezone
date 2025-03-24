@@ -17,6 +17,8 @@ import AboutPage from './pages/AboutPage'
 import ProfilePage from './pages/ProfilePage'
 import VerifyAccountPage from './pages/VerifyAccountPage'
 import CustomToastify from './components/ui/CustomToastify'
+import LoginSuccessPage from './pages/LoginSuccessPage'
+import LoginFailPage from './pages/LoginFailPage'
 
 const App = () => {
   return (
@@ -26,6 +28,8 @@ const App = () => {
       <Routes>
         <Route path='/' element={<HomePage />} />
         <Route path='/login' element={<LoginPage />} />
+        <Route path='/login-success' element={<LoginSuccessPage />} />
+        <Route path='/login-fail' element={<LoginFailPage />} />
         <Route path='/register' element={<RegisterPage />} />
         <Route path='/reset-password' element={<ResetPasswordPage />} />
         <Route path='/verify-account' element={<VerifyAccountPage />} />

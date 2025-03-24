@@ -7,6 +7,10 @@ export const loginUser = async (data) => {
   return res.data
 }
 
+export const loginWithGoogle = async () => {
+  window.location.href = `${import.meta.env.VITE_BACKEND_URL}/api/auth/google`;
+};
+
 export const registerUser = async (data) => {
   console.log(data)
   const res = await apiClient.post("/api/auth/register", data)

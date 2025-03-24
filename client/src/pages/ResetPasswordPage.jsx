@@ -9,8 +9,7 @@ const ResetPasswordPage = () => {
   console.log(step, email)
   return (
     <div>
-      <div className='relative py-10'>
-        <div className='bg-gradian'></div>
+      <div className='bg-gradient'>
         <div className='flex items-center justify-center min-h-screen'>
           {step === 1 && <EmailResetPassword setStep={setStep} setEmail={setEmail} />}
           {step === 2 && <OtpResetPassword setStep={setStep} email={email} />}

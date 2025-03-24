@@ -1,5 +1,5 @@
 import axios from "axios";
-import jwtDecode from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 import { refreshToken } from "./authApi";
 
 const BASE_URL = import.meta.env.VITE_BACKEND_URL;

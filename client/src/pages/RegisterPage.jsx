@@ -26,10 +26,8 @@ const RegisterPage = () => {
 
 
   return (
-    <div className="relative py-20">
-      {/* Background với overlay */}
-      <div className="bg-gradian"></div>
-      <div className="relative container flex items-center justify-center">
+    <div className="py-20 bg-gradient">
+      <div className="container flex items-center justify-center">
         {/* Card login */}
         <div className="max-w-[500px] w-full px-12 py-5 bg-white shadow-lg rounded-sm">
           <Link to="/" className="mb-10 block">

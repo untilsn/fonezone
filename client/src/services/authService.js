@@ -1,5 +1,5 @@
-import { forgetPassword, getUserProfile, loginUser, logoutUser, refreshToken, registerUser, resetPassword, verifyAccount, verifyOtpReset } from "../api/authApi"
-import { logout, setUser } from "../redux/slice/userSlice"
+import { forgetPassword, getUserProfile, loginUser, loginWithGoogle, registerUser, resetPassword, verifyAccount, verifyOtpReset } from "../api/authApi"
+import { setUser } from "../redux/slice/userSlice"
 
 
 export const handleLoginUser = async (values, navigate, dispatch) => {
@@ -16,6 +16,27 @@ export const handleLoginUser = async (values, navigate, dispatch) => {
     throw err;
   }
 }
+
+
+export const handleLoginGoogle = async (navigate, dispatch) => {
+  try {
+    const urlParams = new URLSearchParams(window.location.search);
+    const accessToken = urlParams.get("token");
+
+    if (accessToken) {
+      localStorage.setItem("access_token", JSON.stringify(accessToken));
+      await handleGetUserProfile(accessToken, dispatch);
+      navigate("/");
+    } else {
+      navigate("/login-fail");
+    }
+  } catch (err) {
+    console.error(err.response?.data || err.message);
+    navigate("/login-fail");
+  }
+};
+
+
 
 
 export const handleRegisterUser = async (values, navigate) => {
@@ -109,7 +130,7 @@ export const handleResetPassword = async (values, navigate) => {
 
 export const handleRefreshToken = async (dispatch) => {
   try {
-    
+
   } catch (err) {
     console.error(err.response?.data || err.message);
     throw err;

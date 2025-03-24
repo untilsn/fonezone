@@ -1,7 +1,9 @@
+import passport from "passport";
 import config from "../config/env.js";
 import {
   forgotPassword,
   getUserProfile,
+  loginGoogle,
   loginUser,
   registerUser,
   resetOtpPassword,
@@ -29,6 +31,24 @@ export const loginUserController = async (req, res, next) => {
   }
 };
 
+
+export const googleAuthController = (req, res, next) => {
+  try {
+    if (!req.user) {
+      return res.status(404).json({ success: false, message: "Không tìm thấy thông tin user từ Google." })
+    }
+
+    console.log(req.user)
+    const { access_token, refresh_token } = req.user;
+
+    setRefreshTokenCookie(res, refresh_token);
+
+    res.redirect(`${config.CLIENT_URL}/login-success?token=${access_token}`);
+  } catch (error) {
+    console.error("Lỗi xác thực Google:", error);
+    return res.redirect(`${config.CLIENT_URL}/login-fail`);
+  }
+};
 
 
 
