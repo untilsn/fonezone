@@ -65,7 +65,8 @@ export const loginUser = async (email, password) => {
     throw new CustomError(403, "Tài khoản của bạn chưa được xác minh. Vui lòng xác minh email trước khi đăng nhập.");
   }
 
-  return { access_token, refresh_token } = generateTokens(user);
+  const { access_token, refresh_token } = generateTokens(user);
+  return { access_token, refresh_token }
 };
 
 
@@ -88,7 +89,9 @@ export const googleAuth = async (profile) => {
     });
     await user.save()
   }
-  return { access_token, refresh_token } = generateTokens(user);
+  
+  const { access_token, refresh_token } = generateTokens(user);
+  return { access_token, refresh_token }
 };
 
 

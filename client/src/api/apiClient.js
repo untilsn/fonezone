@@ -12,38 +12,35 @@ export const apiClient = axios.create({
   },
 });
 
-// Kiểm tra chuỗi JSON hợp lệ
-const isJsonString = (data) => {
-  try {
-    JSON.parse(data);
-    return true;
-  } catch (error) {
-    return false;
-  }
-};
-
 // Lấy token từ localStorage
 let access_token = localStorage.getItem("access_token");
 let decodedToken = {};
+let isRefreshing = false; // 🚀 Tránh gọi refresh token nhiều lần
 
-if (access_token && isJsonString(access_token)) {
-  access_token = JSON.parse(access_token);
-  try {
-    decodedToken = jwtDecode(access_token);
-  } catch (error) {
-    console.error("Lỗi decode token:", error);
-    access_token = null;
-    decodedToken = {};
+// Kiểm tra và decode token
+const loadToken = () => {
+  access_token = localStorage.getItem("access_token");
+  if (access_token) {
+    try {
+      decodedToken = jwtDecode(access_token);
+    } catch (error) {
+      console.error("Lỗi decode token:", error);
+      access_token = null;
+      decodedToken = {};
+    }
   }
-}
+};
+loadToken(); // Gọi khi khởi chạy
 
 // Hàm cập nhật token
 const updateToken = async () => {
+  if (isRefreshing) return; // Nếu đang refresh, không gọi lại
+  isRefreshing = true;
+
   try {
     const res = await refreshToken();
-    console.log("Token refreshed:", res);
     if (res?.access_token) {
-      localStorage.setItem("access_token", JSON.stringify(res.access_token));
+      localStorage.setItem("access_token", res.access_token);
       access_token = res.access_token;
       decodedToken = jwtDecode(res.access_token);
     }
@@ -52,17 +49,26 @@ const updateToken = async () => {
     localStorage.removeItem("access_token");
     access_token = null;
     decodedToken = {};
+  } finally {
+    isRefreshing = false;
   }
 };
 
-// Thêm interceptor để tự động refresh token
+// 🚀 Lắng nghe sự kiện `storage` để cập nhật token giữa các tab
+window.addEventListener("storage", (event) => {
+  if (event.key === "access_token") {
+    loadToken();
+  }
+});
+
+// 🚀 Request interceptor: Kiểm tra token hết hạn trước khi gửi request
 apiClient.interceptors.request.use(
-  async (config) => {
+  (config) => {
     const currentTime = Date.now() / 1000;
 
     if (decodedToken?.exp && decodedToken.exp < currentTime) {
-      console.log("Token expired, refreshing...");
-      await updateToken();
+      console.log("Token expired, waiting for refresh...");
+      if (!isRefreshing) updateToken();
     }
 
     if (access_token) {
@@ -71,7 +77,31 @@ apiClient.interceptors.request.use(
 
     return config;
   },
-  (error) => {
+  (error) => Promise.reject(error)
+);
+
+// 🚀 Response interceptor: Nếu nhận 401, tự động refresh token
+apiClient.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config;
+
+    // Nếu lỗi 401 và chưa thử refresh, thì thử refresh token
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+
+      try {
+        await updateToken();
+
+        if (access_token) {
+          originalRequest.headers.Authorization = `Bearer ${access_token}`;
+          return apiClient(originalRequest); // 🚀 Gửi lại request
+        }
+      } catch (refreshError) {
+        console.error("Không thể refresh token, cần đăng xuất!", refreshError);
+      }
+    }
+
     return Promise.reject(error);
   }
 );

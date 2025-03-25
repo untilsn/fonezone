@@ -6,7 +6,7 @@ export const handleLoginUser = async (values, navigate, dispatch) => {
   try {
     const res = await loginUser(values)
     if (res?.access_token) {
-      localStorage.setItem("access_token", JSON.stringify(res.access_token))
+      localStorage.setItem("access_token", access_token)
       await handleGetUserProfile(res.access_token, dispatch)
       navigate("/")
     }
@@ -21,11 +21,10 @@ export const handleLoginUser = async (values, navigate, dispatch) => {
 export const handleLoginGoogle = async (navigate, dispatch) => {
   try {
     const urlParams = new URLSearchParams(window.location.search);
-    const accessToken = urlParams.get("token");
-    console.log(accessToken)
-    if (accessToken) {
-      localStorage.setItem("access_token", JSON.stringify(accessToken));
-      await handleGetUserProfile(accessToken, dispatch);
+    const access_token = urlParams.get("token");
+    if (access_token) {
+      localStorage.setItem("access_token", access_token);
+      await handleGetUserProfile(access_token, dispatch);
       navigate("/");
     } else {
       navigate("/login-fail");
@@ -57,7 +56,7 @@ export const handleVerifyAccount = async (values, navigate, dispatch) => {
   try {
     const res = await verifyAccount(values)
     if (res?.access_token) {
-      localStorage.setItem("access_token", JSON.stringify(res.access_token))
+      localStorage.setItem("access_token", res.access_token)
       await handleGetUserProfile(res.access_token, dispatch)
       navigate("/")
     }
@@ -70,7 +69,7 @@ export const handleVerifyAccount = async (values, navigate, dispatch) => {
 
 
 export const handleGetUserProfile = async (token, dispatch) => {
-  console.log("ww",token, dispatch)
+  console.log("ww", token, dispatch)
   try {
     if (!token) return null;
     const res = await getUserProfile(token)
@@ -131,7 +130,6 @@ export const handleResetPassword = async (values, navigate) => {
 
 export const handleRefreshToken = async (dispatch) => {
   try {
-
   } catch (err) {
     console.error(err.response?.data || err.message);
     throw err;
