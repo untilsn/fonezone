@@ -69,28 +69,25 @@ export const loginUser = async (email, password) => {
 };
 
 
-export const loginGoogle = async (profile) => {
-  if (!profile || !profile.emails || profile.emails.length === 0) {
-    throw new Error("Google profile không hợp lệ!");
-  }
-
-  let user = await User.findOne({ email: profile.emails[0].value });
+export const googleAuth = async (profile) => {
+  const email = profile.emails[0].value
+  let user = await User.findOne({ email });
 
   if (user) {
     if (user.loginMethod !== "google") {
-      throw new CustomError(401, "Tài khoản đã tồn tại với phương thức khá");
+      throw new CustomError(401, "Tài khoản đã tồn tại với phương thức khác");
     }
   } else {
     user = await User.create({
+      email,
       name: profile.displayName || "User google",
-      email: profile.emails[0].value,
       avatar: profile.photos[0].value || "",
       googleId: profile.id,
       isAccountVerify: true,
       loginMethod: "google",
     });
+    await user.save()
   }
-
   return { access_token, refresh_token } = generateTokens(user);
 };
 

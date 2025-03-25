@@ -1,8 +1,7 @@
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import config from "./env.js";
-import User from "../models/User.js";
-import generateTokens from "../utils/jwtGeneral.js";
+import { googleAuth } from "../services/authService.js";
 
 passport.use(
   new GoogleStrategy(
@@ -18,28 +17,8 @@ passport.use(
         if (!profile || !profile.emails || !profile.emails.length) {
           return done(new Error("Không tìm thấy email trong tài khoản Google"), false);
         }
-
-        const email = profile.emails[0].value;
-        let user = await User.findOne({ email });
-
-        if (user) {
-          if (user.loginMethod !== "google") {
-            return done(null, false, { message: "Email này đã được đăng ký bằng phương thức khác." });
-          }
-        } else {
-          user = new User({
-            email,
-            name: profile.displayName,
-            avatar: profile.photos?.[0]?.value,
-            googleId: profile.id,
-            isAccountVerify: true,
-            loginMethod: "google",
-          });
-          await user.save();
-        }
-        const { access_token, refresh_token } = generateTokens(user);
-
-        return done(null, { access_token, refresh_token });
+        const user = await googleAuth(profile);
+        return done(null, user)
       } catch (error) {
         return done(error, false);
       }

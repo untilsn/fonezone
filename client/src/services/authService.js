@@ -22,7 +22,7 @@ export const handleLoginGoogle = async (navigate, dispatch) => {
   try {
     const urlParams = new URLSearchParams(window.location.search);
     const accessToken = urlParams.get("token");
-
+    console.log(accessToken)
     if (accessToken) {
       localStorage.setItem("access_token", JSON.stringify(accessToken));
       await handleGetUserProfile(accessToken, dispatch);
@@ -70,6 +70,7 @@ export const handleVerifyAccount = async (values, navigate, dispatch) => {
 
 
 export const handleGetUserProfile = async (token, dispatch) => {
+  console.log("ww",token, dispatch)
   try {
     if (!token) return null;
     const res = await getUserProfile(token)

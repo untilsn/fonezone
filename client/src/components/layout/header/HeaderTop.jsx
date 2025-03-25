@@ -3,6 +3,7 @@ import { FiPhone } from "react-icons/fi";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { logoutUser } from "../../../api/authApi";
+import { logout } from "../../../redux/slice/userSlice";
 
 const HeaderTop = () => {
   const dispatch = useDispatch();
@@ -11,7 +12,8 @@ const HeaderTop = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const handleLogout = () => {
-    logoutUser(dispatch)
+    logoutUser()
+    dispatch(logout())
   };
 
   return (
