@@ -5,8 +5,9 @@ import { setUser } from "../redux/slice/userSlice"
 export const handleLoginUser = async (values, navigate, dispatch) => {
   try {
     const res = await loginUser(values)
+    console.log("login",res.access_token)
     if (res?.access_token) {
-      localStorage.setItem("access_token", access_token)
+      localStorage.setItem("access_token", res.access_token)
       await handleGetUserProfile(res.access_token, dispatch)
       navigate("/")
     }

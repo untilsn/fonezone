@@ -1,3 +1,4 @@
+import passport from "../config/passport.js";
 import config from "../config/env.js";
 import {
   forgotPassword,
@@ -29,19 +30,35 @@ export const loginUserController = async (req, res, next) => {
 };
 
 
-export const googleAuthController = async (req, res, next) => {
-  try {
-    if (!req.user) {
-      return res.status(404).json({ success: false, message: "Xác thực Google thất bại." });
-    }
-    const { access_token, refresh_token } = req.user
-    setRefreshTokenCookie(res, refresh_token);
+// export const googleAuthController = async (req, res, next) => {
+//   try {
+//     if (!req.user) {
+//       return res.status(404).json({ success: false, message: "Xác thực Google thất bại." });
+//     }
+//     const { access_token, refresh_token } = req.user
+//     setRefreshTokenCookie(res, refresh_token);
 
-    res.redirect(`${config.CLIENT_URL}/login-success?token=${access_token}`);
-  } catch (error) {
-    next(error);
+//     res.redirect(`${config.CLIENT_URL}/login-success?token=${access_token}`);
+//   } catch (error) {
+//     next(error);
+//   }
+// };
+
+
+export const googleAuthController = () => {
+  initiateGoogleAuth: passport.authenticate("google", { scrope: ["profile", "email"] })
+
+  handleGoogleCallback: (req, res, next) => {
+    passport.authenticate("google", async (err, user, info) => {
+      try {
+        
+      } catch (error) {
+        
+      }
+    })
   }
-};
+}
+
 
 
 

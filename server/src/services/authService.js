@@ -76,7 +76,7 @@ export const googleAuth = async (profile) => {
 
   if (user) {
     if (user.loginMethod !== "google") {
-      throw new CustomError(401, "Tài khoản đã tồn tại với phương thức khác");
+      return res.redirect(`${process.env.CLIENT_URL}/login?error=Tài khoản đã tồn tại với phương thức khác`);
     }
   } else {
     user = await User.create({
@@ -89,7 +89,7 @@ export const googleAuth = async (profile) => {
     });
     await user.save()
   }
-  
+
   const { access_token, refresh_token } = generateTokens(user);
   return { access_token, refresh_token }
 };
