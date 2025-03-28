@@ -8,18 +8,18 @@ import Logo from '../ui/Logo';
 import InputOtp from '../input/InputOtp';
 import { otpSchema } from '../../utils/authSchema';
 import { useMutationHook } from '../../hooks/useMutation';
-import { handleVerifyOtpReset } from '../../services/authService';
+import { useAuth } from '../../hooks/useAuth';
 
 
 const OtpResetPassword = ({ setStep, email, }) => {
-  console.log(email)
+  const { verifyOtpReset } = useAuth()
   const { control, handleSubmit, formState: { errors } } = useForm({
     defaultValues: { otp: "" },
     mode: 'onSubmit',
     resolver: yupResolver(otpSchema),
   });
 
-  const { mutate, isPending } = useMutationHook((values) => handleVerifyOtpReset({ ...values, email }, setStep))
+  const { mutate, isPending } = useMutationHook((values) => verifyOtpReset({ ...values, email }, setStep))
   return (
     <div className="relative container flex items-center justify-center">
       {/* Card login */}

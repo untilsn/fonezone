@@ -9,9 +9,10 @@ import InputField from '../input/InputField';
 import Logo from '../ui/Logo';
 import { useMutationHook } from '../../hooks/useMutation';
 import { forgetPasswordSchema } from '../../utils/authSchema';
-import { handleForgetPassword } from '../../services/authService';
+import { useAuth } from '../../hooks/useAuth';
 
 const EmailResetPassword = ({ setStep, setEmail }) => {
+  const { forgetPassword } = useAuth()
   const navigate = useNavigate();
 
   const { control, handleSubmit } = useForm({
@@ -21,7 +22,7 @@ const EmailResetPassword = ({ setStep, setEmail }) => {
   });
 
   const { mutate, isPending } = useMutationHook(async (values) => {
-    const res = await handleForgetPassword(values, setStep);
+    const res = await forgetPassword(values, setStep);
     setEmail(values.email);
     return res;
   });

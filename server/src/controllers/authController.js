@@ -10,6 +10,8 @@ import {
 } from "../services/authService.js";
 import { verifyRefreshToken } from "../services/jwtService.js";
 import { setRefreshTokenCookie } from "../utils/cookieHelper.js";
+import handleGoogleAuthError from "../middlewares/googleAuthError.js";
+import generateTokens from "../utils/jwtGeneral.js";
 
 const isProduction = config.NODE_ENV === "production";
 
@@ -30,34 +32,29 @@ export const loginUserController = async (req, res, next) => {
 };
 
 
-// export const googleAuthController = async (req, res, next) => {
-//   try {
-//     if (!req.user) {
-//       return res.status(404).json({ success: false, message: "Xác thực Google thất bại." });
-//     }
-//     const { access_token, refresh_token } = req.user
-//     setRefreshTokenCookie(res, refresh_token);
 
-//     res.redirect(`${config.CLIENT_URL}/login-success?token=${access_token}`);
-//   } catch (error) {
-//     next(error);
-//   }
-// };
-
-
-export const googleAuthController = () => {
-  initiateGoogleAuth: passport.authenticate("google", { scrope: ["profile", "email"] })
-
+export const googleAuthController = {
   handleGoogleCallback: (req, res, next) => {
-    passport.authenticate("google", async (err, user, info) => {
+    passport.authenticate("google", { session: false }, async (err, user, info) => {
       try {
-        
+        if (err) {
+          return handleGoogleAuthError(err, req, res);
+        }
+        if (!user) {
+          return res.redirect(`${config.CLIENT_URL}/login-fail?error=authentication_failed`);
+        }
+
+        const { access_token, refresh_token } = await generateTokens(user);
+        setRefreshTokenCookie(res, refresh_token);
+
+        return res.redirect(`${config.CLIENT_URL}/login-success?access_token=${access_token}`);
       } catch (error) {
-        
+        return handleGoogleAuthError(error, req, res);
       }
-    })
-  }
-}
+    })(req, res, next);
+  },
+};
+
 
 
 

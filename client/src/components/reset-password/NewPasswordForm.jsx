@@ -1,25 +1,25 @@
-import React from 'react'
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Button } from '@material-tailwind/react';
 import { FaArrowRight } from 'react-icons/fa';
-import { CiLock, CiMail } from 'react-icons/ci';
+import { CiLock } from 'react-icons/ci';
 import Logo from '../ui/Logo';
 import InputField from '../input/InputField';
 import { resetPasswordschema } from '../../utils/authSchema';
-import { handleResetPassword } from '../../services/authService';
 import { useMutationHook } from '../../hooks/useMutation';
+import { useAuth } from '../../hooks/useAuth';
 
 const NewPasswordForm = ({ email }) => {
-  const navigate = useNavigate()
+  const { resetPassword } = useAuth()
   const { control, handleSubmit } = useForm({
     defaultValues: { newPassword: "", confirmNewPassword: "" },
     mode: 'onSubmit',
     resolver: yupResolver(resetPasswordschema),
   });
 
-  const { mutate, isPending } = useMutationHook((values) => handleResetPassword({ ...values, email }, navigate))
+  const { mutate, isPending } = useMutationHook((values) => resetPassword({ ...values, email }))
 
 
   return (

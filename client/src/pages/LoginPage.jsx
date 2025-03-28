@@ -1,7 +1,7 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Button } from '@material-tailwind/react';
 import { FaArrowRight } from 'react-icons/fa';
 import InputField from '../components/input/InputField';
@@ -9,26 +9,19 @@ import Logo from '../components/ui/Logo';
 import { loginSchema } from '../utils/authSchema';
 import { loginFields } from '../utils/formField';
 import { useMutationHook } from '../hooks/useMutation';
-import { handleLoginUser } from '../services/authService';
-import { useDispatch } from 'react-redux';
-import { loginWithGoogle } from '../api/authApi';
-
+import { useAuth } from "../hooks/useAuth";
 
 const LoginPage = () => {
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
+  const { login, loginWithGoogle } = useAuth()
   const { control, handleSubmit } = useForm({
     defaultValues: { email: '', password: '' },
     mode: 'onChange',
     resolver: yupResolver(loginSchema),
   });
 
-  const { mutate, isPending } = useMutationHook((values) => handleLoginUser(values, navigate, dispatch))
+  const { mutate, isPending } = useMutationHook((values) => login(values))
 
-  const handleGoogleLogin = () => {
-    loginWithGoogle();
-  };
-
+  
   return (
     <div className="bg-gradient py-20">
       <div className=" container flex items-center justify-center">
@@ -78,7 +71,7 @@ const LoginPage = () => {
             {/* Login Google */}
             <Button
               type="button"
-              onClick={handleGoogleLogin}
+              onClick={loginWithGoogle}
               variant="outlined"
               className="flex w-full items-center justify-center gap-2 rounded-lg">
               <img src="https://docs.material-tailwind.com/icons/google.svg" alt="google" className="h-4 w-4" />

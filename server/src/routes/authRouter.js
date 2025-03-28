@@ -31,17 +31,11 @@ authRouter.post("/password/reset", validateMiddleware(resetPasswordValidation), 
 
 /* GOOGLE AUTH */
 authRouter.get("/google", passport.authenticate("google", { scope: ["profile", "email"] }));
-authRouter.get(
-  "/google/callback",
-  passport.authenticate("google", {
-    session: false,
-    failureRedirect: `${config.CLIENT_URL}/login-fail`
-  }),
-  googleAuthController
-);
-authRouter.get("/google/fail", (req, res) => {
-  res.redirect(`${config.CLIENT_URL}/login-fail`);
-});
+authRouter.get("/google/callback", googleAuthController.handleGoogleCallback);
+
+// authRouter.get("/google/fail", (req, res) => {
+//   res.redirect(`${config.CLIENT_URL}/login-fail`);
+// });
 
 export default authRouter;
 

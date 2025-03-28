@@ -1,29 +1,28 @@
-import { apiClient } from "./apiClient"
+import { apiClient } from "../api/apiClient"
 
 
-
-export const loginUser = async (data) => {
+export const loginUserApi = async (data) => {
   const res = await apiClient.post("/api/auth/login", data)
   return res.data
 }
 
-export const loginWithGoogle = async () => {
+export const loginWithGoogleApi = async () => {
   window.location.href = `${import.meta.env.VITE_BACKEND_URL}/api/auth/google`;
 };
 
-export const registerUser = async (data) => {
+export const registerUserApi = async (data) => {
   console.log(data)
   const res = await apiClient.post("/api/auth/register", data)
   return res.data
 }
 
-export const verifyAccount = async (data) => {
+export const verifyAccountApi = async (data) => {
   console.log(data)
   const res = await apiClient.post("/api/auth/verify-account", data)
   return res.data
 }
 
-export const getUserProfile = async (token) => {
+export const getUserProfileApi = async (token) => {
   const res = await apiClient.get("/api/auth/profile", {
     headers: { Authorization: `Bearer ${token}` }
   })

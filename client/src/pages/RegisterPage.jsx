@@ -1,20 +1,20 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Button } from '@material-tailwind/react';
 import { FaArrowRight } from 'react-icons/fa';
 import InputField from '../components/input/InputField';
 import Logo from '../components/ui/Logo';
 import { registerSchema } from '../utils/authSchema';
-import { registerUser } from '../api/authApi';
 import { useMutationHook } from '../hooks/useMutation';
 import { registerFields } from '../utils/formField';
-import { handleRegisterUser } from '../services/authService';
+import { useAuth } from '../hooks/useAuth';
 
 
 const RegisterPage = () => {
-  const navigate = useNavigate()
+  const { register } = useAuth()
+
   const { control, handleSubmit } = useForm({
     defaultValues: { email: '', password: '' },
     mode: 'onSubmit',
@@ -22,7 +22,7 @@ const RegisterPage = () => {
   });
 
   const { mutate, data, isSuccess, isPending } =
-    useMutationHook((values) => handleRegisterUser(values, navigate))
+    useMutationHook((values) => register(values))
 
 
   return (

@@ -2,6 +2,7 @@ import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import config from "./env.js";
 import { googleAuth } from "../services/authService.js";
+import CustomError from "../utils/customError.js";
 
 passport.use(
   new GoogleStrategy(
@@ -14,8 +15,8 @@ passport.use(
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
-        if (!profile || !profile.emails || !profile.emails.length) {
-          return done(new Error("Không tìm thấy email trong tài khoản Google"), false);
+        if (!profile.emails.length) {
+          return done(new CustomError(404, "Không tìm thấy email trong tài khoản Google"), false);
         }
         const user = await googleAuth(profile);
         return done(null, user)

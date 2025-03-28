@@ -71,12 +71,16 @@ export const loginUser = async (email, password) => {
 
 
 export const googleAuth = async (profile) => {
+  if (!profile.emails || profile.emails.length === 0) {
+    throw new CustomError(404, "Không tìm thấy email trong tài khoản Google.");
+  }
+
   const email = profile.emails[0].value
   let user = await User.findOne({ email });
 
   if (user) {
     if (user.loginMethod !== "google") {
-      return res.redirect(`${process.env.CLIENT_URL}/login?error=Tài khoản đã tồn tại với phương thức khác`);
+      throw new CustomError(403, "Tài khoản đã tồn tại với phương thức khác");
     }
   } else {
     user = await User.create({
@@ -90,8 +94,7 @@ export const googleAuth = async (profile) => {
     await user.save()
   }
 
-  const { access_token, refresh_token } = generateTokens(user);
-  return { access_token, refresh_token }
+  return user
 };
 
 

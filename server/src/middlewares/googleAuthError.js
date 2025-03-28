@@ -1,15 +1,14 @@
-import CustomError from "../utils/customError";
+import config from "../config/env.js";
+import CustomError from "../utils/customError.js";
 
 const handleGoogleAuthError = (err, req, res) => {
   console.error("Google Auth Error:", err);
 
   if (err instanceof CustomError) {
-    // Gắn lỗi lên URL để trang login hiển thị
-    return res.redirect(`/login?error=${encodeURIComponent(err.message)}`);
+    return res.redirect(`${config.CLIENT_URL}/login-fail?error=${encodeURIComponent(err.message)}`);
   }
 
-  // Nếu lỗi không xác định, redirect với lỗi chung
-  return res.redirect("/login?error=unexpected_error");
+  return res.redirect(`${config.CLIENT_URL}/login-fail?error=unexpected_error`);
 };
 
 export default handleGoogleAuthError;

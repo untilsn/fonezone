@@ -1,20 +1,15 @@
 import React, { useState } from "react";
 import { FiPhone } from "react-icons/fi";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { logoutUser } from "../../../api/authApi";
-import { logout } from "../../../redux/slice/userSlice";
+import { useAuth } from "../../../hooks/useAuth";
 
 const HeaderTop = () => {
-  const dispatch = useDispatch();
+  const { logout } = useAuth()
   const user = useSelector((state) => state.user);
   const isAuthenticated = user?.isAccountVerify;
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-  const handleLogout = () => {
-    logoutUser()
-    dispatch(logout())
-  };
 
   return (
     <div className="flex items-center justify-between py-3 border-b border-gray-dark relative">
@@ -48,7 +43,7 @@ const HeaderTop = () => {
                 </li>
                 <li
                   className="px-4 py-2 hover:bg-gray-700 cursor-pointer"
-                  onClick={handleLogout}
+                  onClick={logout}
                 >
                   Đăng xuất
                 </li>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Link } from 'react-router-dom';
 import { Button } from '@material-tailwind/react';
@@ -9,15 +9,13 @@ import Logo from '../components/ui/Logo';
 import InputOtp from '../components/input/InputOtp';
 import { useMutationHook } from '../hooks/useMutation';
 import { otpSchema } from '../utils/authSchema';
-import { handleVerifyAccount } from '../services/authService';
-import { useDispatch } from 'react-redux';
+import { useAuth } from '../hooks/useAuth';
 
 
 const VerifyAccountPage = () => {
-  const navigate = useNavigate();
+  const { verifyAccount } = useAuth()
   const location = useLocation();
   const email = location.state?.email || '';
-  const dispatch = useDispatch()
 
   const { control, handleSubmit, formState: { errors } } = useForm({
     defaultValues: { otp: '' },
@@ -25,7 +23,7 @@ const VerifyAccountPage = () => {
     resolver: yupResolver(otpSchema),
   });
   console.log(errors)
-  const { mutate, isPending } = useMutationHook((values) => handleVerifyAccount({ ...values, email }, navigate, dispatch));
+  const { mutate, isPending } = useMutationHook((values) => verifyAccount({ ...values, email }));
 
   return (
     <div className="bg-gradient">
