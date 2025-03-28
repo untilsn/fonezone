@@ -1,5 +1,5 @@
 import { IoMdClose } from "react-icons/io";
-import QuantitySelector from "../common/QuantitySelector";
+import QuantitySelector from "../../common/QuantitySelector";
 
 export const cartColumns = (handleIncrease, handleDecrease) => [
   {

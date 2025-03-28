@@ -8,12 +8,11 @@ import { Button } from "@material-tailwind/react";
 
 const SidebarAccount = () => {
   const user = useSelector((state) => state.user);
-
   const { control, handleSubmit } = useForm({
     defaultValues: {
       name: user?.name || "",
       email: user?.email || "",
-      avatar: user?.avatar || "",
+      avatar: user?.avatar || "https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png",
       phoneNumber: user?.phoneNumber || "",
       address: user?.address?.[0] || {}, // Lấy địa chỉ mặc định
     },

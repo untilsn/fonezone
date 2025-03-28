@@ -30,9 +30,9 @@ const userSlice = createSlice({
         addr.id === action.payload.id ? { ...addr, ...action.payload } : addr
       );
     },
-    logout: () => initialState,
+    logoutUser: () => initialState,
   },
 })
 
-export const { setUser, addAddress, updateAddress, removeAddress, logout } = userSlice.actions
+export const { setUser, addAddress, updateAddress, removeAddress, logoutUser } = userSlice.actions
 export default userSlice.reducer

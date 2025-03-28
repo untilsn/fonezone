@@ -1,7 +1,7 @@
 import React from 'react'
 import { FaArrowRightLong } from "react-icons/fa6";
 
-const CouponForm = () => {
+const CouponSection = () => {
   return (
     <div>
       <div
@@ -35,4 +35,4 @@ const CouponForm = () => {
   )
 }
 
-export default CouponForm
+export default CouponSection

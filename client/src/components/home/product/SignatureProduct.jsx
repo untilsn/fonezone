@@ -1,8 +1,8 @@
 import React from 'react'
-import ProductCard from '../../components/card/ProductCard'
 import { SwiperSlide } from 'swiper/react'
-import CustomSwiper from '../../components/swiper/CustomSwiper'
-import SectionTitle from '../../components/ui/SectionTitle'
+import CustomSwiper from '../../swiper/CustomSwiper'
+import SectionTitle from '../../ui/SectionTitle'
+import ProductCard from '../../shop/product/ProductCard'
 
 const SignatureProduct = () => {
   return (

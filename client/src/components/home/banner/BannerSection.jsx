@@ -5,7 +5,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import MainBanner from "./MainBanner";
 import SubBanner from "./SubBanner";
-import { DAILY_DEALS, SUB_BANNERS } from "../../constants/bannerConstant";
+import { DAILY_DEALS, SUB_BANNERS } from "../../../constants/bannerConstant";
 
 const BannerSection = () => {
   return (

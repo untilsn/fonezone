@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { FaCartPlus, FaHeart, FaRegHeart } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
-import formatPrice from "../../utils/formatPrice";
 import { Rating } from "@material-tailwind/react";
+import formatPrice from "../../../utils/formatPrice";
 
 
 const ProductCard = ({ item, classes, size = "normal" }) => {

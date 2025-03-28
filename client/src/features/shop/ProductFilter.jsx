@@ -1,46 +1,80 @@
-import React, { useState } from "react";
-import FilterOption from "./filter/FilterOption";
-import { FILTERLIST } from "../../constants/filterList"
+import React, { useState } from 'react';
+import { CategoryFilter } from '../../components/shop/filter/CategoryFilter';
+import { ColorFilter } from '../../components/shop/filter/ColorFilter';
+import { SizeFilter } from '../../components/shop/filter/SizeFilter';
+import { PriceRangeFilter } from '../../components/shop/filter/PriceRangeFilter';
+
+
+
 const ProductFilter = () => {
-  const [openAcc, setOpenAcc] = useState({
-    brand: false,
-    price: false,
-    ram: false,
+  const [filters, setFilters] = useState({
+    category: [],
+    color: [],
+    size: [],
+    priceRange: [0, 10000]
   });
 
-  const toggleAccordion = (key) => {
-    setOpenAcc((prev) => ({ ...prev, [key]: !prev[key] }));
+  const handleFilterChange = (value, type) => {
+    setFilters(prev => {
+      const currentFilters = prev[type];
+      const newFilters = currentFilters.includes(value)
+        ? currentFilters.filter(f => f !== value)
+        : [...currentFilters, value];
+      
+      return { ...prev, [type]: newFilters };
+    });
   };
 
-  const handleClearAll = () => {
-    // Logic để reset filter (tùy thuộc vào yêu cầu của bạn)
-    console.log("Clear all filters");
+  const handlePriceChange = (priceRange) => {
+    setFilters(prev => ({ ...prev, priceRange }));
+  };
+
+  const applyFilters = () => {
+    // Call API with filters
+    const apiFilters = {
+      categories: filters.category,
+      colors: filters.color,
+      sizes: filters.size,
+      minPrice: filters.priceRange[0],
+      maxPrice: filters.priceRange[1]
+    };
+    
+    // Example API call
+    fetchProducts(apiFilters);
   };
 
   return (
-    <div className="w-full p-4">
-      {/* Heading */}
-      <div className="flex items-center justify-between mb-5">
-        <h1 className="text-darkGray font-semibold text-lg">Filter by</h1>
-        <button className="text-yellowColor" onClick={handleClearAll}>
-          clear all
+    <div className="flex">
+      {/* Filters Sidebar */}
+      <div className="w-64 p-4 border-r">
+        <CategoryFilter 
+          activeFilter={filters.category}
+          onFilterChange={handleFilterChange}
+        />
+        <ColorFilter 
+          activeFilter={filters.color}
+          onFilterChange={handleFilterChange}
+        />
+        <SizeFilter 
+          activeFilter={filters.size}
+          onFilterChange={handleFilterChange}
+        />
+        <PriceRangeFilter 
+          min={0}
+          max={10000}
+          onPriceChange={handlePriceChange}
+        />
+        <button 
+          onClick={applyFilters}
+          className="w-full mt-4 bg-blue-500 text-white py-2 rounded"
+        >
+          Apply Filters
         </button>
       </div>
 
-      {/* Filter */}
-      <div>
-        {FILTERLIST.map((filter) => (
-          <FilterOption
-            key={filter.key}
-            filter={{
-              ...filter,
-              isOpen: openAcc[filter.key],
-              options: filter.options || [], // Đảm bảo luôn là mảng
-            }}
-            onToggle={() => toggleAccordion(filter.key)}
-          />
-        ))}
-
+      {/* Products List */}
+      <div className="flex-1">
+        {/* Render products here */}
       </div>
     </div>
   );

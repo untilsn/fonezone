@@ -1,6 +1,6 @@
 import React from 'react'
-import SectionTitle from '../ui/SectionTitle'
-import BlogCard from './BlogCard'
+import SectionTitle from '../../ui/SectionTitle'
+import BlogCard from '../../blog/BlogCard'
 
 const BlogSection = () => {
   return (

@@ -3,6 +3,7 @@ import React, { useState } from "react";
 
 const FilterCheckbox = ({ options }) => {
     const [selected, setSelected] = useState([]);
+    console.log(selected)
     const handleToggle = (item) => {
         setSelected((prev) =>
             prev.includes(item) ? prev.filter((i) => i !== item) : [...prev, item]

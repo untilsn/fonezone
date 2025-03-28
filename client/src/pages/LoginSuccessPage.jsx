@@ -1,14 +1,15 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { handleLoginGoogle } from "../services/authService";
 import { useDispatch } from "react-redux";
+import { useAuth } from "../hooks/useAuth";
 
 const LoginSuccessPage = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+  const { loginWithGoogleSuccess } = useAuth();
 
   useEffect(() => {
-    handleLoginGoogle(navigate, dispatch);
+    loginWithGoogleSuccess()
   }, [navigate, dispatch]);
 
   return (

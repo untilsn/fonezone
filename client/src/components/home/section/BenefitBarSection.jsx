@@ -34,7 +34,7 @@ export const CouponIconList = [
 
 
 
-const BenefitBar = () => {
+const BenefitBarSection = () => {
   return (
     <div className='border-t border-gray/20 pt-20'>
       {/* <div className='w-full h-[1px]  bg-gray/20  my-10'></div> */}
@@ -55,4 +55,4 @@ const BenefitBar = () => {
   )
 }
 
-export default BenefitBar
+export default BenefitBarSection

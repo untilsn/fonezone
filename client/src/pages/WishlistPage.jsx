@@ -1,7 +1,7 @@
 import React from 'react'
 import TableComponent from '../components/table/TableComponent'
-import { wishlistColumns } from '../components/columns/WishlistColumn';
 import BreadcrumbPage from '../components/layout/BreadcrumbPage';
+import { wishlistColumns } from '../components/table/columns/WishlistColumn';
 
 
 const wishlistData = [

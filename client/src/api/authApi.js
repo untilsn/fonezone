@@ -29,32 +29,32 @@ export const getUserProfileApi = async (token) => {
   return res.data
 }
 
-export const forgetPassword = async (data) => {
+export const forgetPasswordApi = async (data) => {
   const res = await apiClient.post("/api/auth/password/forgot", data)
   return res.data
 }
 
 
-export const verifyOtpReset = async (data) => {
+export const verifyOtpResetApi = async (data) => {
   const res = await apiClient.post("/api/auth/password/verify-otp", data)
   return res.data
 }
 
 
-export const resetPassword = async (data) => {
+export const resetPasswordApi = async (data) => {
   const res = await apiClient.post("/api/auth/password/reset", data)
   return res.data
 }
 
 
-export const refreshToken = async () => {
+export const refreshTokenApi = async () => {
   const res = await apiClient.post("/api/auth/refresh_token")
   return res.data
 }
 
 
 
-export const logoutUser = async () => {
+export const logoutUserApi = async () => {
   const res = await apiClient.post("/api/auth/logout")
   return res.data
 }

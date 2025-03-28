@@ -3,8 +3,8 @@ import BreadcrumbPage from '../components/layout/BreadcrumbPage';
 import HeaderPage from '../components/layout/HeaderPage';
 import CartTotal from '../features/cart/CartTotal';
 import TableComponent from '../components/table/TableComponent';
-import { cartColumns } from '../components/columns/CartColumn';
 import CartCoupon from '../features/cart/CartCoupon';
+import { cartColumns } from '../components/table/columns/CartColumn';
 
 const CartPage = () => {
   const [data, setData] = useState([

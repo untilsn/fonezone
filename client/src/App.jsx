@@ -11,7 +11,6 @@ import ShopPage from './pages/ShopPage'
 import ProductDetailsPage from './pages/ProductDetailsPage'
 import WishlistPage from './pages/WishlistPage'
 import CartPage from './pages/CartPage'
-import ScrollTopButton from './components/button/ScrollTopButton'
 import BlogPage from './pages/BlogPage'
 import AboutPage from './pages/AboutPage'
 import ProfilePage from './pages/ProfilePage'
@@ -25,6 +24,7 @@ import SidebarWishlist from './components/profile/sidebar/SidebarWishlist'
 import SiderbarOrder from './components/profile/sidebar/SiderbarOrder'
 import SidebarChangepassword from './components/profile/sidebar/SidebarChangepassword'
 import SidebarMessage from './components/profile/sidebar/SidebarMessage'
+import ScrollTopButton from './components/common/ScrollTopButton'
 
 const App = () => {
   return (

@@ -1,7 +1,7 @@
 import React from 'react'
 import { createColumnHelper } from "@tanstack/react-table";
 import TableComponent from '../../table/TableComponent';
-import { reviewColumns } from '../../columns/ReviewColumn';
+import { reviewColumns } from '../../table/columns/ReviewColumn';
 
 export const reviews = [
   {

@@ -1,22 +1,22 @@
 import React from 'react'
-import BannerSection from '../components/banner/BannerSection'
-import PromoBanner from '../components/banner/PromoBanner'
-import BenefitBar from '../components/ui/BenefitBar'
-import CouponForm from '../components/ui/CouponForm'
-import BlogSection from '../components/blog/BlogSection'
-import SignatureProduct from '../features/home/SignatureProduct'
-import HomeTabs from '../features/home/HomeTabs'
+import BenefitBarSection from '../components/home/section/BenefitBarSection'
+import CouponSection from '../components/home/section/CouponSection'
+import BannerSection from '../components/home/banner/BannerSection'
+import ProductTabSection from '../components/home/product/ProductTabSection'
+import PromoBanner from '../components/home/banner/PromoBanner'
+import SignatureProduct from '../components/home/product/SignatureProduct'
+import BlogSection from '../components/home/section/BlogSection'
 
 
 const HomePage = () => {
   return (
     <div className='container py-10 flex flex-col gap-20'>
       <BannerSection></BannerSection>
-      <HomeTabs></HomeTabs>
+      <ProductTabSection></ProductTabSection>
       <PromoBanner></PromoBanner> 
       <SignatureProduct></SignatureProduct>  
-      <BenefitBar></BenefitBar>  
-      <CouponForm></CouponForm>  
+      <BenefitBarSection></BenefitBarSection>  
+      <CouponSection></CouponSection>  
       <BlogSection></BlogSection>
     </div>
   )

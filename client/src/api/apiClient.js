@@ -1,6 +1,7 @@
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
-import { refreshToken } from "./authApi";
+import { refreshTokenApi } from "./authApi";
+
 
 const BASE_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -38,7 +39,7 @@ const updateToken = async () => {
   isRefreshing = true;
 
   try {
-    const res = await refreshToken();
+    const res = await refreshTokenApi();
     if (res?.access_token) {
       localStorage.setItem("access_token", res.access_token);
       access_token = res.access_token;

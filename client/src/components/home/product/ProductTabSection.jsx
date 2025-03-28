@@ -1,11 +1,13 @@
 import React from "react";
-import SectionTitle from "../../components/ui/SectionTitle";
+import SectionTitle from "../../ui/SectionTitle";
+import SectionTabs from "../../ui/SectionTabs";
 import FeaturedProduct from "./FeaturedProduct";
 import OnSaleProduct from "./OnSaleProduct";
 import TopRatedProduct from "./TopRatedProduct";
-import SectionTabs from "../../components/ui/SectionTabs";
 
-const HomeTabs = () => {
+
+
+const ProductTabSection = () => {
   const tabsData = [
     { value: "featured", label: "Nổi bật", component: FeaturedProduct },
     { value: "discount", label: "Giảm giá", component: OnSaleProduct },
@@ -20,4 +22,4 @@ const HomeTabs = () => {
   );
 };
 
-export default HomeTabs;
+export default ProductTabSection;

@@ -1,6 +1,6 @@
 import React from 'react'
 import TableComponent from '../../table/TableComponent';
-import { orderColumns } from '../../columns/UserOrderColumn';
+import { orderColumns } from '@tanstack/react-table';
 
 export const dummyOrders = [
   { orderId: "#123456", date: "2024-03-10", total: "1.500.000", status: "Hoàn thành" },

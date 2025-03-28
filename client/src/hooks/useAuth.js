@@ -6,13 +6,12 @@ import {
   registerUserApi,
   verifyAccountApi,
   getUserProfileApi,
-  forgetPassword,
-  verifyOtpReset,
-  resetPassword,
-  refreshToken,
-  logoutUser
-} from "../api/authApi"; // Đổi thành đúng file API của bạn
-import { logout, setUser } from "../redux/slice/userSlice";
+  logoutUserApi,
+  resetPasswordApi,
+  verifyOtpResetApi,
+  forgetPasswordApi
+} from "../api/authApi";
+import { logoutUser, setUser } from "../redux/slice/userSlice";
 
 export const useAuth = () => {
   const dispatch = useDispatch();
@@ -41,6 +40,29 @@ export const useAuth = () => {
       navigate("/login-fail");
     }
   };
+
+
+  const loginWithGoogleSuccess = async () => {
+    try {
+      const urlParams = new URLSearchParams(window.location.search);
+
+      const access_token = urlParams.get("access_token");
+
+      if (access_token) {
+        localStorage.setItem("access_token", access_token);
+        await getUserProfile(access_token);
+        navigate("/");
+      } else {
+        navigate("/login-fail");
+      }
+    } catch (err) {
+      console.error("Lỗi khi đăng nhập với Google:", err.response?.data || err.message);
+      navigate("/login-fail");
+    }
+  };
+
+
+
 
   const register = async (values) => {
     try {
@@ -73,11 +95,11 @@ export const useAuth = () => {
   const getUserProfile = async (token) => {
     try {
       if (!token) return null;
-      const data = await getUserProfileApi(token);
-      if (data) {
-        dispatch(setUser(data));
+      const res = await getUserProfileApi(token);
+      if (res) {
+        dispatch(setUser(res.data));
       }
-      return data;
+      return res;
     } catch (err) {
       console.error(err);
       throw err;
@@ -86,7 +108,7 @@ export const useAuth = () => {
 
   const forgetPassword = async (values, setStep) => {
     try {
-      const data = await forgetPassword(values);
+      const data = await forgetPasswordApi(values);
       if (data?.step) setStep(data.step);
       return data;
     } catch (err) {
@@ -97,7 +119,7 @@ export const useAuth = () => {
 
   const verifyOtpReset = async (values, setStep) => {
     try {
-      const data = await verifyOtpReset(values);
+      const data = await verifyOtpResetApi(values);
       if (data?.step) setStep(data.step);
       return data;
     } catch (err) {
@@ -108,7 +130,7 @@ export const useAuth = () => {
 
   const resetPassword = async (values) => {
     try {
-      const data = await resetPassword(values);
+      const data = await resetPasswordApi(values);
       if (data?.success) navigate("/login");
       return data;
     } catch (err) {
@@ -117,20 +139,11 @@ export const useAuth = () => {
     }
   };
 
-  const refreshToken = async () => {
-    try {
-      return await refreshToken();
-    } catch (err) {
-      console.error(err);
-      throw err;
-    }
-  };
-
   const logout = async () => {
     try {
-      await logoutUser();
+      await logoutUserApi();
       localStorage.removeItem("access_token");
-      dispatch(logout());
+      dispatch(logoutUser());
       navigate("/login");
     } catch (error) {
       console.error("Lỗi khi đăng xuất:", error);
@@ -140,13 +153,13 @@ export const useAuth = () => {
   return {
     login,
     loginWithGoogle,
+    loginWithGoogleSuccess,
     register,
     verifyAccount,
     getUserProfile,
     forgetPassword,
     verifyOtpReset,
     resetPassword,
-    refreshToken,
     logout,
   };
 };
