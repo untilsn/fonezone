@@ -2,7 +2,7 @@ import React from 'react';
 import ProductDesc from './ProductDesc';
 import ProductTerm from './ProductTerm';
 import ProductReview from './ProductReview';
-import SectionTabs from '../../../components/ui/SectionTabs';
+import SectionTabs from '../../ui/SectionTabs';
 
 
 const ProductTabs = () => {

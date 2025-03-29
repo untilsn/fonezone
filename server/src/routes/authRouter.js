@@ -1,41 +1,41 @@
 import express from "express";
 import passport from "../config/passport.js";
-import config from "../config/env.js";
 import {
   loginUserController, registerUserController, verifyAccountController,
   forgetPasswordController, verifyOtpResetController, resetPasswordController,
   refreshTokenController, googleAuthController, logoutController,
-  getUserProfileController
+  getUserProfileController,
 } from "../controllers/authController.js";
-import validateMiddleware from "../middlewares/validateMiddleware.js";
+import validate from "../middlewares/validateMiddleware.js";
 import {
   loginValidation, registerValidation, resetPasswordValidation,
   verifyAccountValidation, verifyOtpValidation, forgotPasswordValidation
 } from "../validation/authValidation.js";
-import { verifyUserToken } from "../middlewares/authMiddleware.js";
+import { isUser } from "../middlewares/authMiddleware.js";
 
 const authRouter = express.Router();
 
-/* AUTH ROUTES */
-authRouter.post("/login", validateMiddleware(loginValidation), loginUserController);
-authRouter.post("/register", validateMiddleware(registerValidation), registerUserController);
-authRouter.post("/verify-account", validateMiddleware(verifyAccountValidation), verifyAccountController);
-authRouter.get("/profile", verifyUserToken, getUserProfileController);
+/*USER AUTH ROUTES*/
+// Authentication dành cho khách hàng
+authRouter.post("/login", validate(loginValidation), loginUserController);
+authRouter.post("/register", validate(registerValidation), registerUserController);
+authRouter.post("/verify-account", validate(verifyAccountValidation), verifyAccountController);
+authRouter.get("/profile", isUser, getUserProfileController);
 authRouter.post("/refresh-token", refreshTokenController);
 authRouter.post("/logout", logoutController);
 
-/* PASSWORD RECOVERY */
-authRouter.post("/password/forgot", validateMiddleware(forgotPasswordValidation), forgetPasswordController);
-authRouter.post("/password/verify-otp", validateMiddleware(verifyOtpValidation), verifyOtpResetController);
-authRouter.post("/password/reset", validateMiddleware(resetPasswordValidation), resetPasswordController);
+// Password recovery
+authRouter.post("/password/forgot", validate(forgotPasswordValidation), forgetPasswordController);
+authRouter.post("/password/verify-otp", validate(verifyOtpValidation), verifyOtpResetController);
+authRouter.post("/password/reset", validate(resetPasswordValidation), resetPasswordController);
 
-/* GOOGLE AUTH */
+// Google Auth
 authRouter.get("/google", passport.authenticate("google", { scope: ["profile", "email"] }));
 authRouter.get("/google/callback", googleAuthController.handleGoogleCallback);
 
-// authRouter.get("/google/fail", (req, res) => {
-//   res.redirect(`${config.CLIENT_URL}/login-fail`);
-// });
+
+/*ADMIN AUTH ROUTES*/
+authRouter.post("/admin/login", validate(loginValidation));
+authRouter.post("/admin/logout", logoutController);
 
 export default authRouter;
-

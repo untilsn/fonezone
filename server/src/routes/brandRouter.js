@@ -3,18 +3,20 @@ import {
   createBrandController,
   deleteBrandController,
   getAllBrandsController,
-  getBrandByIdController,
   updateBrandController
 } from '../controllers/brandController.js';
-import validateMiddleware from '../middlewares/validateMiddleware.js';
+import validate from '../middlewares/validateMiddleware.js';
 import { brandValidation } from '../validation/brandValidation.js';
+import { isAdmin } from '../middlewares/authMiddleware.js';
 
 const brandRouter = express.Router();
 
+/*USER ROUTE*/
 brandRouter.get('/', getAllBrandsController);
-brandRouter.get('/:id', getBrandByIdController);
-brandRouter.post('/create', validateMiddleware(brandValidation) , createBrandController);
-brandRouter.put('/update/:id', updateBrandController);
-brandRouter.delete('/delete/:id', deleteBrandController);
+
+/*ADMIN ROUTES*/
+brandRouter.post('/', isAdmin, validate(brandValidation), createBrandController);
+brandRouter.patch('/:id', isAdmin, validate(brandValidation), updateBrandController);
+brandRouter.delete('/:id', isAdmin, deleteBrandController);
 
 export default brandRouter;

@@ -1,7 +1,8 @@
 import React from 'react'
 import HeaderPage from '../components/layout/HeaderPage'
 import BreadcrumbPage from '../components/layout/BreadcrumbPage'
-import ProductFilter from '../features/shop/ProductFilter'
+import ProductFilter from '../components/shop/product/ProductFilter'
+import ProductList from '../components/shop/product/ProductList'
 
 const ShopPage = () => {
   return (
@@ -13,7 +14,7 @@ const ShopPage = () => {
           <ProductFilter></ProductFilter>
         </div>
         <div className='col-span-9'>
-          {/* <ProductGrid></ProductGrid> */}
+          <ProductList></ProductList>
         </div>
       </div>
     </div>

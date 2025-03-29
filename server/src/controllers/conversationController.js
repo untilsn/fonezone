@@ -1,4 +1,4 @@
-export const createOrderController = async (req, res, next) => {
+export const createConversationController = async (req, res, next) => {
   try {
     const { someData } = req.body;
 
@@ -13,7 +13,7 @@ export const createOrderController = async (req, res, next) => {
     next(error); 
   }
 };
-export const getUserOrdersController = async (req, res, next) => {
+export const getConversationsByUserController = async (req, res, next) => {
   try {
     const { someData } = req.body;
 
@@ -28,7 +28,7 @@ export const getUserOrdersController = async (req, res, next) => {
     next(error); 
   }
 };
-export const getOrderByIdController = async (req, res, next) => {
+export const getConversationByIdController = async (req, res, next) => {
   try {
     const { someData } = req.body;
 
@@ -43,7 +43,7 @@ export const getOrderByIdController = async (req, res, next) => {
     next(error); 
   }
 };
-export const getAllOrdersController = async (req, res, next) => {
+export const getAllConversationsForAdminController = async (req, res, next) => {
   try {
     const { someData } = req.body;
 
@@ -58,22 +58,7 @@ export const getAllOrdersController = async (req, res, next) => {
     next(error); 
   }
 };
-export const updateOrderStatusController = async (req, res, next) => {
-  try {
-    const { someData } = req.body;
-
-    const result = await someServiceFunction(someData);
-
-    return res.status(200).json({
-      success: true,
-      data: result,
-      message: "Xử lý thành công!",
-    });
-  } catch (error) {
-    next(error); 
-  }
-};
-export const deleteOrderController = async (req, res, next) => {
+export const deleteConversationController = async (req, res, next) => {
   try {
     const { someData } = req.body;
 

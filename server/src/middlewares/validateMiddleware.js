@@ -1,5 +1,5 @@
 
-const validateMiddleware = (schema) => {
+const validate = (schema) => {
   return (req, res, next) => {
     const { error } = schema.validate(req.body, { abortEarly: false });
     if (error) {
@@ -12,4 +12,4 @@ const validateMiddleware = (schema) => {
   };
 };
 
-export default validateMiddleware;
+export default validate;

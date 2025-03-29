@@ -9,7 +9,6 @@ const blogSchema = new mongoose.Schema(
     categories: [{ type: mongoose.Schema.Types.ObjectId, ref: "Category" }],
     author: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
     views: { type: Number, default: 0 },
-    likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     comments: [
       {
         user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
@@ -18,10 +17,11 @@ const blogSchema = new mongoose.Schema(
       },
     ],
     isPublished: { type: Boolean, default: false },
-    publishedAt: { type: Date, default: null },
   },
   { timestamps: true }
 );
 
 
-export default mongoose.model("Blog", blogSchema);
+const Blog = mongoose.model("Blog", blogSchema);
+
+export default Blog;

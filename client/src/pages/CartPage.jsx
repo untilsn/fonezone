@@ -1,10 +1,12 @@
 import React, { useMemo, useState } from 'react';
-import BreadcrumbPage from '../components/layout/BreadcrumbPage';
 import HeaderPage from '../components/layout/HeaderPage';
-import CartTotal from '../features/cart/CartTotal';
+import BreadcrumbPage from '../components/layout/BreadcrumbPage';
 import TableComponent from '../components/table/TableComponent';
-import CartCoupon from '../features/cart/CartCoupon';
 import { cartColumns } from '../components/table/columns/CartColumn';
+import CartTotal from '../components/cart/CartTotal';
+import CartCoupon from '../components/cart/CartCoupon';
+
+
 
 const CartPage = () => {
   const [data, setData] = useState([

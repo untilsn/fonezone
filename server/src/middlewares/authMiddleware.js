@@ -9,7 +9,7 @@ const extractToken = (req) => {
   return authHeader.split(" ")[1];
 };
 
-export const verifyAdminToken = (req, res, next) => {
+export const isAdmin = (req, res, next) => {
   const token = extractToken(req);
   if (!token) {
     return res.status(401).json({ success: false, message: "Unauthorized: No token provided" });
@@ -29,7 +29,7 @@ export const verifyAdminToken = (req, res, next) => {
 };
 
 
-export const verifyUserToken = (req, res, next) => {
+export const isUser = (req, res, next) => {
   const token = extractToken(req);
   if (!token) {
     return res.status(401).json({ success: false, message: "Unauthorized: No token provided" });

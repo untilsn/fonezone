@@ -1,6 +1,6 @@
 import { Rating } from '@material-tailwind/react'
 import React from 'react'
-import RatingIcon from '../../../components/ui/RatingIcon';
+import RatingIcon from '../../ui/RatingIcon';
 
 const reviewsFromServer = [
   { id: 1, rating: 5 },

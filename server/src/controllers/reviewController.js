@@ -1,4 +1,4 @@
-export const createOrderController = async (req, res, next) => {
+export const createReviewController = async (req, res, next) => {
   try {
     const { someData } = req.body;
 
@@ -10,10 +10,10 @@ export const createOrderController = async (req, res, next) => {
       message: "Xử lý thành công!",
     });
   } catch (error) {
-    next(error); 
+    next(error);
   }
 };
-export const getUserOrdersController = async (req, res, next) => {
+export const getReviewsByProductOrBlogController = async (req, res, next) => {
   try {
     const { someData } = req.body;
 
@@ -25,10 +25,10 @@ export const getUserOrdersController = async (req, res, next) => {
       message: "Xử lý thành công!",
     });
   } catch (error) {
-    next(error); 
+    next(error);
   }
 };
-export const getOrderByIdController = async (req, res, next) => {
+export const getReviewByIdController = async (req, res, next) => {
   try {
     const { someData } = req.body;
 
@@ -40,10 +40,10 @@ export const getOrderByIdController = async (req, res, next) => {
       message: "Xử lý thành công!",
     });
   } catch (error) {
-    next(error); 
+    next(error);
   }
 };
-export const getAllOrdersController = async (req, res, next) => {
+export const updateReviewController = async (req, res, next) => {
   try {
     const { someData } = req.body;
 
@@ -55,10 +55,10 @@ export const getAllOrdersController = async (req, res, next) => {
       message: "Xử lý thành công!",
     });
   } catch (error) {
-    next(error); 
+    next(error);
   }
 };
-export const updateOrderStatusController = async (req, res, next) => {
+export const deleteReviewController = async (req, res, next) => {
   try {
     const { someData } = req.body;
 
@@ -70,10 +70,10 @@ export const updateOrderStatusController = async (req, res, next) => {
       message: "Xử lý thành công!",
     });
   } catch (error) {
-    next(error); 
+    next(error);
   }
 };
-export const deleteOrderController = async (req, res, next) => {
+export const approveReviewController = async (req, res, next) => {
   try {
     const { someData } = req.body;
 
@@ -85,6 +85,6 @@ export const deleteOrderController = async (req, res, next) => {
       message: "Xử lý thành công!",
     });
   } catch (error) {
-    next(error); 
+    next(error);
   }
 };

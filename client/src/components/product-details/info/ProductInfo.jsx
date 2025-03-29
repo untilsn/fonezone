@@ -3,7 +3,7 @@ import { ButtonGroup } from "@material-tailwind/react";
 import { FaCartPlus, FaHeart, FaRegHeart } from 'react-icons/fa6';
 import parse from "html-react-parser";
 import formatPrice from '../../../utils/formatPrice';
-import QuantitySelector from '../../../components/common/QuantitySelector';
+import QuantitySelector from '../../common/QuantitySelector';
 
 
 const fakeItem = {

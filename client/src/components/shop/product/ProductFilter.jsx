@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { CategoryFilter } from '../../components/shop/filter/CategoryFilter';
-import { ColorFilter } from '../../components/shop/filter/ColorFilter';
-import { SizeFilter } from '../../components/shop/filter/SizeFilter';
-import { PriceRangeFilter } from '../../components/shop/filter/PriceRangeFilter';
+import { useState } from 'react';
+import { CategoryFilter } from '../filter/CategoryFilter';
+import { ColorFilter } from '../filter/ColorFilter';
+import { SizeFilter } from '../filter/SizeFilter';
+import { PriceRangeFilter } from '../filter/PriceRangeFilter';
 
 
 
@@ -43,6 +43,7 @@ const ProductFilter = () => {
     fetchProducts(apiFilters);
   };
 
+
   return (
     <div className="flex">
       {/* Filters Sidebar */}
@@ -77,7 +78,7 @@ const ProductFilter = () => {
         {/* Render products here */}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ProductFilter;
+export default ProductFilter

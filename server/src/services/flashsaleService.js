@@ -1,6 +1,6 @@
 import errorHandle from "../middlewares/errorMiddleware.js";
-import Flashsale from "../models/flashSaleModel.js";
-import Product from "../models/productModel.js"; 
+import Flashsale from "../models/Flashsale.js";
+import Product from "../models/Product.js";
 
 
 export const getAllFlashSales = async () => {

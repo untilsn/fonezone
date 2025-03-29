@@ -1,9 +1,10 @@
 import React from 'react'
 import BreadcrumbPage from '../components/layout/BreadcrumbPage'
-import ProductTabs from '../features/product/details/ProductTabs'
-import ProductImageSlide from "../features/product/details/ProductImageSlide"
-import ProductInfo from '../features/product/details/ProductInfo'
-import ProductRelative from '../components/shop/product/ProductRelative'
+import ProductImageSlide from '../components/product-details/gallery/ProductImageSlide'
+import ProductInfo from '../components/product-details/info/ProductInfo'
+import ProductTabs from '../components/product-details/tab/ProductTabs'
+import ProductRelative from '../components/product-details/tab/ProductRelative'
+
 const image = [
   "https://picsum.photos/id/237/200/300",
   "https://picsum.photos/id/238/200/300",

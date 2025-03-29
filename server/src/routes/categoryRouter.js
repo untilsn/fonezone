@@ -1,20 +1,22 @@
 import express from 'express';
-import validateMiddleware from '../middlewares/validateMiddleware.js';
+import validate from '../middlewares/validateMiddleware.js';
 import {
   createCategoryController,
   deleteCategoryController,
   getAllCategoriesController,
-  getCategoryByIdController,
   updateCategoryController
 } from '../controllers/categoryController.js';
 import { categoryValidation, updateCategoryValidation } from '../validation/categoryValidation.js';
+import { isAdmin } from '../middlewares/authMiddleware.js';
 
 const categoryRouter = express.Router();
 
+/*USER ROUTE*/
 categoryRouter.get('/', getAllCategoriesController);
-categoryRouter.get('/:id', getCategoryByIdController);
-categoryRouter.post('/create', validateMiddleware(categoryValidation), createCategoryController);
-categoryRouter.patch('/update/:id', validateMiddleware(updateCategoryValidation), updateCategoryController);
-categoryRouter.delete('/delete/:id', deleteCategoryController);
+
+/*ADMIN ROUTES*/
+categoryRouter.post('/', isAdmin, validate(categoryValidation), createCategoryController);
+categoryRouter.patch('/:id', isAdmin, validate(updateCategoryValidation), updateCategoryController);
+categoryRouter.delete('/:id', isAdmin, deleteCategoryController);
 
 export default categoryRouter;

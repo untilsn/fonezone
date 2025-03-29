@@ -7,6 +7,30 @@ import {
   updateCoupon
 } from "../services/couponService.js";
 
+export const getCouponByCodeController = async (req, res, next) => {
+  try {
+    const coupons = await getAllCoupons();
+    return res.status(200).json({
+      success: true,
+      data: coupons,
+      message: "Lấy danh sách mã giảm giá thành công!",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+export const getAllCouponsController = async (req, res, next) => {
+  try {
+    const coupons = await getAllCoupons();
+    return res.status(200).json({
+      success: true,
+      data: coupons,
+      message: "Lấy danh sách mã giảm giá thành công!",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
 export const getCouponsController = async (req, res, next) => {
   try {
     const coupons = await getAllCoupons();
