@@ -28,5 +28,7 @@ export const HEADER_NAVBAR = [
     id: 6,
     title: "Hồ sơ",
     url: "/user-info",
+    type: "dropdown",
+    hasDropdown: true,
   },
 ];

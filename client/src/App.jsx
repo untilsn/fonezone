@@ -25,6 +25,7 @@ import SiderbarOrder from './components/profile/sidebar/SiderbarOrder'
 import SidebarChangepassword from './components/profile/sidebar/SidebarChangepassword'
 import SidebarMessage from './components/profile/sidebar/SidebarMessage'
 import ScrollTopButton from './components/common/ScrollTopButton'
+import CheckoutPage from './pages/CheckoutPage'
 
 const App = () => {
   return (
@@ -45,6 +46,7 @@ const App = () => {
         <Route path='/cart' element={<CartPage />} />
         <Route path='/blog' element={<BlogPage />} />
         <Route path='/about' element={<AboutPage />} />
+        <Route path='/checkout' element={<CheckoutPage />} />
         <Route path='/profile' element={<ProfilePage />} >
           <Route path='account' element={<SidebarAccount />} />
           <Route path='message' element={<SidebarMessage />} />

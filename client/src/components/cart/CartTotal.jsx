@@ -1,5 +1,6 @@
 import React from 'react'
 import formatPrice from '../../utils/formatPrice'
+import { useNavigate } from 'react-router-dom'
 
 
 const Title = ({ children }) => {
@@ -10,6 +11,7 @@ const Title = ({ children }) => {
 
 
 const CartTotal = () => {
+    const navigate = useNavigate()
     return (
         <div className='border border-dashed border-darkPrimary border-opacity-40 bg-[#F9F9F9] bg-opacity-60 rounded-lg p-8'>
             <Title>cart total</Title>
@@ -21,8 +23,11 @@ const CartTotal = () => {
                 <h1 className='text-base text-yellowDark'>Total:	</h1>
                 <span className='font-semibold text-yellowDark'>{formatPrice(644.97)}</span>
             </div>
-          <button className='text-lg rounded-sm capitalize text-light font-semibold w-full p-2 bg-yellow-dark'>Tiến hành thanh toán</button>
-        </div>
+            <button
+                onClick={() => navigate('/checkout')}
+                className='text-lg rounded-sm capitalize text-light font-semibold w-full p-2 bg-yellow-dark'>Tiến hành thanh toán
+            </button>
+        </div >
     )
 }
 

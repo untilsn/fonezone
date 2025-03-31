@@ -109,7 +109,7 @@ const ProductList = ({ products: initialProducts, categories }) => {
   };
 
   return (
-    <div id="product-list-container" className="container mx-auto px-4 py-8">
+    <div id="product-list-container" className="container mx-auto w-full">
       {/* Search and sort header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
         <div className="w-full md:w-auto">
@@ -118,7 +118,7 @@ const ProductList = ({ products: initialProducts, categories }) => {
             placeholder="Search products..."
             value={searchQuery}
             onChange={handleSearchChange}
-            className="w-full md:w-80 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full md:w-80 px-4 py-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
 
@@ -128,7 +128,7 @@ const ProductList = ({ products: initialProducts, categories }) => {
           </div>
 
           <div className="flex items-center gap-2">
-            <div className="flex border border-gray-300 rounded-md">
+            <div className="flex border border-gray-300 ">
               <button
                 onClick={() => setViewMode('grid')}
                 className={`p-2 ${viewMode === 'grid' ? 'bg-gray-200' : ''}`}
