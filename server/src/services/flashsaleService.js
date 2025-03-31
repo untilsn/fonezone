@@ -1,6 +1,6 @@
-import errorHandle from "../middlewares/errorMiddleware.js";
 import Flashsale from "../models/Flashsale.js";
 import Product from "../models/Product.js";
+import CustomError from "../utils/customError.js";
 
 
 export const getAllFlashSales = async () => {
@@ -17,7 +17,7 @@ export const getActiveFlashSale = async () => {
 
 export const getFlashSaleById = async (id) => {
   const flashsale = await Flashsale.findById(id).populate("products");
-  if (!flashsale) throw new errorHandle(404, "Flash Sale không tồn tại.");
+  if (!flashsale) throw new CustomError(404, "Flash Sale không tồn tại.");
   return flashsale;
 };
 
@@ -31,7 +31,7 @@ export const createFlashSale = async (data) => {
   });
 
   if (checkFlashsaleDate) {
-    throw new errorHandle(400, "Thời gian Flash Sale bị trùng với một đợt khác.");
+    throw new CustomError(400, "Thời gian Flash Sale bị trùng với một đợt khác.");
   }
 
   const existingProducts = await Product.find({
@@ -40,7 +40,7 @@ export const createFlashSale = async (data) => {
   });
 
   if (existingProducts.length !== products.length) {
-    throw new errorHandle(400, "Một số sản phẩm không tồn tại hoặc đã bị ẩn.");
+    throw new CustomError(400, "Một số sản phẩm không tồn tại hoặc đã bị ẩn.");
   }
 
   return await Flashsale.create(data);
@@ -51,7 +51,7 @@ export const updateFlashSale = async (id, updateData) => {
   const { start, end } = updateData;
 
   const flashsale = await Flashsale.findById(id);
-  if (!flashsale) throw new errorHandle(404, "Flash Sale không tồn tại.");
+  if (!flashsale) throw new CustomError(404, "Flash Sale không tồn tại.");
 
   if (start && end) {
     const checkFlashsaleDate = await Flashsale.findOne({
@@ -61,7 +61,7 @@ export const updateFlashSale = async (id, updateData) => {
     });
 
     if (checkFlashsaleDate) {
-      throw new errorHandle(400, "Thời gian Flash Sale bị trùng với một đợt khác.");
+      throw new CustomError(400, "Thời gian Flash Sale bị trùng với một đợt khác.");
     }
   }
 
@@ -76,11 +76,11 @@ export const updateFlashSale = async (id, updateData) => {
 export const deleteFlashSale = async (id) => {
   const flashsale = await Flashsale.findById(id);
   if (!flashsale) {
-    throw new errorHandle(404, "Flash Sale không tồn tại.");
+    throw new CustomError(404, "Flash Sale không tồn tại.");
   }
 
   if (flashsale.status === "active") {
-    throw new errorHandle(400, "Không thể xóa Flash Sale đang hoạt động.");
+    throw new CustomError(400, "Không thể xóa Flash Sale đang hoạt động.");
   }
 
   return await Flashsale.findByIdAndDelete(id);

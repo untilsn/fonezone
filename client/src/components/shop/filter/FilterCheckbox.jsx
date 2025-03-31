@@ -1,43 +1,33 @@
-import { Checkbox } from "@material-tailwind/react";
-import React, { useState } from "react";
+import React from "react";
+import { Accordion, AccordionHeader, AccordionBody, Checkbox } from "@material-tailwind/react";
 
-const FilterCheckbox = ({ options }) => {
-    const [selected, setSelected] = useState([]);
-    console.log(selected)
-    const handleToggle = (item) => {
-        setSelected((prev) =>
-            prev.includes(item) ? prev.filter((i) => i !== item) : [...prev, item]
-        );
-    };
+export const FilterCheckbox = ({ title, filterList, activeFilter, onFilterChange }) => {
+  const [open, setOpen] = React.useState(false);
 
-    return (
-        <div>
-            {options.map((item) => (
-                <label
-                    key={item}
-                    className="flex items-center justify-between px-2 transition duration-300 rounded cursor-pointer group"
-                >
-                    <div className="flex items-center gap-2">
-                        <Checkbox
-                            className="!p-0 hover"
-                            checked={selected.includes(item)}
-                            onChange={() => handleToggle(item)}
-                        />
-                        <span
-                            className={`capitalize transition duration-300 ${
-                                selected.includes(item) ? "text-yellowColor font-medium" : "text-darkPrimary"
-                            }`}
-                        >
-                            {item}
-                        </span>
-                    </div>
-                    <span className="px-2 py-1 text-xs font-medium text-gray-600 bg-blue-gray-200 bg-opacity-10 rounded-md">
-                        0
-                    </span>
-                </label>
-            ))}
+  const handleOpen = () => setOpen(!open);
+
+  return (
+    <Accordion open={open}>
+      <AccordionHeader onClick={handleOpen} className="text-sm font-semibold">
+        {title}
+      </AccordionHeader>
+      <AccordionBody>
+        <div className="space-y-2">
+          {filterList.map((item) => (
+            <div key={item.value} className="flex items-center gap-4">
+              <Checkbox
+                type="checkbox"
+                id={item.value}
+                value={item.value}
+                checked={activeFilter.includes(item.value)}
+                onChange={() => onFilterChange(item.value, title.toLowerCase())}
+                className="p-0 w-4 h-4 border-gray-400 rounded focus:ring-0 before:content-none"
+                label={item.name}
+              />
+            </div>
+          ))}
         </div>
-    );
+      </AccordionBody>
+    </Accordion>
+  );
 };
-
-export default FilterCheckbox;

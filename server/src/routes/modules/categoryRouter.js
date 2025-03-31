@@ -7,6 +7,8 @@ import {
   updateCategoryController
 } from '../../controllers/categoryController.js';
 import { categoryValidation, updateCategoryValidation } from '../../validation/categoryValidation.js';
+import { checkIdParam } from '../../middlewares/paramIdMiddleware.js';
+
 
 const categoryRouter = express.Router();
 const adminCategoryRouter = express.Router();
@@ -17,7 +19,7 @@ categoryRouter.get('/', getAllCategoriesController);
 //ADMIN ROUTER
 adminCategoryRouter
   .post('/', validate(categoryValidation), createCategoryController)
-  .patch('/:id', validate(updateCategoryValidation), updateCategoryController)
-  .delete('/:id', deleteCategoryController)
+  .patch('/:id', checkIdParam, validate(updateCategoryValidation), updateCategoryController)
+  .delete('/:id', checkIdParam, deleteCategoryController)
 
 export { categoryRouter, adminCategoryRouter };

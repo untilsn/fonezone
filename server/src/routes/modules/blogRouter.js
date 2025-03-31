@@ -5,6 +5,7 @@ import {
 } from "../../controllers/blogController.js";
 import validate from "../../middlewares/validateMiddleware.js";
 import { createBlogValidation, updateBlogValidation } from "../../validation/blogValidation.js";
+import { checkIdParam } from "../../middlewares/paramIdMiddleware.js";
 
 const blogRouter = express.Router();
 const adminBlogRouter = express.Router();
@@ -12,12 +13,13 @@ const adminBlogRouter = express.Router();
 //USER ROUTER
 blogRouter
   .get("/", getAllBlogsController)
-  .get("/:id", getBlogByIdController)
+  .get("/:id", checkIdParam, getBlogByIdController)
 
 //ADMIN ROUTER
 adminBlogRouter
   .post("/", validate(createBlogValidation), createBlogController)
-  .patch("/:id", validate(updateBlogValidation), updateBlogController)
-  .delete("/:id", deleteBlogController)
+  .patch("/:id", checkIdParam, validate(updateBlogValidation), updateBlogController)
+  .delete("/:id", checkIdParam, deleteBlogController)
 
 export { blogRouter, adminBlogRouter };
+ 

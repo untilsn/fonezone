@@ -44,10 +44,6 @@ export const getProductByIdController = async (req, res, next) => {
   try {
     const { productId } = req.params;
 
-    if (!productId) {
-      return res.status(404).json({ success: false, message: "Thiếu mã sản phẩm" })
-    }
-
     const result = await getProductById(productId);
 
     return res.status(200).json({ success: true, data: result, message: "Lấy thông tin sản phẩm thành công!" });

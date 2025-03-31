@@ -4,7 +4,7 @@ import { FILTER_LIST } from '../../../constants/filterList';
 
 
 
-export const ColorFilter = ({ 
+export const FilterColor = ({ 
   activeFilter, 
   onFilterChange 
 }) => {

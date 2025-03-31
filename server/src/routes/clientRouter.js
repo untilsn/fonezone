@@ -21,8 +21,7 @@ clientRouter
   .use('/brands', brandRouter)
   .use('/blogs', blogRouter)
   .use('/flash-sales', flashsaleRouter)
-  // yêu cầu đăng nhập
-  .use(isUser)
+  .use(isUser)  // yêu cầu đăng nhập
   .use('/user', userRouter)
   .use('/orders', orderRouter)
   .use('/wishlist', wishlistRouter)

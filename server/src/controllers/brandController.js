@@ -46,10 +46,6 @@ export const updateBrandController = async (req, res, next) => {
     const { id } = req.params;
     const { name } = req.body;
 
-    if (!id || !name) {
-      return res.status(400).json({ success: false, message: "Thiếu thông tin cập nhật" });
-    }
-
     const updatedBrand = await updateBrand(id, name);
     return res.status(200).json({ success: true, data: updatedBrand, message: "Cập nhật thương hiệu thành công!" });
   } catch (error) {
@@ -60,10 +56,6 @@ export const updateBrandController = async (req, res, next) => {
 export const deleteBrandController = async (req, res, next) => {
   try {
     const { id } = req.params;
-
-    if (!id) {
-      return res.status(400).json({ success: false, message: "Thiếu mã thương hiệu" });
-    }
 
     await deleteBrand(id);
     return res.status(200).json({ success: true, message: "Xóa thương hiệu thành công!" });

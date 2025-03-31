@@ -9,6 +9,12 @@ import {
 
 export const getCouponByCodeController = async (req, res, next) => {
   try {
+    const { code } = req.params;
+
+    if (!code) {
+      return res.status(400).json({ success: false, message: "Thiếu mã coupon!" });
+    }
+
     const coupons = await getAllCoupons();
     return res.status(200).json({
       success: true,
@@ -19,6 +25,8 @@ export const getCouponByCodeController = async (req, res, next) => {
     next(error);
   }
 };
+
+
 export const getAllCouponsController = async (req, res, next) => {
   try {
     const coupons = await getAllCoupons();
@@ -31,6 +39,8 @@ export const getAllCouponsController = async (req, res, next) => {
     next(error);
   }
 };
+
+
 export const getCouponsController = async (req, res, next) => {
   try {
     const coupons = await getAllCoupons();
@@ -43,6 +53,7 @@ export const getCouponsController = async (req, res, next) => {
     next(error);
   }
 };
+
 
 export const getCouponByIdController = async (req, res, next) => {
   try {
@@ -62,6 +73,7 @@ export const getCouponByIdController = async (req, res, next) => {
     next(error);
   }
 };
+
 
 export const createCouponController = async (req, res, next) => {
   try {

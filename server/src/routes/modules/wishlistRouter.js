@@ -5,13 +5,14 @@ import {
   getWishlistController,
   removeWishlistController
 } from '../../controllers/wishlistController.js';
+import { checkIdParam } from '../../middlewares/paramIdMiddleware.js';
 
 const wishlistRouter = express.Router();
 
 wishlistRouter
   .get('/', getWishlistController)
   .post('/', addWishlistController)
-  .delete('/:id', removeWishlistController)
+  .delete('/:id', checkIdParam, removeWishlistController)
   .delete('/', clearWishlistController)
 
 export default wishlistRouter;

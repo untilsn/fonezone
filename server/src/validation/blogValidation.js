@@ -1,6 +1,5 @@
 import Joi from "joi";
 
-// Validation khi tạo mới một bài viết
 export const createBlogValidation = Joi.object({
   title: Joi.string().trim().required().messages({
     "string.base": "Tiêu đề phải là chuỗi ký tự.",
@@ -34,7 +33,6 @@ export const createBlogValidation = Joi.object({
   }),
 });
 
-// Validation khi cập nhật một bài viết
 export const updateBlogValidation = Joi.object({
   title: Joi.string().trim().optional().messages({
     "string.base": "Tiêu đề phải là chuỗi ký tự.",

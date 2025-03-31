@@ -9,6 +9,7 @@ import {
 } from "../../controllers/reviewController.js";
 import validate from "../../middlewares/validateMiddleware.js";
 import { createReviewValidation, updateReviewValidation } from "../../validation/reviewValidation.js";
+import { checkIdParam } from "../../middlewares/paramIdMiddleware.js";
 
 const reviewRouter = express.Router();
 const adminReviewRouter = express.Router();
@@ -16,11 +17,11 @@ const adminReviewRouter = express.Router();
 reviewRouter
   .post("/", validate(createReviewValidation), createReviewController)
   .get("/:referenceModelId", getReviewsByProductOrBlogController)
-  .get("/detail/:id", getReviewByIdController)
-  .put("/:id", validate(updateReviewValidation), updateReviewController)
-  .delete("/:id", deleteReviewController);
+  .get("/detail/:id", checkIdParam, getReviewByIdController)
+  .put("/:id", checkIdParam, validate(updateReviewValidation), updateReviewController)
+  .delete("/:id", checkIdParam, deleteReviewController);
 
 
-adminReviewRouter.patch("/approve/:id", approveReviewController);
+adminReviewRouter.patch("/approve/:id", checkIdParam, approveReviewController);
 
 export { reviewRouter, adminReviewRouter };

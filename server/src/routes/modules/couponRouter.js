@@ -9,6 +9,7 @@ import {
 } from '../../controllers/couponController.js';
 import validate from '../../middlewares/validateMiddleware.js';
 import { couponValidation } from '../../validation/couponValidation.js';
+import { checkIdParam } from '../../middlewares/paramIdMiddleware.js';
 
 const couponRouter = express.Router();
 const adminCouponRouter = express.Router();
@@ -22,8 +23,8 @@ couponRouter
 adminCouponRouter
   .get('/', getAllCouponsController) // Lấy danh sách tất cả coupon (Admin)
   .post('/', validate(couponValidation), createCouponController) // Tạo coupon mới (Admin)
-  .patch('/:id', validate(couponValidation), updateCouponController) // Cập nhật thông tin coupon (Admin)
-  .delete('/:id', deleteCouponController); // Xóa coupon (Admin)
+  .patch('/:id', checkIdParam, validate(couponValidation), updateCouponController) // Cập nhật thông tin coupon (Admin)
+  .delete('/:id', checkIdParam, deleteCouponController); // Xóa coupon (Admin)
 
 export { couponRouter, adminCouponRouter };
 
