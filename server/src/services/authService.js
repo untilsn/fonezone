@@ -98,14 +98,6 @@ export const googleAuth = async (profile) => {
 };
 
 
-export const getUserProfile = async (userId) => {
-  const user = await User.findById(userId).select("-password")
-  if (!user) {
-    throw new CustomError(404, "Tài khoản người dùng không tồn tại!");
-  }
-  return user
-}
-
 // * verify account
 export const verifyAccount = async (email, otp) => {
   await verifyOtp(email, otp, "verify")

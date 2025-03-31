@@ -1,8 +1,7 @@
 import passport from "../config/passport.js";
 import config from "../config/env.js";
 import {
-  forgotPassword,
-  getUserProfile, loginUser,
+  forgotPassword, loginUser,
   registerUser,
   resetOtpPassword,
   verifyAccount,
@@ -93,18 +92,7 @@ export const verifyAccountController = async (req, res, next) => {
 };
 
 
-// *get current user
-export const getUserProfileController = async (req, res, next) => {
-  try {
-    const userId = req.user.id
 
-    const result = await getUserProfile(userId);
-
-    return res.status(200).json({ success: true, data: result, message: "Lấy thông tin người dùng thành công!" });
-  } catch (error) {
-    next(error)
-  }
-};
 
 
 //* Send email otp reset password
