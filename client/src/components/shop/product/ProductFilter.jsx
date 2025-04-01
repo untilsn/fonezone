@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { FilterColor } from '../filter/FilterColor';
 import { FILTER_LIST } from '../../../constants/filterList';
 import FilterBox from '../filter/FilterBox';
-import { FilterRange } from '../filter/FilterRange';
+import FilterRange from '../filter/FilterRange';
 import { FilterCheckbox } from '../filter/FilterCheckbox';
+import FilterColor from '../filter/FilterColor';
 
 
 
@@ -20,7 +20,7 @@ const ProductFilter = () => {
 
   const handleFilterChange = (value, type) => {
     setFilters(prev => {
-      const currentFilters = prev[type];
+      const currentFilters = prev[type] || [];
       const newFilters = currentFilters.includes(value)
         ? currentFilters.filter(f => f !== value)
         : [...currentFilters, value];
@@ -54,15 +54,15 @@ const ProductFilter = () => {
   return (
     <div className="flex">
       {/* Filters Sidebar */}
-      <div className="w-64 p-4 border-r">
+      <div className="w-full p-4 border-r">
         <FilterCheckbox
-          title="Category"
+          title="Danh mục"
           filterList={FILTER_LIST.CATEGORY}
           activeFilter={filters.category}
           onFilterChange={handleFilterChange}
         />
         <FilterCheckbox
-          title="Brand"
+          title="Hãng điện thoại"
           filterList={FILTER_LIST.BRAND}
           activeFilter={filters.brand}
           onFilterChange={handleFilterChange}
@@ -74,12 +74,14 @@ const ProductFilter = () => {
           onFilterChange={handleFilterChange}
         />
         <FilterBox
-          title="Storage"
+          title="Dung lượng"
           filterList={FILTER_LIST.STORAGE}
           activeFilter={filters.storage}
           onFilterChange={handleFilterChange}
         />
         <FilterColor
+          title="Màu sản phẩm"
+          filterList={FILTER_LIST.COLOR}
           activeFilter={filters.color}
           onFilterChange={handleFilterChange}
         />
