@@ -17,7 +17,7 @@ export const FilterCheckbox = ({ title, filterList, activeFilter, onFilterChange
               value={item.value}
               checked={activeFilter.includes(item.value)}
               onChange={() => onFilterChange(item.value, title.toLowerCase())}
-              className="p-0 w-4 h-4 border-gray-400 rounded focus:ring-0 before:content-none"
+              className=" w-4 h-4 border-gray-400 rounded focus:ring-0 before:content-none"
               label={item.name}
             />
           </div>

@@ -5,7 +5,8 @@ import { Rating } from "@material-tailwind/react";
 import formatPrice from "../../../utils/formatPrice";
 
 
-const ProductCard = ({ item, classes, size = "normal" }) => {
+const ProductCard = ({ item, classes, size = "normal", product }) => {
+  console.log(product)
   const [isHover, setIsHover] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
   const [isCart, setIsCart] = useState(false);
@@ -43,13 +44,13 @@ const ProductCard = ({ item, classes, size = "normal" }) => {
               className={`absolute top-0 right-0 left-0 w-full h-full object-contain p-2 transition duration-500 
                 ${isHover ? "opacity-0 scale-105" : "opacity-100 scale-100"} 
                 ${item?.type === "unknown" ? "blur-xl" : ""}`}
-              src="https://m.media-amazon.com/images/I/61TTdTnaEeL._AC_SL1500_.jpg"
+              src={product?.image?.[0]}
               alt="product"
             />
             <img
               className={`absolute top-0 right-0 left-0 w-full h-full object-contain p-2 transition duration-500 
                 ${isHover ? "opacity-100 scale-105" : "opacity-0 scale-100"}`}
-              src="https://m.media-amazon.com/images/I/71Sbx9zQN3L._AC_SL1500_.jpg"
+              src={product?.image?.[1]}
               alt="product alternative"
             />
           </div>
@@ -72,11 +73,11 @@ const ProductCard = ({ item, classes, size = "normal" }) => {
         <div>
           <NavLink to={`/product?id=${item?._id}`}
             className="overflow-hidden text-darkPrimary text-center text-sm font-medium overflow-ellipsis h-[16px] line-clamp-2 mb-1">
-            SAMSUNG GALAXY J7 PRIME
+            {product?.name}
           </NavLink>
           <div className="flex items-center gap-2 justify-center ">
 
-            <h2 className={`text-yellow-accent text-sm text-center ${textStyles[size]}`}>{formatPrice(20000000)}</h2>
+            <h2 className={`text-yellow-accent text-sm text-center ${textStyles[size]}`}>{formatPrice(product?.price)}</h2>
             <h2 className={`text-gray text-sm line-through text-center ${textStyles[size]}`}>{formatPrice(100000)}</h2>
           </div>
         </div>

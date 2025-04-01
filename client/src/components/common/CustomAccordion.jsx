@@ -10,7 +10,7 @@ const CustomAccordion = ({ title, open, setOpen, children }) => {
 
   return (
     <Accordion open={open} icon={<AccordionIcon open={open} />}>
-      <AccordionHeader onClick={handleOpen} className="text-sm font-semibold flex items-center justify-between">
+      <AccordionHeader onClick={handleOpen} className="text-sm text-gray-dark font-semibold flex items-center justify-between">
         {title}
       </AccordionHeader>
       <AccordionBody>{children}</AccordionBody>

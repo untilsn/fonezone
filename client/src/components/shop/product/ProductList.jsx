@@ -3,26 +3,25 @@ import { FaGripHorizontal, FaTh } from 'react-icons/fa';
 import ProductCard from './ProductCard';
 import Pagination from '../../common/Pagination';
 
-const ProductList = ({ products: initialProducts }) => {
+const ProductList = ({ 
+  products: initialProducts,
+  loading,
+  // Receive props from parent
+  sortOption,
+  setSortOption,
+  searchQuery,
+  setSearchQuery,
+  viewMode,
+  setViewMode,
+  currentPage,
+  setCurrentPage,
+  filteredProducts,
+  setFilteredProducts
+}) => {
+  // Local state for products only
   const [products, setProducts] = useState([]);
-  const [filteredProducts, setFilteredProducts] = useState([]);
-  const [currentPage, setCurrentPage] = useState(0);
-  const [sortOption, setSortOption] = useState('createdAt_desc');
-  const [searchQuery, setSearchQuery] = useState('');
-  const [viewMode, setViewMode] = useState('grid-4');
 
   const productsPerPage = 8;
-
-  const sortOptions = {
-    price_asc: { price: 1 },
-    price_desc: { price: -1 },
-    rating_desc: { rating: -1 },
-    name_asc: { name: 1 },
-    name_desc: { name: -1 },
-    createdAt_desc: { createdAt: -1 },
-    createdAt_asc: { createdAt: 1 },
-    view_desc: { view: -1 },
-  };
 
   const sortOptionLabels = {
     price_asc: 'Giá: Thấp đến Cao',
@@ -35,15 +34,16 @@ const ProductList = ({ products: initialProducts }) => {
     view_desc: 'Xem Nhiều Nhất',
   };
 
-
   useEffect(() => {
     if (initialProducts) {
       setProducts(initialProducts);
       setFilteredProducts(initialProducts);
     }
-  }, [initialProducts]);
+  }, [initialProducts, setFilteredProducts]);
 
   useEffect(() => {
+    // Only handle local search filtering
+    // Sorting is now handled by the API
     let result = [...products];
 
     if (searchQuery) {
@@ -52,21 +52,9 @@ const ProductList = ({ products: initialProducts }) => {
       );
     }
 
-    const [sortKey, sortDirection] = Object.entries(sortOptions[sortOption])[0];
-    result = [...result].sort((a, b) => {
-      if (sortKey === 'name') {
-        return sortDirection === 1
-          ? a.name.localeCompare(b.name)
-          : b.name.localeCompare(a.name);
-      }
-      return sortDirection === 1
-        ? a[sortKey] - b[sortKey]
-        : b[sortKey] - a[sortKey];
-    });
-
     setFilteredProducts(result);
     setCurrentPage(0);
-  }, [sortOption, searchQuery, products]);
+  }, [searchQuery, products, setFilteredProducts, setCurrentPage]);
 
   const offset = currentPage * productsPerPage;
   const currentProducts = filteredProducts.slice(offset, offset + productsPerPage);
@@ -83,6 +71,7 @@ const ProductList = ({ products: initialProducts }) => {
   };
 
   const handleSortChange = (e) => {
+    // This will trigger the API call in the parent component
     setSortOption(e.target.value);
   };
 
@@ -135,13 +124,12 @@ const ProductList = ({ products: initialProducts }) => {
             onChange={handleSortChange}
             className="border border-gray-300 px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
-            {Object.keys(sortOptions).map(option => (
+            {Object.keys(sortOptionLabels).map(option => (
               <option key={option} value={option}>
                 {sortOptionLabels[option]}
               </option>
             ))}
           </select>
-
         </div>
       </div>
 
@@ -156,7 +144,6 @@ const ProductList = ({ products: initialProducts }) => {
             {currentProducts.map(product => (
               <ProductCard key={product.id} product={product} variant="vertical" />
             ))}
-
           </div>
           {/* paginate */}
           <Pagination

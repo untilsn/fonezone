@@ -1,19 +1,30 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Range } from "react-range";
+import { useDebounce } from "use-debounce";
 import CustomAccordion from "../../common/CustomAccordion";
+import formatPrice from "../../../utils/formatPrice";
 
 const FilterRange = ({ min = 0, max = 10000, step = 100, onPriceChange }) => {
   const [priceRange, setPriceRange] = useState([min, max]);
   const [open, setOpen] = useState(true);
 
+  const [debouncedPriceRange] = useDebounce(priceRange, 1000);
+
+  useEffect(() => {
+    onPriceChange(debouncedPriceRange);
+  }, [debouncedPriceRange]);
+
   const handlePriceChange = (values) => {
     setPriceRange(values);
-    onPriceChange(values);
   };
 
   return (
     <CustomAccordion title="Phạm vi giá" open={open} setOpen={setOpen}>
-      <div className="px-4 py-2">
+      <div className="py-2 px-2">
+        <div className="flex items-center justify-between mb-1">
+          <span className="text-xs text-gray-700 mt-1">{formatPrice(priceRange[0])}</span>
+          <span className="text-xs text-gray-700 mt-1">{formatPrice(priceRange[1])}</span>
+        </div>
         <Range
           step={step}
           min={min}
@@ -21,31 +32,29 @@ const FilterRange = ({ min = 0, max = 10000, step = 100, onPriceChange }) => {
           values={priceRange}
           onChange={handlePriceChange}
           renderTrack={({ props, children }) => {
-            // Tách key ra khỏi props
             const { key, ...restProps } = props;
             return (
               <div
-                key={key} // Truyền key trực tiếp
-                {...restProps} // Spread các props còn lại
-                className="w-full h-2 bg-gray-200 rounded-md relative"
+                key={key}
+                {...restProps}
+                className="w-full h-2 bg-gray-200 rounded-sm relative"
               >
                 {children}
               </div>
             );
           }}
           renderThumb={({ props }) => {
-            // Tách key ra khỏi props
             const { key, ...restProps } = props;
             return (
               <div
-                key={key} // Truyền key trực tiếp
-                {...restProps} // Spread các props còn lại
+                key={key}
+                {...restProps}
                 className="w-3 h-3 bg-yellow rounded-sm focus:outline-none focus:ring-2 focus:ring-yellow-dark"
               />
             );
           }}
         />
-        
+
         {/* Price Display */}
         <div className="flex justify-between mt-4">
           <div className="flex flex-col">
@@ -60,10 +69,10 @@ const FilterRange = ({ min = 0, max = 10000, step = 100, onPriceChange }) => {
                 );
                 handlePriceChange([newMin, priceRange[1]]);
               }}
-              className="w-20 border rounded px-2 py-1 text-sm"
+              className="w-28 border px-2 py-1 text-sm"
             />
           </div>
-          
+
           <div className="flex flex-col">
             <span className="text-xs text-gray-500">Max</span>
             <input
@@ -76,7 +85,7 @@ const FilterRange = ({ min = 0, max = 10000, step = 100, onPriceChange }) => {
                 );
                 handlePriceChange([priceRange[0], newMax]);
               }}
-              className="w-20 border rounded px-2 py-1 text-sm"
+              className="w-28 border px-2 py-1 text-sm"
             />
           </div>
         </div>

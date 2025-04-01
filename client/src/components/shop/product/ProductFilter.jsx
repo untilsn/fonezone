@@ -4,50 +4,77 @@ import FilterBox from '../filter/FilterBox';
 import FilterRange from '../filter/FilterRange';
 import { FilterCheckbox } from '../filter/FilterCheckbox';
 import FilterColor from '../filter/FilterColor';
+import { useDispatch } from 'react-redux';
+import { clearFilters } from '../../../redux/slice/filterSlice';
 
+const ProductFilter = ({ filters, onFilterChange }) => {
+  const dispatch = useDispatch()
 
+  const handleCategoryChange = (value) => {
+    const currentCategories = filters.category || [];
+    const newCategories = currentCategories.includes(value)
+      ? currentCategories.filter(c => c !== value)
+      : [...currentCategories, value];
 
-const ProductFilter = () => {
-  const [filters, setFilters] = useState({
-    category: [],
-    brand: [],
-    ram: [],
-    storage: [],
-    color: [],
-    size: [],
-    priceRange: [0, 10000]
-  });
+    onFilterChange({
+      ...filters,
+      category: newCategories
+    });
+  };
 
-  const handleFilterChange = (value, type) => {
-    setFilters(prev => {
-      const currentFilters = prev[type] || [];
-      const newFilters = currentFilters.includes(value)
-        ? currentFilters.filter(f => f !== value)
-        : [...currentFilters, value];
+  const handleBrandChange = (value) => {
+    const currentBrands = filters.brand || [];
+    const newBrands = currentBrands.includes(value)
+      ? currentBrands.filter(b => b !== value)
+      : [...currentBrands, value];
 
-      return { ...prev, [type]: newFilters };
+    onFilterChange({
+      ...filters,
+      brand: newBrands
+    });
+  };
+
+  const handleRamChange = (value) => {
+    const currentRam = filters.ram || [];
+    const newRam = currentRam.includes(value)
+      ? currentRam.filter(c => c !== value)
+      : [...currentRam, value];
+
+    onFilterChange({
+      ...filters,
+      ram: newRam  // Fixed: was updating 'brand' instead of 'ram'
+    });
+  };
+
+  const handleStorageChange = (value) => {
+    const currentStorages = filters.storage || [];
+    const newStorages = currentStorages.includes(value)
+      ? currentStorages.filter(b => b !== value)
+      : [...currentStorages, value];
+
+    onFilterChange({
+      ...filters,
+      storage: newStorages
+    });
+  };
+
+  const handleColorChange = (value) => {
+    const currentColors = filters.color || [];
+    const newColors = currentColors.includes(value)
+      ? currentColors.filter(b => b !== value)
+      : [...currentColors, value];
+
+    onFilterChange({
+      ...filters,
+      color: newColors
     });
   };
 
   const handlePriceChange = (priceRange) => {
-    setFilters(prev => ({ ...prev, priceRange }));
-  };
-
-  const applyFilters = () => {
-    // Call API with filters
-    const apiFilters = {
-      categories: filters.category,
-      brands: filters.brand,
-      rams: filters.ram,
-      storages: filters.storage,
-      colors: filters.color,
-      sizes: filters.size,
-      minPrice: filters.priceRange[0],
-      maxPrice: filters.priceRange[1]
-    };
-
-    // Example API call
-    fetchProducts(apiFilters);
+    onFilterChange({
+      ...filters,
+      priceRange
+    });
   };
 
 
@@ -55,55 +82,52 @@ const ProductFilter = () => {
     <div className="flex">
       {/* Filters Sidebar */}
       <div className="w-full p-4 border-r">
+        <div className='flex justify-between items-center mb-4'>
+          <h1>Filter</h1>
+          <button
+            onClick={() => dispatch(clearFilters())}
+            className='text-yellow font-medium text-sm'
+          >clear all</button>
+        </div>
         <FilterCheckbox
           title="Danh mục"
           filterList={FILTER_LIST.CATEGORY}
           activeFilter={filters.category}
-          onFilterChange={handleFilterChange}
+          onFilterChange={handleCategoryChange}
         />
         <FilterCheckbox
           title="Hãng điện thoại"
           filterList={FILTER_LIST.BRAND}
           activeFilter={filters.brand}
-          onFilterChange={handleFilterChange}
+          onFilterChange={handleBrandChange}
         />
         <FilterBox
           title="Ram"
           filterList={FILTER_LIST.RAM}
-          activeFilter={filters.ram}
-          onFilterChange={handleFilterChange}
+          activeFilter={filters.ram} // Fixed: was missing the correct prop
+          onFilterChange={handleRamChange}
         />
         <FilterBox
           title="Dung lượng"
           filterList={FILTER_LIST.STORAGE}
           activeFilter={filters.storage}
-          onFilterChange={handleFilterChange}
+          onFilterChange={handleStorageChange}
         />
         <FilterColor
           title="Màu sản phẩm"
           filterList={FILTER_LIST.COLOR}
           activeFilter={filters.color}
-          onFilterChange={handleFilterChange}
+          onFilterChange={handleColorChange}
         />
         <FilterRange
           min={0}
-          max={10000}
+          max={40000000}
+          value={filters.priceRange} // Added: Pass current priceRange value to component
           onPriceChange={handlePriceChange}
         />
-        <button
-          onClick={applyFilters}
-          className="w-full mt-4 bg-blue-500 text-white py-2 rounded"
-        >
-          Apply Filters
-        </button>
-      </div>
-
-      {/* Products List */}
-      <div className="flex-1">
-        {/* Render products here */}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ProductFilter
+export default ProductFilter;
