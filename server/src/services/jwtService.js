@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import config from "../config/env.js";
-import generateTokens from "../utils/jwtGeneral.js";
+import generateTokens from "../utils/jwtHelper.js";
 import User from "../models/User.js";
 import CustomError from "../utils/customError.js";
 

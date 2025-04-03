@@ -13,15 +13,14 @@ import { adminProductRouter } from './modules/productRouter.js';
 const adminRouter = express.Router();
 
 adminRouter
-  .use(isAdmin)
-  .use('/products', adminProductRouter)
-  .use('/categories', adminCategoryRouter)
-  .use('/brands', adminBrandRouter)
-  .use('/blogs', adminBlogRouter)
-  .use('/flash-sales', adminFlashsaleRouter)
-  .use('/users', adminUserRouter)
-  .use('/orders', adminOrderRouter)
-  .use('/coupons', adminCouponRouter)
-  .use('/reviews', adminReviewRouter);
+  .use('/products', isAdmin, adminProductRouter)
+  .use('/categories', isAdmin, adminCategoryRouter)
+  .use('/brands', isAdmin, adminBrandRouter)
+  .use('/blogs', isAdmin, adminBlogRouter)
+  .use('/flash-sales', isAdmin, adminFlashsaleRouter)
+  .use('/users', isAdmin, adminUserRouter)
+  .use('/orders', isAdmin, adminOrderRouter)
+  .use('/coupons', isAdmin, adminCouponRouter)
+  .use('/reviews', isAdmin, adminReviewRouter);
 
 export default adminRouter;

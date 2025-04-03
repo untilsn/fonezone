@@ -5,7 +5,7 @@ import { EMAIL_VERIFY_TEMPLATE, PASSWORD_RESET_TEMPLATE } from "../mail/emailTem
 import { generateOtp, verifyOtp } from "./otpService.js";
 import sendEmail from "../utils/emailHelper.js";
 import CustomError from "../utils/customError.js";
-import generateTokens from "../utils/jwtGeneral.js";
+import generateTokens from "../utils/jwtHelper.js";
 
 
 
@@ -52,6 +52,7 @@ export const registerUser = async (name, email, password) => {
 
 // * login user
 export const loginUser = async (email, password) => {
+  console.log(email, password)
   const user = await User.findOne({ email });
   if (!user) {
     throw new CustomError(404, "Người dùng không tồn tại.");

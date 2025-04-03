@@ -6,11 +6,11 @@ export const createBlogValidation = Joi.object({
     "string.empty": "Tiêu đề không được để trống.",
     "any.required": "Tiêu đề là bắt buộc.",
   }),
-  slug: Joi.string().trim().lowercase().required().messages({
-    "string.base": "Slug phải là chuỗi ký tự.",
-    "string.empty": "Slug không được để trống.",
-    "any.required": "Slug là bắt buộc.",
-  }),
+  // slug: Joi.string().trim().lowercase().required().messages({
+  //   "string.base": "Slug phải là chuỗi ký tự.",
+  //   "string.empty": "Slug không được để trống.",
+  //   "any.required": "Slug là bắt buộc.",
+  // }),
   content: Joi.string().required().messages({
     "string.base": "Nội dung phải là chuỗi ký tự.",
     "string.empty": "Nội dung không được để trống.",

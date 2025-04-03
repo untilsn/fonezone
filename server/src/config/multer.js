@@ -30,3 +30,5 @@ const limits = { fileSize: 4 * 1024 * 1024 }; // 2MB
 // Xuất ra cấu hình multer theo từng loại upload
 export const avatarUpload = multer({ storage: storageConfig("avatars"), fileFilter, limits });
 export const productUpload = multer({ storage: storageConfig("products"), fileFilter, limits });
+export const blogUpload = multer({ storage: storageConfig("blogs"), fileFilter, limits });
+

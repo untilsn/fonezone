@@ -10,7 +10,7 @@ import {
 import { verifyRefreshToken } from "../services/jwtService.js";
 import { setRefreshTokenCookie } from "../utils/cookieHelper.js";
 import handleGoogleAuthError from "../middlewares/googleAuthError.js";
-import generateTokens from "../utils/jwtGeneral.js";
+import generateTokens from "../utils/jwtHelper.js";
 
 const isProduction = config.NODE_ENV === "production";
 
@@ -19,7 +19,7 @@ const isProduction = config.NODE_ENV === "production";
 export const loginUserController = async (req, res, next) => {
   try {
     const { email, password } = req.body;
-
+    
     const { access_token, refresh_token } = await loginUser(email, password);
 
     setRefreshTokenCookie(res, refresh_token);

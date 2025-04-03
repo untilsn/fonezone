@@ -21,12 +21,11 @@ clientRouter
   .use('/brands', brandRouter)
   .use('/blogs', blogRouter)
   .use('/flash-sales', flashsaleRouter)
-  .use(isUser)  // yêu cầu đăng nhập
-  .use('/user', userRouter)
-  .use('/orders', orderRouter)
-  .use('/wishlist', wishlistRouter)
-  .use('/reviews', reviewRouter)
-  .use('/coupons', couponRouter)
-  .use('/conversations', conversationRouter)
+  .use('/user', isUser, userRouter) // yêu cầu đăng nhập
+  .use('/orders', isUser, orderRouter)
+  .use('/wishlist', isUser, wishlistRouter)
+  .use('/reviews', isUser, reviewRouter)
+  .use('/coupons', isUser, couponRouter)
+  .use('/conversations', isUser, conversationRouter)
 
 export default clientRouter;

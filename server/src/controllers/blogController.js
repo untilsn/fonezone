@@ -3,11 +3,11 @@ import { createBlog, deleteBlog, getAllBlogs, getBlogById, updateBlog } from "..
 // Create a new blog
 export const createBlogController = async (req, res, next) => {
   try {
-    const result = await createBlog(req.body);
+    const newBlog = await createBlog({ ...req.body, author: req.user.id }, file);
 
     return res.status(201).json({
       success: true,
-      data: result,
+      data: newBlog,
       message: "Tạo blog thành công!",
     });
   } catch (error) {

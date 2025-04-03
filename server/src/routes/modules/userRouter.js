@@ -7,7 +7,8 @@ import {
 import validate from '../../middlewares/validateMiddleware.js';
 import { changePasswordValidation, updateUserValidation } from '../../validation/userValidation.js';
 import { checkIdParam } from '../../middlewares/paramIdMiddleware.js';
-import { uploadAvatarMiddleware } from '../../middlewares/uploadMiddleware.js';
+import { uploadMiddleware } from '../../middlewares/uploadMiddleware.js';
+import { avatarUpload } from '../../config/multer.js';
 
 const userRouter = express.Router();
 const adminUserRouter = express.Router();
@@ -15,7 +16,7 @@ const adminUserRouter = express.Router();
 /* USER AUTH ROUTES */
 userRouter
   .get('/', getUserController) // Lấy thông tin người dùng
-  .patch("/avatar", uploadAvatarMiddleware, updateUserAvatarController)
+  .patch("/avatar", uploadMiddleware(avatarUpload, 1), updateUserAvatarController)
   .patch('/update', validate(updateUserValidation), updateUserController) // Người dùng cập nhật thông tin cá nhân
   .post('/change-password', validate(changePasswordValidation), changePasswordController); // Người dùng đổi mật khẩu
 

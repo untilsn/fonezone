@@ -11,6 +11,7 @@ const extractToken = (req) => {
 
 export const isAdmin = (req, res, next) => {
   const token = extractToken(req);
+  console.log("admin", token)
   if (!token) {
     return res.status(401).json({ success: false, message: "Unauthorized: No token provided" });
   }

@@ -9,7 +9,8 @@ import {
 import validate from '../../middlewares/validateMiddleware.js';
 import { productValidation, updateProductValidation } from '../../validation/productValidation.js';
 import { checkIdParam } from '../../middlewares/paramIdMiddleware.js';
-import { uploadProductMiddleware } from '../../middlewares/uploadMiddleware.js';
+import { uploadMiddleware } from '../../middlewares/uploadMiddleware.js';
+import { productUpload } from '../../config/multer.js';
 
 const productRouter = express.Router();
 const adminProductRouter = express.Router();
@@ -22,7 +23,7 @@ productRouter
 
 /* ADMIN ROUTE */
 adminProductRouter
-  .post('/', uploadProductMiddleware, validate(productValidation), createProductController)// Admin tạo sản phẩm mới
+  .post('/', uploadMiddleware(productUpload, 5), validate(productValidation), createProductController)// Admin tạo sản phẩm mới
   .put('/:id', checkIdParam, validate(updateProductValidation), updateProductController) // Admin cập nhật sản phẩm
   .delete('/:id', checkIdParam, deleteProductController); // Admin xóa sản phẩm
 

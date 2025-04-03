@@ -1,20 +1,24 @@
 import Blog from "../models/Blog.js";
+import { uploadToCloudinary } from "../utils/cloudinaryHelper.js";
 import { generalSlug } from "../utils/slugHelper.js";
 
 // Create a new blog
-export const createBlog = async (data) => {
-  const { title, content, thumbnail, categories, author, isPublished } = data;
+export const createBlog = async (data, file) => {
+  const { title, content, categories, author, isPublished } = data;
 
   const existingBlog = await Blog.findOne({ title });
   if (existingBlog) throw new CustomError(400, "Bài viết đã tồn tại.");
 
   const slug = generalSlug(title);
 
+  let thumbnailUrl = "";
+  if (file) thumbnailUrl = await uploadToCloudinary(file.path, "blogs");
+
   const blog = new Blog({
     title,
     slug,
     content,
-    thumbnail,
+    thumbnail: thumbnailUrl,
     categories,
     author,
     isPublished,
