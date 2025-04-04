@@ -6,13 +6,13 @@ import { generalSlug } from "../utils/slugHelper.js";
 export const createBlog = async (data, file) => {
   const { title, content, categories, author, isPublished } = data;
 
+  let thumbnailUrl = "";
+  if (file) thumbnailUrl = await uploadToCloudinary(file.path, "blogs");
+
   const existingBlog = await Blog.findOne({ title });
   if (existingBlog) throw new CustomError(400, "Bài viết đã tồn tại.");
 
   const slug = generalSlug(title);
-
-  let thumbnailUrl = "";
-  if (file) thumbnailUrl = await uploadToCloudinary(file.path, "blogs");
 
   const blog = new Blog({
     title,
@@ -67,7 +67,8 @@ export const updateBlog = async (id, data) => {
 
   if (!blog) throw new CustomError(404, "Blog không tồn tại.");
 
-  if (data.title) data.slug = slugify(data.title, { lower: true, strict: true });
+  if (data.title)
+    data.slug = slugify(data.title, { lower: true, strict: true });
 
   return await Blog.findByIdAndUpdate(id, data, { new: true });
 };

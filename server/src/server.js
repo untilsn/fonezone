@@ -11,18 +11,20 @@ dotenv.config();
 
 const app = express();
 
-app.use(cors({
-  origin: config.CLIENT_URL,
-  methods: "GET,POST,PUT,DELETE",
-  credentials: true
-}));
+app.use(
+  cors({
+    origin: config.CLIENT_URL,
+    methods: "GET,POST,PUT,DELETE",
+    credentials: true,
+  })
+);
 
 app.use(express.json());
 app.use(cookieParser());
 
 mainRouter(app);
 
-app.use(errorMiddleware);  
+app.use(errorMiddleware);
 
 const port = config.PORT || 5000;
 

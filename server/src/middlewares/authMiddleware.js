@@ -11,29 +11,35 @@ const extractToken = (req) => {
 
 export const isAdmin = (req, res, next) => {
   const token = extractToken(req);
-  console.log("admin", token)
   if (!token) {
-    return res.status(401).json({ success: false, message: "Unauthorized: No token provided" });
+    return res
+      .status(401)
+      .json({ success: false, message: "Unauthorized: No token provided" });
   }
 
   try {
     const decoded = jwt.verify(token, config.ACCESS_TOKEN_SECRET);
     if (decoded.role !== "admin") {
-      return res.status(403).json({ success: false, message: "Bạn không có quyền truy cập!" });
+      return res
+        .status(403)
+        .json({ success: false, message: "Bạn không có quyền truy cập!" });
     }
 
     req.user = { id: decoded.id, role: decoded.role };
     next();
   } catch (err) {
-    return res.status(403).json({ success: false, message: "Token không hợp lệ hoặc đã hết hạn!" });
+    return res
+      .status(403)
+      .json({ success: false, message: "Token không hợp lệ hoặc đã hết hạn!" });
   }
 };
-
 
 export const isUser = (req, res, next) => {
   const token = extractToken(req);
   if (!token) {
-    return res.status(401).json({ success: false, message: "Unauthorized: No token provided" });
+    return res
+      .status(401)
+      .json({ success: false, message: "Unauthorized: No token provided" });
   }
 
   try {
@@ -41,6 +47,8 @@ export const isUser = (req, res, next) => {
     req.user = { id: decoded.id, role: decoded.role };
     next();
   } catch (err) {
-    return res.status(403).json({ success: false, message: "Token không hợp lệ hoặc đã hết hạn!" });
+    return res
+      .status(403)
+      .json({ success: false, message: "Token không hợp lệ hoặc đã hết hạn!" });
   }
 };

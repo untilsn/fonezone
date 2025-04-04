@@ -1,13 +1,14 @@
 import bcrypt from "bcryptjs";
 import User from "../models/User.js";
 import config from "../config/env.js";
-import { EMAIL_VERIFY_TEMPLATE, PASSWORD_RESET_TEMPLATE } from "../mail/emailTemplates.js";
+import {
+  EMAIL_VERIFY_TEMPLATE,
+  PASSWORD_RESET_TEMPLATE,
+} from "../mail/emailTemplates.js";
 import { generateOtp, verifyOtp } from "./otpService.js";
 import sendEmail from "../utils/emailHelper.js";
 import CustomError from "../utils/customError.js";
 import generateTokens from "../utils/jwtHelper.js";
-
-
 
 // * create user
 export const registerUser = async (name, email, password) => {
@@ -34,7 +35,7 @@ export const registerUser = async (name, email, password) => {
     });
   }
 
-  const otp = await generateOtp(user._id, "verify")
+  const otp = await generateOtp(user._id, "verify");
 
   const emailResult = await sendEmail(
     user.email,
@@ -46,13 +47,11 @@ export const registerUser = async (name, email, password) => {
     throw new CustomError(500, "Gửi email thất bại. Vui lòng thử lại.");
   }
 
-  return user
+  return user;
 };
-
 
 // * login user
 export const loginUser = async (email, password) => {
-  console.log(email, password)
   const user = await User.findOne({ email });
   if (!user) {
     throw new CustomError(404, "Người dùng không tồn tại.");
@@ -63,20 +62,22 @@ export const loginUser = async (email, password) => {
   }
 
   if (!user.isAccountVerify) {
-    throw new CustomError(403, "Tài khoản của bạn chưa được xác minh. Vui lòng xác minh email trước khi đăng nhập.");
+    throw new CustomError(
+      403,
+      "Tài khoản của bạn chưa được xác minh. Vui lòng xác minh email trước khi đăng nhập."
+    );
   }
 
   const { access_token, refresh_token } = generateTokens(user);
-  return { access_token, refresh_token }
+  return { access_token, refresh_token };
 };
-
 
 export const googleAuth = async (profile) => {
   if (!profile.emails || profile.emails.length === 0) {
     throw new CustomError(404, "Không tìm thấy email trong tài khoản Google.");
   }
 
-  const email = profile.emails[0].value
+  const email = profile.emails[0].value;
   let user = await User.findOne({ email });
 
   if (user) {
@@ -92,16 +93,15 @@ export const googleAuth = async (profile) => {
       isAccountVerify: true,
       loginMethod: "google",
     });
-    await user.save()
+    await user.save();
   }
 
-  return user
+  return user;
 };
-
 
 // * verify account
 export const verifyAccount = async (email, otp) => {
-  await verifyOtp(email, otp, "verify")
+  await verifyOtp(email, otp, "verify");
 
   const user = await User.findOne({ email });
 
@@ -117,20 +117,21 @@ export const verifyAccount = async (email, otp) => {
   return { user, accessToken, refreshToken };
 };
 
-
 // * send otp reset
 export const forgotPassword = async (email) => {
-  const user = await User.findOne({ email })
+  const user = await User.findOne({ email });
   if (!user) {
     throw new CustomError(404, "Người dùng không tồn tại.");
   }
 
-  const otp = await generateOtp(user._id, "reset")
+  const otp = await generateOtp(user._id, "reset");
 
   const emailResult = await sendEmail(
     email,
     "Mã OTP reset mật khẩu",
-    PASSWORD_RESET_TEMPLATE.replace("{{otp}}", otp).replace("{{email}}", { email: user.email })
+    PASSWORD_RESET_TEMPLATE.replace("{{otp}}", otp).replace("{{email}}", {
+      email: user.email,
+    })
   );
 
   if (!emailResult.success) {
@@ -138,16 +139,14 @@ export const forgotPassword = async (email) => {
   }
 };
 
-
 export const verifyOtpReset = async (email, otp) => {
-  const user = await User.findOne({ email })
+  const user = await User.findOne({ email });
   if (!user) {
     throw new CustomError(404, "Người dùng không tồn tại.");
   }
 
-  await verifyOtp(email, otp, "reset")
+  await verifyOtp(email, otp, "reset");
 };
-
 
 export const resetOtpPassword = async (email, newPassword) => {
   const user = await User.findOne({ email });
@@ -164,4 +163,3 @@ export const resetOtpPassword = async (email, newPassword) => {
   user.password = hashNewPassword;
   await user.save();
 };
-

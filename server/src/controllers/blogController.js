@@ -1,9 +1,18 @@
-import { createBlog, deleteBlog, getAllBlogs, getBlogById, updateBlog } from "../services/blogService.js";
+import {
+  createBlog,
+  deleteBlog,
+  getAllBlogs,
+  getBlogById,
+  updateBlog,
+} from "../services/blogService.js";
 
 // Create a new blog
 export const createBlogController = async (req, res, next) => {
   try {
-    const newBlog = await createBlog({ ...req.body, author: req.user.id }, file);
+    const newBlog = await createBlog(
+      { ...req.body, author: req.user.id },
+      req.file
+    );
 
     return res.status(201).json({
       success: true,

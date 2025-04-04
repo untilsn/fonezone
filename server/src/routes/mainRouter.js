@@ -4,9 +4,9 @@ import clientRouter from "./clientRouter.js";
 
 const mainRouter = (app) => {
   app
-  .use("/api", clientRouter)
-  .use("/api/admin", adminRouter)
-  .use("/api/auth", authRouter) 
+    .use("/api", clientRouter)
+    .use("/api/admin", adminRouter)
+    .use("/api/auth", authRouter);
 };
 
 export default mainRouter;

@@ -1,4 +1,6 @@
 import CustomError from "../utils/customError.js";
+import slugify from "slugify";
+import latinize from "latinize";
 
 export const generalSlug = (name) => {
   if (!name || typeof name !== "string") {
@@ -8,7 +10,10 @@ export const generalSlug = (name) => {
   const slug = slugify(latinize(name), { lower: true, trim: true });
 
   if (!slug) {
-    throw new CustomError(400, "Tên không thể chỉ chứa ký tự đặc biệt hoặc khoảng trắng.");
+    throw new CustomError(
+      400,
+      "Tên không thể chỉ chứa ký tự đặc biệt hoặc khoảng trắng."
+    );
   }
 
   return slug;
