@@ -3,6 +3,7 @@ import {
   deleteBlog,
   getAllBlogs,
   getBlogById,
+  setPublishStatusBlog,
   updateBlog,
 } from "../services/blogService.js";
 
@@ -27,11 +28,18 @@ export const createBlogController = async (req, res, next) => {
 // Get all blogs
 export const getAllBlogsController = async (req, res, next) => {
   try {
-    const result = await getAllBlogs(req.query);
+    const { page = 1, limit = 5, search, category } = req.query;
+
+    const allBlogs = await getAllBlogs({
+      page: parseInt(page),
+      limit: parseInt(limit),
+      search,
+      category,
+    });
 
     return res.status(200).json({
       success: true,
-      data: result,
+      data: allBlogs,
       message: "Lấy tất cả blog thành công!",
     });
   } catch (error) {
@@ -42,7 +50,11 @@ export const getAllBlogsController = async (req, res, next) => {
 // Get a single blog by ID
 export const getBlogByIdController = async (req, res, next) => {
   try {
-    const result = await getBlogById(req.params.id);
+    const result = await getBlogById(
+      { ...req.body, author: req.user.id },
+      req.file,
+      req.params.id
+    );
 
     return res.status(200).json({
       success: true,
@@ -57,12 +69,27 @@ export const getBlogByIdController = async (req, res, next) => {
 // Update a blog
 export const updateBlogController = async (req, res, next) => {
   try {
-    const result = await updateBlog(req.params.id, req.body);
+    const updatedBlog = await updateBlog(req.body, req.file, req.params.id);
 
     return res.status(200).json({
       success: true,
-      data: result,
+      data: updatedBlog,
       message: "Cập nhật blog thành công!",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Delete a blog
+export const publishStatusBlogController = async (req, res, next) => {
+  try {
+    const publicStatus = await setPublishStatusBlog(req.params.id);
+
+    return res.status(200).json({
+      success: true,
+      publicStatus,
+      message: `Blog đã được ${publicStatus ? "công khai" : "ẩn"} thành công.`,
     });
   } catch (error) {
     next(error);

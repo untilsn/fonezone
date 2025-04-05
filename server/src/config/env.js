@@ -17,11 +17,12 @@ const config = {
   // jwt
   ACCESS_TOKEN_SECRET: process.env.ACCESS_TOKEN_SECRET,
   REFRESH_TOKEN_SECRET: process.env.REFRESH_TOKEN_SECRET,
-  // CLOUD
-  CLOUD_NAME: process.env.CLOUD_NAME,
-  CLOUD_API_KEY: process.env.CLOUD_API_KEY,
-  CLOUD_API_SECRET: process.env.CLOUD_API_SECRET,
+  // CLOUDINARY
+  CLOUDINARY_NAME: process.env.CLOUDINARY_NAME,
+  CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY,
+  CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET,
+  CLOUDINARY_BASE_FOLDER: process.env.CLOUDINARY_BASE_FOLDER,
   CLOUDINARY_URL: process.env.CLOUDINARY_URL,
 };
 
-export default config
+export default config;

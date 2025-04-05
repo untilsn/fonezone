@@ -1,57 +1,50 @@
-import cloudinary from "../config/cloudinary.js"
+import cloudinary from "../config/cloudinary.js";
 import CustomError from "./customError.js";
 import fs from "fs";
 
-const extractPublicId = (imageUrl) => {
-  const parts = imageUrl.split("/");
-  const publicId = parts[parts.length - 1].split(".")[0];
-  return publicId;
-}
-
-
-// upload image
-export const uploadToCloudinary = async (filePath, folder) => {
+export const uploadImage = async (filePath, folder) => {
   try {
-    const result = await cloudinary.uploader.upload(filePath, { folder });
+    const result = await cloudinary.uploader.upload(filePath, {
+      folder,
+    });
 
     fs.unlinkSync(filePath);
 
-    return result.secure_url;
+    return {
+      url: result.secure_url,
+      public_id: result.public_id,
+    };
   } catch (error) {
-    console.error("Cloudinary upload error:", error);
+    console.error("❌ Cloudinary upload error:", error);
     throw new CustomError(500, "Upload ảnh lên Cloudinary thất bại.");
   }
-}
+};
 
-
-// delete image
-export const deleteFromCoudinary = async (imageUrl,) => {
+export const deleteImage = async (publicId) => {
   try {
-    if (!imageUrl) throw new CustomError(400, "Không tìm thấy URL ảnh để xóa.")
+    if (!publicId)
+      throw new CustomError(400, "Không tìm thấy public_id ảnh để xóa.");
 
-    const publicId = extractPublicId(imageUrl)
-    await cloudinary.uploader.destroy(publicId)
+    const result = await cloudinary.uploader.destroy(publicId);
 
+    if (result.result !== "ok") {
+      throw new CustomError(500, "Không thể xóa ảnh từ Cloudinary.");
+    }
+
+    return result;
   } catch (error) {
-    console.error("Cloudinary upload error:", error);
+    console.error("❌ Cloudinary delete error:", error);
     throw new CustomError(500, "Không thể xóa ảnh từ Cloudinary.");
   }
-}
+};
 
-
-// update image
-export const updateCloudinaryImage = async (oldImageUrl, filePath, folder) => {
+export const updateImage = async (oldImagePublicId, filePath, folder) => {
   try {
-    if (oldImageUrl) await deleteFromCoudinary(oldImageUrl);
+    if (oldImagePublicId) await deleteImage(oldImagePublicId);
 
-    return await uploadToCloudinary(filePath, folder);
+    return await uploadImage(filePath, folder);
   } catch (error) {
-    console.error("Cloudinary upload error:", error);
-    throw new CustomError(500, "Upload ảnh lên Cloudinary thất bại.");
+    console.error("❌ Cloudinary update error:", error);
+    throw new CustomError(500, "Cập nhật ảnh lên Cloudinary thất bại.");
   }
-}
-
-
-
-
-
+};

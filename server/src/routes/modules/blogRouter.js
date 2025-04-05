@@ -1,22 +1,20 @@
 import express from "express";
+import { blogUpload } from "../../config/multer.js";
 import {
+  createBlogController,
+  deleteBlogController,
   getAllBlogsController,
   getBlogByIdController,
-  createBlogController,
+  publishStatusBlogController,
   updateBlogController,
-  deleteBlogController,
 } from "../../controllers/blogController.js";
-import {
-  validate,
-  validateFormData,
-} from "../../middlewares/validateMiddleware.js";
+import { checkIdParam } from "../../middlewares/paramIdMiddleware.js";
+import { uploadMiddleware } from "../../middlewares/uploadMiddleware.js";
+import { validateFormData } from "../../middlewares/validateMiddleware.js";
 import {
   createBlogValidation,
   updateBlogValidation,
 } from "../../validation/blogValidation.js";
-import { checkIdParam } from "../../middlewares/paramIdMiddleware.js";
-import { uploadMiddleware } from "../../middlewares/uploadMiddleware.js";
-import { blogUpload } from "../../config/multer.js";
 
 const blogRouter = express.Router();
 const adminBlogRouter = express.Router();
@@ -37,9 +35,11 @@ adminBlogRouter
   .patch(
     "/:id",
     checkIdParam,
+    uploadMiddleware(blogUpload),
     validateFormData(updateBlogValidation),
     updateBlogController
   )
+  .patch("/:id/publish-status", checkIdParam, publishStatusBlogController)
   .delete("/:id", checkIdParam, deleteBlogController);
 
-export { blogRouter, adminBlogRouter };
+export { adminBlogRouter, blogRouter };

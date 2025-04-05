@@ -2,36 +2,36 @@ import mongoose from "mongoose";
 
 const reviewSchema = new mongoose.Schema(
   {
-    user: { 
-      type: mongoose.Schema.Types.ObjectId, 
-      ref: "User", 
-      required: true 
-    },
-    referenceModel: { 
-      type: mongoose.Schema.Types.ObjectId, 
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
       required: true,
-      refPath: 'onModel'
     },
-    onModel: { 
-      type: String, 
+    rating: {
+      type: Number,
       required: true,
-      enum: ['Product', 'Blog']
+      min: 1,
+      max: 5,
     },
-    rating: { 
-      type: Number, 
-      required: true, 
-      min: 1, 
-      max: 5 
+    comment: {
+      type: String,
+      required: true,
+      trim: true,
     },
-    comment: { 
-      type: String, 
-      required: true, 
-      trim: true 
+    isApproved: {
+      type: Boolean,
+      default: false,
     },
-    isApproved: { 
-      type: Boolean, 
-      default: false 
-    }
+    referenceModel: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      refPath: "onModel",
+    },
+    onModel: {
+      type: String,
+      required: true,
+      enum: ["Product", "Blog"],
+    },
   },
   { timestamps: true }
 );

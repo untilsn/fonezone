@@ -1,5 +1,6 @@
 import Blog from "../models/Blog.js";
-import { uploadToCloudinary } from "../utils/cloudinaryHelper.js";
+import { updateImage, uploadImage } from "../utils/cloudinaryHelper.js";
+import CustomError from "../utils/customError.js";
 import { generalSlug } from "../utils/slugHelper.js";
 
 // Create a new blog
@@ -7,7 +8,7 @@ export const createBlog = async (data, file) => {
   const { title, content, categories, author, isPublished } = data;
 
   let thumbnailUrl = "";
-  if (file) thumbnailUrl = await uploadToCloudinary(file.path, "blogs");
+  if (file) thumbnailUrl = await uploadImage(file.path, "fonezone/blogs");
 
   const existingBlog = await Blog.findOne({ title });
   if (existingBlog) throw new CustomError(400, "Bài viết đã tồn tại.");
@@ -62,15 +63,34 @@ export const getBlogById = async (id) => {
 };
 
 // Update a blog by ID
-export const updateBlog = async (id, data) => {
-  const blog = await Blog.findById(id);
-
+export const updateBlog = async (data, file, blogId) => {
+  const blog = await Blog.findById(blogId);
   if (!blog) throw new CustomError(404, "Blog không tồn tại.");
 
   if (data.title)
-    data.slug = slugify(data.title, { lower: true, strict: true });
+    data.slug = generalSlug(data.title, { lower: true, strict: true });
 
-  return await Blog.findByIdAndUpdate(id, data, { new: true });
+  if (file)
+    data.thumbnail = await updateImage(
+      blog.thumbnail.public_id,
+      file.path,
+      "fonezone/blogs"
+    );
+
+  return await Blog.findByIdAndUpdate(blogId, data, { new: true });
+};
+
+// Delete a blog by ID
+export const setPublishStatusBlog = async (blogId) => {
+  const blog = await Blog.findById(blogId);
+
+  if (!blog) throw new CustomError(404, "Blog không tồn tại.");
+
+  blog.isPublished = !blog.isPublished;
+
+  await blog.save();
+
+  return blog.isPublished;
 };
 
 // Delete a blog by ID
