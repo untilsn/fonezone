@@ -3,8 +3,8 @@ import React from "react";
 const Logo = ({
   color = "#333E48",
   subColor,
-  width = "220px",
-  height = "42px",
+  width = "120px",
+  height = "24px",
 }) => {
   return (
     <svg

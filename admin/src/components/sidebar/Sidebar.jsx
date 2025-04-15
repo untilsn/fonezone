@@ -1,35 +1,36 @@
 import React from "react";
-import { FaRegUser } from "react-icons/fa";
+import { sidebarMenuItems } from "../../constants/sidebar";
 import Logo from "../ui/Logo";
 import SidebarAccordion from "./SidebarAccodian";
-
-const menuItems = [
-  {
-    icon: <FaRegUser size={18} />,
-    title: "Quản lý người dùng",
-    basePath: "/admin",
-    items: [
-      { key: "user-list", title: "Danh sách người dùng", to: "/users" },
-      { key: "user-create", title: "Thêm người dùng mới", to: "/users/create" },
-      {
-        key: "user-edit",
-        title: "Chỉnh sửa người dùng",
-        to: "/users/:id/edit",
-      },
-    ],
-  },
-];
+import { Link, NavLink } from "react-router-dom";
+import { FaChartPie } from "react-icons/fa";
+import clsx from "clsx";
 
 const Sidebar = () => {
   return (
     <aside className="flex flex-col justify-between w-64 h-screen text-white bg-dark">
       {/* Logo */}
-      <div className="py-5 border-b border-gray-800">
+      <div className="px-5 py-5 border-b border-gray-800">
         <Logo height="24px" color="#fff" subColor="#fcb941" />
       </div>
       {/* content */}
-      <nav className="flex-1 mx-3 my-4 overflow-y-auto">
-        {menuItems.map((item) => (
+      <nav className="flex-1 pr-2 my-4 ml-4 mr-2 overflow-y-scroll scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-transparent">
+        <NavLink
+          to="/admin"
+          end
+          className={({ isActive }) =>
+            clsx(
+              "flex items-center gap-2 py-3 text-sm font-semibold transition-colors duration-200",
+              isActive
+                ? "text-primary-light"
+                : "text-text-muted hover:text-primary-light"
+            )
+          }
+        >
+          <FaChartPie />
+          <span>Dashboard</span>
+        </NavLink>
+        {sidebarMenuItems.map((item) => (
           <SidebarAccordion
             key={item.title}
             title={item.title}
@@ -40,8 +41,8 @@ const Sidebar = () => {
         ))}
       </nav>
       {/* logout */}
-      <div className="">
-        <button className="w-full p-4 border border-gray-800 rounded-3xl">
+      <div className="px-3 pb-3">
+        <button className="w-full p-2 capitalize border border-gray-800 rounded-xl">
           logout
         </button>
       </div>

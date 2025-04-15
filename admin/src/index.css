@@ -56,6 +56,7 @@
   --color-border: #e4e6ef;
   --color-border-dashed: #e4e6ef;
 
+  --color-gray-primary: #1c1c21;
   --color-gray-50: #f9fafb;
   --color-gray-100: #f5f8fa;
   --color-gray-200: #eff2f5;
@@ -77,4 +78,18 @@
 
 body {
   @apply font-sant;
+}
+
+::-webkit-scrollbar {
+  @apply w-[6px] h-[6px];
+}
+
+/* Thanh cuộn (thumb) */
+::-webkit-scrollbar-thumb {
+  @apply bg-[#ffffff33] min-h-[20px] rounded-full;
+}
+
+/* Track scrollbar (phần nền) */
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
 }
