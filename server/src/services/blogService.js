@@ -1,4 +1,5 @@
 import Blog from "../models/Blog.js";
+import Category from "../models/Category.js";
 import { updateImage, uploadImage } from "../utils/cloudinaryHelper.js";
 import CustomError from "../utils/customError.js";
 import { generalSlug } from "../utils/slugHelper.js";
@@ -29,18 +30,25 @@ export const createBlog = async (data, file) => {
 };
 
 // Get all blogs with pagination and filtering
-export const getAllBlogs = async (query) => {
-  const { page = 1, limit = 10, category, author, search } = query;
+export const getAllBlogs = async (page = 1, limit = 5, search, category) => {
+  let filter = {};
 
-  const filter = {};
+  if (search) {
+    filter.title = { $regex: search, $options: "i" };
+  }
 
-  if (category) filter.categories = category;
-  if (author) filter.author = author;
-  if (search) filter.title = { $regex: search, $options: "i" };
+  if (category) {
+    const categories = await Category.find({
+      slug: { $in: category.split(",") },
+    }).select("_id");
+    const categoryIds = categories.map((cat) => cat._id);
+
+    filter.categories = { $in: categoryIds };
+  }
 
   const blogs = await Blog.find(filter)
     .populate("author", "name")
-    .populate("categories", "name")
+    .populate("category", "name")
     .skip((page - 1) * limit)
     .limit(parseInt(limit))
     .sort({ createdAt: -1 });

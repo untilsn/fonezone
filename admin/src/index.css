@@ -1,3 +1,80 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import url("https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+@import "tailwindcss";
+
+@theme {
+  --breakpoint-*: initial;
+  --breakpoint-sm: 480px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 976px;
+  --breakpoint-xl: 1200px;
+
+  --color-primary: #009ef7;
+  --color-primary-hover: #0095e8;
+  --color-primary-light: #f1faff;
+  --color-primary-active: #0095e8;
+
+  --color-secondary: #e4e6ef;
+  --color-secondary-hover: #d7dae7;
+  --color-secondary-light: #f5f8fa;
+  --color-secondary-active: #d7dae7;
+
+  --color-success: #50cd89;
+  --color-success-hover: #47be7d;
+  --color-success-light: #e8fff3;
+  --color-success-active: #47be7d;
+
+  --color-info: #7239ea;
+  --color-info-hover: #5014d0;
+  --color-info-light: #f8f5ff;
+  --color-info-active: #5014d0;
+
+  --color-warning: #ffc700;
+  --color-warning-hover: #f1bc00;
+  --color-warning-light: #fff8dd;
+  --color-warning-active: #f1bc00;
+
+  --color-danger: #f1416c;
+  --color-danger-hover: #d9214e;
+  --color-danger-light: #fff5f8;
+  --color-danger-active: #d9214e;
+
+  --color-dark: #0d0e12;
+  --color-dark-hover: #131628;
+  --color-dark-light: #eff2f5;
+  --color-dark-active: #131628;
+
+  --color-background-body: #f5f8fa;
+  --color-background-card: #ffffff;
+  --color-background-light: #f5f8fa;
+  --color-background-hover: #f5f8fa;
+
+  --color-text-dark: #181c32;
+  --color-text-muted: #a1a5b7;
+  --color-text-light: #7e8299;
+  --color-text-inverse: #ffffff;
+
+  --color-border: #e4e6ef;
+  --color-border-dashed: #e4e6ef;
+
+  --color-gray-50: #f9fafb;
+  --color-gray-100: #f5f8fa;
+  --color-gray-200: #eff2f5;
+  --color-gray-300: #e4e6ef;
+  --color-gray-400: #b5b5c3;
+  --color-gray-500: #a1a5b7;
+  --color-gray-600: #7e8299;
+  --color-gray-700: #5e6278;
+  --color-gray-800: #3f4254;
+  --color-gray-900: #181c32;
+
+  --shadow: 0px 0px 20px 0px rgba(76, 87, 125, 0.02);
+  --shadow-sm: 0px 0px 10px 0px rgba(76, 87, 125, 0.01);
+  --shadow-md: 0px 0px 30px 0px rgba(76, 87, 125, 0.05);
+  --shadow-lg: 0px 10px 40px 0px rgba(76, 87, 125, 0.1);
+
+  --font-sant: "Be Vietnam Pro", sans-serif;
+}
+
+body {
+  @apply font-sant;
+}
