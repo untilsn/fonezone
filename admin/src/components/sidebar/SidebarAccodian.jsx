@@ -10,7 +10,6 @@ const SidebarAccodian = ({ icon: IconComponent, title, items, basePath }) => {
   const isActiveChild = () => {
     return items.some((item) => location.pathname === basePath + item.to);
   };
-  console.log(isActiveChild());
   return (
     <div>
       {/* HEADER */}
@@ -49,9 +48,9 @@ const SidebarAccodian = ({ icon: IconComponent, title, items, basePath }) => {
               end
               className={({ isActive }) =>
                 clsx(
-                  "flex items-center pl-4 py-3 text-[13px] rounded-lg transition-colors duration-200",
+                  "flex items-center pl-4 py-3 font-medium rounded-lg transition-colors duration-200",
                   isActive
-                    ? "text-primary-light bg-gray-primary"
+                    ? "text-primary-active bg-gray-primary"
                     : "text-text-muted hover:text-primary-light hover:bg-gray-primary"
                 )
               }

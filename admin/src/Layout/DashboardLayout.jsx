@@ -3,11 +3,11 @@ import { Outlet } from "react-router-dom";
 import Sidebar from "../components/sidebar/Sidebar";
 import Header from "../components/header/Header";
 
-const AdminLayout = () => {
+const DashboardLayout = () => {
   return (
     <div className="flex ">
       <Sidebar />
-      <div className="flex-1">
+      <div className="flex-1 pl-64">
         <Header />
         <main className="p-4">
           <Outlet />
@@ -17,4 +17,4 @@ const AdminLayout = () => {
   );
 };
 
-export default AdminLayout;
+export default DashboardLayout;
