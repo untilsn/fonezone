@@ -9,7 +9,7 @@ const DashboardLayout = () => {
       <Sidebar />
       <div className="flex-1 pl-64">
         <Header />
-        <main className="p-4">
+        <main className="px-6 py-7">
           <Outlet />
         </main>
       </div>
