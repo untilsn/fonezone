@@ -1,64 +1,100 @@
-import { IoMdClose } from "react-icons/io";
+import React from "react";
+import { createColumnHelper } from "@tanstack/react-table";
+import TableActionButton from "../TableActionButton";
+import formatPrice from "../../../utils/formatPrice";
 
-export const ProductColumn = (handleToggleStock) => [
-  {
-    header: "Product",
-    accessorKey: "product",
-    cell: ({ row }) => (
-      <div className="flex items-center gap-4">
-        <img
-          src={row.original.img}
-          alt="Product"
-          className="object-cover w-12 h-12 rounded-md"
-        />
-        <div className="font-medium">{row.original.product}</div>
-      </div>
-    ),
-  },
-  {
-    header: "Type",
-    accessorKey: "type",
-    cell: ({ getValue }) => <span>{getValue()}</span>,
-  },
-  {
-    header: "Stocks",
-    accessorKey: "stock",
-    cell: ({ row }) => (
-      <label className="relative inline-flex items-center cursor-pointer">
-        <input
-          type="checkbox"
-          checked={row.original.stock}
-          onChange={() => handleToggleStock(row.index)}
-          className="sr-only peer"
-        />
-        <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-blue-500 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full" />
-      </label>
-    ),
-  },
-  {
-    header: "SKU",
-    accessorKey: "sku",
-  },
-  {
-    header: "Price",
-    accessorKey: "price",
-    cell: ({ getValue }) => {
-      const value = getValue();
-      return value != null ? `$${value.toFixed(2)}` : "N/A";
-    },
-  },
-  {
-    header: "Variants",
-    accessorKey: "variants",
-    cell: ({ getValue }) => <span>{getValue()}</span>,
-  },
-  {
-    header: "",
-    accessorKey: "actions",
-    cell: () => (
-      <button className="flex items-center justify-center mx-auto text-lg text-gray-500 hover:text-dark">
-        <IoMdClose />
-      </button>
-    ),
-  },
-];
+/**
+ * Creates column definitions for Product table
+ *
+ * @param {Function} handleToggleStock - Callback for toggling stock status
+ * @returns {Array} Column definitions for the product table
+ */
+export const ProductColumn = ({ onView, onEdit, onDelete }) => {
+  const columnHelper = createColumnHelper();
+
+  return [
+    columnHelper.accessor("_id", {
+      header: "ID",
+      cell: ({ getValue }) => getValue(),
+    }),
+
+    // Product column with image and name
+    columnHelper.accessor("product", {
+      header: "sản phẩm",
+      cell: ({ row }) => {
+        const { image, name } = row.original;
+        return (
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 overflow-hidden bg-gray-100 rounded">
+              <img
+                src={image || "/api/placeholder/40/40"}
+                alt={name}
+                className="object-cover w-full h-full"
+              />
+            </div>
+            <span className="font-medium">{name}</span>
+          </div>
+        );
+      },
+    }),
+
+    // Type column
+    columnHelper.accessor("status", {
+      header: "loại",
+      cell: ({ getValue }) => getValue(),
+    }),
+
+    // Stock toggle column
+    columnHelper.accessor("quantity", {
+      header: "tồn kho",
+      cell: ({ getValue }) => {
+        console.log(getValue, "stock");
+        return (
+          <span
+            variant="small"
+            className={`font-semibold ${
+              getValue() > 0 ? "text-green-600" : "text-red-500"
+            }`}
+          >
+            {getValue() > 0 ? `${getValue()} sp` : "Hết hàng"}
+          </span>
+        );
+      },
+    }),
+
+    // Price column
+    columnHelper.accessor("price", {
+      header: "giá",
+      cell: ({ getValue }) => (
+        <span className="font-medium text-success">
+          {formatPrice(getValue())}
+        </span>
+      ),
+    }),
+
+    columnHelper.accessor("brand", {
+      header: "thương hiệu",
+      cell: ({ getValue }) => `$${getValue()}`,
+    }),
+
+    columnHelper.accessor("brand", {
+      header: "thương hiệu",
+      cell: ({ getValue }) => `$${getValue()}`,
+    }),
+
+    columnHelper.display({
+      id: "actions",
+      cell: ({ row }) => (
+        <div className="">
+          <TableActionButton
+            onView={() => onView(row.original)}
+            onEdit={() => onEdit(row.original)}
+            onDelete={() => onDelete(row.original)}
+          />
+        </div>
+      ),
+    }),
+  ];
+};
+
+export default ProductColumn;

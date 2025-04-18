@@ -1,117 +1,103 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import {
   useReactTable,
   getCoreRowModel,
   getSortedRowModel,
   getPaginationRowModel,
   flexRender,
-  createColumnHelper,
 } from "@tanstack/react-table";
+import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
+import { FaAnglesLeft, FaAnglesRight } from "react-icons/fa6";
 
-const Table = ({ data }) => {
+/**
+ * Reusable Table Component with built-in sorting, selection and pagination
+ *
+ * @param {Object} props
+ * @param {Array} props.data - Data array to display in table
+ * @param {Array} props.columns - Column definitions
+ * @param {boolean} props.enableSelection - Enable row selection feature
+ * @param {Function} props.onSelectionChange - Callback when selection changes
+ * @param {boolean} props.enablePagination - Show pagination controls
+ * @param {Object} props.tableOptions - Additional options for react-table
+ * @param {string} props.className - Additional CSS classes for table wrapper
+ */
+const Table = ({
+  data = [],
+  columns = [],
+  enableSelection = true,
+  onSelectionChange = null,
+  enablePagination = true,
+  tableOptions = {},
+  className = "",
+}) => {
   const [sorting, setSorting] = useState([]);
   const [rowSelection, setRowSelection] = useState({});
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 10,
+  });
 
-  // Log selected rows whenever selection changes
+  // Add selection column if enableSelection is true
+  const finalColumns = useMemo(() => {
+    if (!enableSelection) return columns;
+
+    return [
+      {
+        id: "select",
+        header: ({ table }) => (
+          <div className="flex items-center justify-center">
+            <input
+              type="checkbox"
+              checked={table.getIsAllRowsSelected()}
+              onChange={table.getToggleAllRowsSelectedHandler()}
+              className="w-4 h-4 border-gray-300 rounded"
+            />
+          </div>
+        ),
+        cell: ({ row }) => (
+          <div className="flex items-center justify-center">
+            <input
+              type="checkbox"
+              checked={row.getIsSelected()}
+              onChange={row.getToggleSelectedHandler()}
+              className="w-4 h-4 border-gray-300 rounded"
+            />
+          </div>
+        ),
+      },
+      ...columns,
+    ];
+  }, [columns, enableSelection]);
+
+  // Notify about selection changes if callback provided
   useEffect(() => {
-    const selectedRows = data.filter((_, index) => rowSelection[index]);
-    console.log("Selected products:", selectedRows);
-  }, [rowSelection, data]);
+    if (onSelectionChange) {
+      const selectedRows = data.filter((_, index) => rowSelection[index]);
+      onSelectionChange(selectedRows);
+    }
+  }, [rowSelection, data, onSelectionChange]);
 
-  const columnHelper = createColumnHelper();
-
-  const columns = [
-    // Selection column
-    columnHelper.display({
-      id: "select",
-      header: ({ table }) => (
-        <div className="px-1">
-          <input
-            type="checkbox"
-            checked={table.getIsAllRowsSelected()}
-            onChange={table.getToggleAllRowsSelectedHandler()}
-            className="w-4 h-4 border-gray-300 rounded"
-          />
-        </div>
-      ),
-      cell: ({ row }) => (
-        <div className="px-1">
-          <input
-            type="checkbox"
-            checked={row.getIsSelected()}
-            onChange={row.getToggleSelectedHandler()}
-            className="w-4 h-4 border-gray-300 rounded"
-          />
-        </div>
-      ),
-    }),
-    // Product column with image and name
-    columnHelper.accessor("product", {
-      header: "PRODUCT",
-      cell: ({ row }) => (
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 overflow-hidden bg-gray-100 rounded">
-            <img
-              src={row.original.image || "/api/placeholder/40/40"}
-              alt={row.original.product}
-              className="object-cover w-full h-full"
-            />
-          </div>
-          <span>{row.original.product}</span>
-        </div>
-      ),
-    }),
-    // Other columns
-    columnHelper.accessor("type", {
-      header: "TYPE",
-    }),
-    columnHelper.accessor("stocks", {
-      header: "STOCKS",
-      cell: ({ row }) => (
-        <div className="flex items-center">
-          <div
-            className={`w-8 h-4 rounded-full ${
-              row.original.stocks ? "bg-blue-500" : "bg-gray-200"
-            }`}
-          >
-            <div
-              className={`h-4 w-4 rounded-full bg-white transform transition-transform ${
-                row.original.stocks ? "translate-x-4" : "translate-x-0"
-              }`}
-            />
-          </div>
-        </div>
-      ),
-    }),
-    columnHelper.accessor("sku", {
-      header: "SKU",
-    }),
-    columnHelper.accessor("price", {
-      header: "PRICE",
-      cell: ({ getValue }) => `$${getValue()}`,
-    }),
-    columnHelper.accessor("variants", {
-      header: "VARIANTS",
-    }),
-  ];
-
+  // Initialize table instance
   const table = useReactTable({
     data,
-    columns,
+    columns: finalColumns,
     state: {
       sorting,
       rowSelection,
+      pagination,
     },
     onSortingChange: setSorting,
     onRowSelectionChange: setRowSelection,
+    onPaginationChange: setPagination,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
-    enableRowSelection: true,
+    enableRowSelection: enableSelection,
+    ...tableOptions,
   });
 
   return (
-    <div className="w-full overflow-x-auto">
+    <div className={`w-full overflow-x-auto ${className}`}>
       <table className="min-w-full text-sm bg-white border-gray-300 border-y">
         <thead className="bg-gray-50">
           {table.getHeaderGroups().map((headerGroup) => (
@@ -120,7 +106,7 @@ const Table = ({ data }) => {
                 <th
                   key={header.id}
                   colSpan={header.colSpan}
-                  className="px-4 py-2 font-semibold text-left text-gray-600 select-none"
+                  className="px-4 py-3 font-semibold text-left text-gray-600 capitalize select-none"
                 >
                   {header.isPlaceholder ? null : (
                     <div
@@ -163,7 +149,7 @@ const Table = ({ data }) => {
               className="border-t border-gray-300 hover:bg-gray-100"
             >
               {row.getVisibleCells().map((cell) => (
-                <td key={cell.id} className="px-4 py-2">
+                <td key={cell.id} className="px-4 py-3">
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </td>
               ))}
@@ -171,6 +157,60 @@ const Table = ({ data }) => {
           ))}
         </tbody>
       </table>
+
+      {/* Pagination Controls - Only shown if enablePagination is true */}
+      {enablePagination && (
+        <div className="flex items-center justify-between px-4 py-3 bg-white border-t border-gray-300">
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => table.setPageIndex(0)}
+              disabled={!table.getCanPreviousPage()}
+              className="px-2 py-1 text-sm bg-gray-100 rounded disabled:opacity-50"
+            >
+              <FaAnglesLeft />
+            </button>
+            <button
+              onClick={() => table.previousPage()}
+              disabled={!table.getCanPreviousPage()}
+              className="px-2 py-1 text-sm bg-gray-100 rounded disabled:opacity-50"
+            >
+              <FaAngleLeft />
+            </button>
+            <span className="text-sm">
+              Trang{" "}
+              <strong>
+                {table.getState().pagination.pageIndex + 1} /{" "}
+                {table.getPageCount()}
+              </strong>
+            </span>
+            <button
+              onClick={() => table.nextPage()}
+              disabled={!table.getCanNextPage()}
+              className="px-2 py-1 text-sm bg-gray-100 rounded disabled:opacity-50"
+            >
+              <FaAngleRight />
+            </button>
+            <button
+              onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+              disabled={!table.getCanNextPage()}
+              className="px-2 py-1 text-sm bg-gray-100 rounded disabled:opacity-50"
+            >
+              <FaAnglesRight />
+            </button>
+          </div>
+          <select
+            value={table.getState().pagination.pageSize}
+            onChange={(e) => table.setPageSize(Number(e.target.value))}
+            className="px-2 py-1 text-sm bg-white border border-gray-300 rounded"
+          >
+            {[10, 20, 30, 40, 50].map((pageSize) => (
+              <option key={pageSize} value={pageSize}>
+                Hiển thị {pageSize}
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
     </div>
   );
 };
