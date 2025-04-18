@@ -10,14 +10,18 @@ const productData = [
     discount: 5,
     discountPrice: 31340500,
     stock: 50,
-    brand: {
-      _id: "65f7a3b1c82f265e34a8721a",
-      name: "Apple",
-    },
-    category: {
-      _id: "65f7a3b1c82f265e34a8721b",
-      name: "Smartphone",
-    },
+    brand: [
+      {
+        _id: "65f7a3b1c82f265e34a8721a",
+        name: "Apple",
+      },
+    ],
+    category: [
+      {
+        _id: "65f7a3b1c82f265e34a8721b",
+        name: "Smartphone",
+      },
+    ],
     images: [
       "https://example.com/images/iphone15-pro-max-1.jpg",
       "https://example.com/images/iphone15-pro-max-2.jpg",
@@ -71,14 +75,18 @@ const productData = [
     discount: 10,
     discountPrice: 26091000,
     stock: 35,
-    brand: {
-      _id: "65f7a3b1c82f265e34a8721c",
-      name: "Samsung",
-    },
-    category: {
-      _id: "65f7a3b1c82f265e34a8721b",
-      name: "Smartphone",
-    },
+    brand: [
+      {
+        _id: "65f7a3b1c82f265e34a8721c",
+        name: "Samsung",
+      },
+    ],
+    category: [
+      {
+        _id: "65f7a3b1c82f265e34a8721b",
+        name: "Smartphone",
+      },
+    ],
     images: [
       "https://example.com/images/samsung-s23-ultra-1.jpg",
       "https://example.com/images/samsung-s23-ultra-2.jpg",
@@ -127,14 +135,18 @@ const productData = [
     discount: 15,
     discountPrice: 18691500,
     stock: 25,
-    brand: {
-      _id: "65f7a3b1c82f265e34a8721d",
-      name: "Xiaomi",
-    },
-    category: {
-      _id: "65f7a3b1c82f265e34a8721b",
-      name: "Smartphone",
-    },
+    brand: [
+      {
+        _id: "65f7a3b1c82f265e34a8721d",
+        name: "Xiaomi",
+      },
+    ],
+    category: [
+      {
+        _id: "65f7a3b1c82f265e34a8721b",
+        name: "Smartphone",
+      },
+    ],
     images: [
       "https://example.com/images/xiaomi-13-pro-1.jpg",
       "https://example.com/images/xiaomi-13-pro-2.jpg",
@@ -180,14 +192,18 @@ const productData = [
     discount: 0,
     discountPrice: 75990000,
     stock: 10,
-    brand: {
-      _id: "65f7a3b1c82f265e34a8721a",
-      name: "Apple",
-    },
-    category: {
-      _id: "65f7a3b1c82f265e34a8721e",
-      name: "Laptop",
-    },
+    brand: [
+      {
+        _id: "65f7a3b1c82f265e34a8721a",
+        name: "Apple",
+      },
+    ],
+    category: [
+      {
+        _id: "65f7a3b1c82f265e34a8721e",
+        name: "Laptop",
+      },
+    ],
     images: [
       "https://example.com/images/macbook-pro-16-m3-max-1.jpg",
       "https://example.com/images/macbook-pro-16-m3-max-2.jpg",
@@ -250,14 +266,18 @@ const productData = [
     discount: 7,
     discountPrice: 7895700,
     stock: 60,
-    brand: {
-      _id: "65f7a3b1c82f265e34a8721f",
-      name: "Sony",
-    },
-    category: {
-      _id: "65f7a3b1c82f265e34a87220",
-      name: "Headphones",
-    },
+    brand: [
+      {
+        _id: "65f7a3b1c82f265e34a8721f",
+        name: "Sony",
+      },
+    ],
+    category: [
+      {
+        _id: "65f7a3b1c82f265e34a87220",
+        name: "Headphones",
+      },
+    ],
     images: [
       "https://example.com/images/sony-wh-1000xm5-1.jpg",
       "https://example.com/images/sony-wh-1000xm5-2.jpg",

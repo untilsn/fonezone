@@ -2,6 +2,8 @@ import React from "react";
 import { createColumnHelper } from "@tanstack/react-table";
 import TableActionButton from "../TableActionButton";
 import formatPrice from "../../../utils/formatPrice";
+import { useNavigate } from "react-router-dom";
+import { paths } from "../../../constants/paths";
 
 /**
  * Creates column definitions for Product table
@@ -11,11 +13,20 @@ import formatPrice from "../../../utils/formatPrice";
  */
 export const ProductColumn = ({ onView, onEdit, onDelete }) => {
   const columnHelper = createColumnHelper();
+  const navigate = useNavigate();
 
   return [
     columnHelper.accessor("_id", {
       header: "ID",
-      cell: ({ getValue }) => getValue(),
+      enableSorting: false,
+      cell: ({ getValue }) => {
+        const id = getValue();
+        return (
+          <span className="truncate max-w-[100px] block" title={id}>
+            {id.slice(1, 6)}...{id.slice(-4)}
+          </span>
+        );
+      },
     }),
 
     // Product column with image and name
@@ -41,14 +52,21 @@ export const ProductColumn = ({ onView, onEdit, onDelete }) => {
     // Type column
     columnHelper.accessor("status", {
       header: "loại",
-      cell: ({ getValue }) => getValue(),
+      cell: ({ row }) => {
+        return (
+          <div>
+            {row.original.category.map((item) => (
+              <div key={item._id}>{item.name}</div>
+            ))}
+          </div>
+        );
+      },
     }),
 
     // Stock toggle column
     columnHelper.accessor("quantity", {
       header: "tồn kho",
       cell: ({ getValue }) => {
-        console.log(getValue, "stock");
         return (
           <span
             variant="small"
@@ -74,25 +92,33 @@ export const ProductColumn = ({ onView, onEdit, onDelete }) => {
 
     columnHelper.accessor("brand", {
       header: "thương hiệu",
-      cell: ({ getValue }) => `$${getValue()}`,
-    }),
-
-    columnHelper.accessor("brand", {
-      header: "thương hiệu",
-      cell: ({ getValue }) => `$${getValue()}`,
+      cell: ({ row }) => {
+        const { brand } = row.original;
+        return (
+          <div>
+            {brand.map((item) => (
+              <div key={item.id}>{item.name}</div>
+            ))}
+          </div>
+        );
+      },
     }),
 
     columnHelper.display({
       id: "actions",
-      cell: ({ row }) => (
-        <div className="">
-          <TableActionButton
-            onView={() => onView(row.original)}
-            onEdit={() => onEdit(row.original)}
-            onDelete={() => onDelete(row.original)}
-          />
-        </div>
-      ),
+      cell: ({ row }) => {
+        console.log(row.original);
+        return (
+          <div className="">
+            <TableActionButton
+              onEdit={() =>
+                onEdit(navigate(paths.products.edit(row.original.slug)))
+              }
+              onDelete={() => onDelete(row.original)}
+            />
+          </div>
+        );
+      },
     }),
   ];
 };
