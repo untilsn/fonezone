@@ -3,44 +3,63 @@ import { useController } from "react-hook-form";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import clsx from "clsx";
 
-const InputField = ({ control, name, label, type = "text", placeholder }) => {
+const InputField = ({
+  control,
+  name,
+  label,
+  type = "text",
+  placeholder,
+  className = "",
+}) => {
   const {
     field,
-    formState: { error },
+    fieldState: { error },
   } = useController({
     name,
     control,
+    defaultValue: "",
   });
-  const [showPassword, setShowPasswor] = useState(false);
+
+  const [showPassword, setShowPassword] = useState(false);
   const inputType =
     type === "password" ? (showPassword ? "text" : "password") : type;
 
   return (
-    <div className="relative mb-5">
+    <div className={clsx("mb-5", className)}>
       {label && (
-        <label htmlFor={name} className="mb-2 text-sm text-gray-600">
+        <label
+          htmlFor={name}
+          className="block mb-2 text-xs font-medium text-gray-700 capitalize"
+        >
           {label}
         </label>
       )}
-      <input
-        {...field}
-        id={name}
-        type={inputType}
-        className={clsx(
-          "w-full outline-none text-sm border border-gray-400 rounded-xl p-3 placeholder:text-gray-600 placeholder:capitalize",
-          type === "password" && "pr-10"
+
+      <div className="relative">
+        <input
+          {...field}
+          id={name}
+          type={inputType}
+          placeholder={placeholder}
+          className={clsx(
+            "w-full p-3 text-sm border rounded-lg outline-none placeholder:text-gray-600 placeholder:capitalize",
+            error
+              ? "border-danger focus:border-danger"
+              : "border-gray-400 focus:border-blue-500",
+            type === "password" && "pr-10"
+          )}
+        />
+        {type === "password" && (
+          <button
+            type="button"
+            className="absolute text-gray-600 -translate-y-1/2 top-1/2 right-3 focus:outline-none"
+            onClick={() => setShowPassword((prev) => !prev)}
+          >
+            {showPassword ? <FaEye /> : <FaEyeSlash />}
+          </button>
         )}
-        placeholder={placeholder}
-      />
-      {type === "password" && (
-        <button
-          type="button"
-          className="absolute text-gray-700 -translate-y-1/2 top-1/2 right-4"
-          onClick={() => setShowPasswor((prev) => !prev)}
-        >
-          {showPassword ? <FaEye /> : <FaEyeSlash />}
-        </button>
-      )}
+      </div>
+      {error && <p className="mt-1 text-sm text-danger">{error.message}</p>}
     </div>
   );
 };

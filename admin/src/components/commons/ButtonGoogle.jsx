@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import React from "react";
 
 const ButtonGoogle = ({ onClick }) => {
@@ -6,7 +7,10 @@ const ButtonGoogle = ({ onClick }) => {
       type="button"
       onClick={onClick}
       variant="outlined"
-      className="flex items-center justify-center w-full gap-3 p-3 mb-5 text-sm text-gray-700 transition-all border border-gray-400 hover:bg-gray-100 hover:text-primary-hover rounded-xl"
+      className={clsx(
+        "hover:text-primary-hover mb-5 flex w-full items-center justify-center gap-3 rounded-lg",
+        "border border-gray-300 p-3 text-sm text-gray-700 transition-all hover:bg-gray-100",
+      )}
     >
       <img
         src="https://docs.material-tailwind.com/icons/google.svg"

@@ -9,23 +9,24 @@ import {
   logoutUserApi,
   resetPasswordApi,
   verifyOtpResetApi,
-  forgetPasswordApi
+  forgetPasswordApi,
 } from "../api/authApi";
-import { logoutUser, setUser } from "../redux/slice/userSlice";
+// import { logoutUser, setUser } from "../redux/slice/userSlice";
 
 export const useAuth = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const login = async (values) => {
+    console.log(values, "login");
     try {
-      const data = await loginUserApi(values);
-      if (data?.access_token) {
-        localStorage.setItem("access_token", data.access_token);
-        await getUserProfile(data.access_token);
-        navigate("/");
-      }
-      return data;
+      // const data = await loginUserApi(values);
+      // if (data?.access_token) {
+      //   localStorage.setItem("access_token", data.access_token);
+      //   await getUserProfile(data.access_token);
+      //   navigate("/");
+      // }
+      // return data;
     } catch (err) {
       console.error(err);
       throw err;
@@ -41,7 +42,6 @@ export const useAuth = () => {
     }
   };
 
-
   const loginWithGoogleSuccess = async () => {
     try {
       const urlParams = new URLSearchParams(window.location.search);
@@ -56,13 +56,13 @@ export const useAuth = () => {
         navigate("/login-fail");
       }
     } catch (err) {
-      console.error("Lỗi khi đăng nhập với Google:", err.response?.data || err.message);
+      console.error(
+        "Lỗi khi đăng nhập với Google:",
+        err.response?.data || err.message,
+      );
       navigate("/login-fail");
     }
   };
-
-
-
 
   const register = async (values) => {
     try {

@@ -123,7 +123,7 @@ const Table = ({
                     >
                       {flexRender(
                         header.column.columnDef.header,
-                        header.getContext()
+                        header.getContext(),
                       )}
                       {header.column.getCanSort() && header.id !== "select" && (
                         <>

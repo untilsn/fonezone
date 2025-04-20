@@ -22,7 +22,7 @@ export const ProductColumn = ({ onView, onEdit, onDelete }) => {
       cell: ({ getValue }) => {
         const id = getValue();
         return (
-          <span className="truncate max-w-[100px] block" title={id}>
+          <span className="block max-w-[100px] truncate" title={id}>
             {id.slice(1, 6)}...{id.slice(-4)}
           </span>
         );

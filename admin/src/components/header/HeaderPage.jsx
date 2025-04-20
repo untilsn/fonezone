@@ -8,7 +8,7 @@ const HeaderPage = ({ title, children }) => {
         <Breadcrumb></Breadcrumb>
         <h1 className="px-2 text-xl">{title}</h1>
       </div>
-      {children}
+      <div className="flex items-center gap-5">{children}</div>
     </div>
   );
 };

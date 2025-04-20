@@ -40,7 +40,7 @@ export const sidebarMenuItems = [
       {
         key: "productEdit",
         title: "Chỉnh sửa sản phẩm",
-        to: "/products/:id/edit",
+        to: "/products/:slug/edit",
       },
     ],
   },

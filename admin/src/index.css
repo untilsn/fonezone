@@ -81,6 +81,10 @@ body {
   @apply font-sans bg-background-body text-text-body font-medium text-[14.3px] leading-relaxed;
 }
 
+button {
+  @apply cursor-pointer;
+}
+
 ::-webkit-scrollbar {
   @apply w-[6px] h-[6px];
 }

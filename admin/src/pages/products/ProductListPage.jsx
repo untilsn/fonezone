@@ -5,6 +5,7 @@ import { ProductColumn } from "../../components/table/columns/ProductColumn";
 import Table from "../../components/table/Table";
 import MainButton from "../../components/commons/MainButton";
 import productData from "../../components/table/columns/productData";
+import { CiExport } from "react-icons/ci";
 
 const ProductListPage = () => {
   const handleView = (product) => {
@@ -27,6 +28,10 @@ const ProductListPage = () => {
     <div>
       <HeaderPage title="Danh sách sản phẩm">
         <MainButton>thêm sản phẩm mới</MainButton>
+        <button className="flex items-center gap-2 px-4 py-2 capitalize rounded-sm bg-primary/20 text-primary">
+          <CiExport size={20} />
+          export excel
+        </button>
       </HeaderPage>
       <TableLayout>
         <Table data={productData} columns={columns} />

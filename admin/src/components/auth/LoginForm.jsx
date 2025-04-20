@@ -5,26 +5,45 @@ import AuthHeader from "./AuthHeader";
 import ButtonGoogle from "../commons/ButtonGoogle";
 import ButtonSubmit from "../commons/ButtonSubmit";
 import { Link } from "react-router-dom";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { loginSchema } from "../../utils/authSchema";
+import { useAuth } from "../../hooks/useAuth";
+import { useMutationHook } from "../../hooks/useMutation";
 
 const LoginForm = () => {
-  const { control } = useForm({
+  const { login, loginWithGoogle } = useAuth();
+  const { control, handleSubmit } = useForm({
+    mode: "onSubmit",
     defaultValue: {
       email: "",
       password: "",
     },
+    resolver: yupResolver(loginSchema),
   });
 
+  const { data, isPending } = useMutationHook((values) => login(values));
+  console.log(data, isPending, "hook login");
+
   return (
-    <form className="w-full">
-      <AuthHeader title="Đăng nhập" subTitle="Your dashboard" />
+    <form
+      onSubmit={handleSubmit((values) => mutate(values))}
+      className="w-full"
+    >
+      <AuthHeader title="Đăng nhập" subTitle="Your Social Campaigns" />
       <ButtonGoogle></ButtonGoogle>
       <div className="relative my-10 h-[1px] bg-gray-200">
-        <span className="absolute px-3 text-sm -translate-x-1/2 -translate-y-1/2 bg-white top-1/2 left-1/2">
+        <span className="bg-background-body absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 px-3 text-sm">
           or
         </span>
       </div>
-      <InputField control={control} name={"email"} placeholder="email" />
       <InputField
+        label="email address"
+        control={control}
+        name={"email"}
+        placeholder="email"
+      />
+      <InputField
+        label="password"
         control={control}
         name={"password"}
         placeholder="password"
@@ -32,7 +51,7 @@ const LoginForm = () => {
       />
       <Link
         to={"/admin/auth/password-forget"}
-        className="block mb-5 ml-auto text-sm text-left text-gray-800 transition-all hover:text-primary-active"
+        className="hover:text-primary-active mb-5 ml-auto block text-left text-sm text-gray-800 transition-all"
       >
         Quên mật khẩu?
       </Link>
