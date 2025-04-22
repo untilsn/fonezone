@@ -4,16 +4,35 @@ export const productSchema = yup.object().shape({
   name: yup.string().required("Tên sản phẩm là bắt buộc").trim(),
   slug: yup.string().lowercase().nullable(), // có thể để optional
   price: yup
-    .number()
+    .number("Giá phải là chữ số")
+    .transform((value, originalValue) =>
+      String(originalValue).trim() === "" ? undefined : value,
+    )
+    .typeError("Giá phải là chữ số")
     .required("Giá sản phẩm là bắt buộc")
     .min(0, "Giá phải lớn hơn hoặc bằng 0"),
-  discount: yup.number().min(0, "Giảm giá phải từ 0 trở lên").default(0),
+  discount: yup
+    .number("giảm giá phải sử dụng chữ số")
+    .transform((value, originalValue) =>
+      String(originalValue).trim() === "" ? undefined : value,
+    )
+    .typeError("Giá phải là chữ số")
+    .min(0, "Giảm giá phải từ 0 trở lên")
+    .default(0),
   discountPrice: yup
     .number()
+    .transform((value, originalValue) =>
+      String(originalValue).trim() === "" ? undefined : value,
+    )
+    .typeError("Giá phải là chữ số")
     .min(0, "Giá sau giảm phải từ 0 trở lên")
-    .nullable(),
+    .nullable(""),
   stock: yup
     .number()
+    .transform((value, originalValue) =>
+      String(originalValue).trim() === "" ? undefined : value,
+    )
+    .typeError("Giá phải là chữ số")
     .required("Số lượng tồn kho là bắt buộc")
     .min(0, "Tồn kho phải từ 0 trở lên"),
   brand: yup.string().required("Thương hiệu là bắt buộc"),
@@ -29,6 +48,10 @@ export const productSchema = yup.object().shape({
       size: yup.string().required("Kích thước RAM là bắt buộc"),
       priceDifference: yup
         .number()
+        .transform((value, originalValue) =>
+          String(originalValue).trim() === "" ? undefined : value,
+        )
+        .typeError("Giá phải là chữ số")
         .min(0, "Chênh lệch giá RAM phải từ 0 trở lên")
         .default(0),
     }),
@@ -39,6 +62,10 @@ export const productSchema = yup.object().shape({
       capacity: yup.string().required("Dung lượng là bắt buộc"),
       priceDifference: yup
         .number()
+        .transform((value, originalValue) =>
+          String(originalValue).trim() === "" ? undefined : value,
+        )
+        .typeError("Giá phải là chữ số")
         .min(0, "Chênh lệch giá bộ nhớ phải từ 0 trở lên")
         .default(0),
     }),
@@ -52,9 +79,20 @@ export const productSchema = yup.object().shape({
 
   rating: yup
     .number()
+    .transform((value, originalValue) =>
+      String(originalValue).trim() === "" ? undefined : value,
+    )
+    .typeError("Giá phải là chữ số")
     .min(0, "Đánh giá phải từ 0 đến 5")
     .max(5, "Đánh giá phải từ 0 đến 5")
     .default(0),
   isFeatured: yup.boolean().default(false),
-  view: yup.number().min(0, "Lượt xem phải từ 0 trở lên").default(0),
+  view: yup
+    .number()
+    .transform((value, originalValue) =>
+      String(originalValue).trim() === "" ? undefined : value,
+    )
+    .typeError("Giá phải là chữ số")
+    .min(0, "Lượt xem phải từ 0 trở lên")
+    .default(0),
 });

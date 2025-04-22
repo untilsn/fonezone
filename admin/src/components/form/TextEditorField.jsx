@@ -33,7 +33,7 @@ const MenuBar = ({ editor }) => {
   );
 };
 
-const TextEditor = ({ initialValue = "", onChange }) => {
+const TextEditorField = ({ initialValue = "", onChange }) => {
   const [content, setContent] = useState(initialValue);
 
   const editor = useEditor({
@@ -68,7 +68,7 @@ const TextEditor = ({ initialValue = "", onChange }) => {
   }, [initialValue, editor]);
 
   return (
-    <div className="p-4 border border-gray-400 rounded-lg">
+    <div className="p-4 border border-gray-300 rounded-lg">
       <MenuBar editor={editor} />
       <EditorContent
         placeholder="hoke"
@@ -79,4 +79,4 @@ const TextEditor = ({ initialValue = "", onChange }) => {
   );
 };
 
-export default TextEditor;
+export default TextEditorField;
