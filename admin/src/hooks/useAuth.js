@@ -11,7 +11,7 @@ import {
   verifyOtpResetApi,
   forgetPasswordApi,
 } from "../api/authApi";
-// import { logoutUser, setUser } from "../redux/slice/userSlice";
+import { logoutUser, setUser } from "../redux/slice/userSlice";
 
 export const useAuth = () => {
   const dispatch = useDispatch();
@@ -20,13 +20,13 @@ export const useAuth = () => {
   const login = async (values) => {
     console.log(values, "login");
     try {
-      // const data = await loginUserApi(values);
-      // if (data?.access_token) {
-      //   localStorage.setItem("access_token", data.access_token);
-      //   await getUserProfile(data.access_token);
-      //   navigate("/");
-      // }
-      // return data;
+      const data = await loginUserApi(values);
+      if (data?.access_token) {
+        localStorage.setItem("access_token", data.access_token);
+        await getUserProfile(data.access_token);
+        navigate("/");
+      }
+      return data;
     } catch (err) {
       console.error(err);
       throw err;

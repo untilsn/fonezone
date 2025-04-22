@@ -17,6 +17,7 @@ import DashboardLayout from "./Layout/DashboardLayout";
 import BrandListPage from "./pages/brands/BrandListPage";
 import CategoryListPage from "./pages/categories/CategoryListPage";
 import OrderListPage from "./pages/orders/OrderListPage";
+import ProfilePage from "./pages/ProfilePage";
 
 const App = () => {
   return (
@@ -39,6 +40,7 @@ const App = () => {
         {/* Dashboard */}
         <Route index element={<Navigate to="dashboard" />} />
         <Route path="dashboard" element={<DashboardPage />} />
+        <Route path="user-profile" element={<ProfilePage />} />
 
         {/* Users */}
         <Route path="users">

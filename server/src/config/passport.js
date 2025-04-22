@@ -9,17 +9,20 @@ passport.use(
     {
       clientID: config.GOOGLE_CLIENT_ID,
       clientSecret: config.GOOGLE_CLIENT_SECRET,
-      callbackURL: "/api/auth/google/callback",
+      callbackURL: config.GOOGLE_REDIRECT_URl,
       scope: ["profile", "email"],
       session: false,
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
         if (!profile.emails.length) {
-          return done(new CustomError(404, "Không tìm thấy email trong tài khoản Google"), false);
+          return done(
+            new CustomError(404, "Không tìm thấy email trong tài khoản Google"),
+            false
+          );
         }
         const user = await googleAuth(profile);
-        return done(null, user)
+        return done(null, user);
       } catch (error) {
         return done(error, false);
       }

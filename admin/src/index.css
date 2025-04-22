@@ -78,7 +78,7 @@
 }
 
 body {
-  @apply font-sans bg-background-body text-text-body font-medium text-[14.3px] leading-relaxed;
+  @apply bg-background-body text-text-body font-sans text-[14.3px] leading-relaxed font-medium;
 }
 
 button {
@@ -86,15 +86,41 @@ button {
 }
 
 ::-webkit-scrollbar {
-  @apply w-[6px] h-[6px];
+  @apply h-[6px] w-[6px];
 }
 
 /* Thanh cuộn (thumb) */
 ::-webkit-scrollbar-thumb {
-  @apply bg-[#ffffff33] min-h-[20px] rounded-full;
+  @apply min-h-[20px] rounded-full bg-[#ffffff33];
 }
 
 /* Track scrollbar (phần nền) */
 ::-webkit-scrollbar-track {
   @apply bg-transparent;
+}
+
+.ProseMirror {
+  @apply h-full min-h-[300px] w-full flex-1 overflow-auto rounded bg-transparent p-4 outline-none;
+}
+
+/* Focus state */
+.ProseMirror:focus {
+}
+
+.ProseMirror.is-editor-empty::before {
+  content: "Nhập nội dung tại đây...";
+  @apply float-left h-0 italic text-gray-400 pointer-events-none;
+}
+
+/* Bạn có thể style các thẻ nội bộ như p, a, img... */
+.ProseMirror p {
+  @apply my-2;
+}
+
+.ProseMirror a {
+  @apply text-blue-500 underline;
+}
+
+.ProseMirror img {
+  @apply h-auto max-w-full rounded;
 }

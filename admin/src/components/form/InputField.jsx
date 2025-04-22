@@ -25,7 +25,7 @@ const InputField = ({
     type === "password" ? (showPassword ? "text" : "password") : type;
 
   return (
-    <div className={clsx("mb-5", className)}>
+    <div className={clsx("mb-5 w-full", className)}>
       {label && (
         <label
           htmlFor={name}
@@ -42,11 +42,11 @@ const InputField = ({
           type={inputType}
           placeholder={placeholder}
           className={clsx(
-            "w-full p-3 text-sm border rounded-lg outline-none placeholder:text-gray-600 placeholder:capitalize",
+            "w-full rounded-lg border p-3 text-sm outline-none placeholder:text-gray-600 placeholder:capitalize",
             error
               ? "border-danger focus:border-danger"
               : "border-gray-400 focus:border-blue-500",
-            type === "password" && "pr-10"
+            type === "password" && "pr-10",
           )}
         />
         {type === "password" && (

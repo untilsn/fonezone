@@ -21,7 +21,9 @@ const LoginForm = () => {
     resolver: yupResolver(loginSchema),
   });
 
-  const { data, isPending } = useMutationHook((values) => login(values));
+  const { mutate, data, isPending } = useMutationHook((values) =>
+    login(values),
+  );
   console.log(data, isPending, "hook login");
 
   return (

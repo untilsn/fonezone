@@ -3,7 +3,6 @@ import { jwtDecode } from "jwt-decode";
 import { refreshTokenApi } from "./authApi";
 
 const BASE_URL = import.meta.env.VITE_BACKEND_URL;
-console.log(BASE_URL);
 export const apiClient = axios.create({
   baseURL: BASE_URL,
   withCredentials: true,
