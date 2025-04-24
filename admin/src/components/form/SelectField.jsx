@@ -25,7 +25,11 @@ const SelectField = ({
   };
 
   const selectedValue = options.filter((opt) =>
-    isMulti ? value.includes(opt.value) : opt.value === value,
+    isMulti
+      ? Array.isArray(value)
+        ? value.includes(opt.value)
+        : false
+      : opt.value === value,
   );
 
   const customStyles = {
@@ -61,8 +65,8 @@ const SelectField = ({
       ...base,
       color: "white",
       ":hover": {
-        backgroundColor: "var(--color-primary-hover)", // Hover color from theme
-        color: "white",
+        backgroundColor: "var(--color-primary-active)", // Active hover effect
+        color: "var(--color-text-inverse)",
       },
     }),
     placeholder: (base) => ({

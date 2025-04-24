@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 const Header = ({ user }) => {
   return (
-    <div className="flex items-center justify-between px-5 py-2 border-b border-gray-200 shadow-sm">
+    <div className="sticky top-0 left-0 right-0 z-50 flex items-center justify-between px-5 py-2 bg-white border-b border-gray-200 shadow-sm">
       {/* search */}
       <div className="flex items-center gap-2 px-3 border border-gray-400 rounded-xl">
         <FaSearch />
