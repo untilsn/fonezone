@@ -18,7 +18,6 @@ export const useAuth = () => {
   const navigate = useNavigate();
 
   const login = async (values) => {
-    console.log(values, "login");
     try {
       const data = await loginUserApi(values);
       if (data?.access_token) {

@@ -1,9 +1,9 @@
 import React from "react";
-import AuthHeader from "./AuthHeader";
-import InputField from "../form/InputField";
 import { useForm } from "react-hook-form";
-import ButtonSubmit from "../commons/ButtonSubmit";
 import { useNavigate } from "react-router-dom";
+import PrimaryButton from "../button/PrimaryButton";
+import InputField from "../form/InputField";
+import AuthHeader from "./AuthHeader";
 
 const ForgetPasswordForm = () => {
   const navigate = useNavigate();
@@ -22,7 +22,7 @@ const ForgetPasswordForm = () => {
       ></AuthHeader>
       <InputField control={control} name={"email"} placeholder="email" />
       <div className="flex items-center gap-5">
-        <ButtonSubmit>gửi email</ButtonSubmit>
+        <PrimaryButton>gửi email</PrimaryButton>
         <button
           type="button"
           onClick={() => navigate(-1)}

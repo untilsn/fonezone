@@ -1,32 +1,41 @@
-import React, { useState } from "react";
-import HeaderPage from "../../components/header/HeaderPage";
+import React from "react";
 import { useForm } from "react-hook-form";
-import { productSchema } from "../../utils/productSchema";
-import { yupResolver } from "@hookform/resolvers/yup";
-import InputField from "../../components/form/InputField";
+import PrimaryButton from "../../components/button/PrimaryButton";
 import FormFieldControl from "../../components/form/FormFieldControl";
-import ButtonSubmit from "../../components/commons/ButtonSubmit";
-import TextEditorField from "../../components/form/TextEditorField";
-import SelectField from "../../components/form/SelectField";
-import MultiSelectField from "../../components/form/MultiSelectField";
 import ImageUploadField from "../../components/form/ImageUploadField";
+import InputField from "../../components/form/InputField";
+import SelectField from "../../components/form/SelectField";
+import TextEditorField from "../../components/form/TextEditorField";
+import HeaderPage from "../../components/header/HeaderPage";
 import { useBrand } from "../../hooks/queries/useBrand";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { productSchema } from "../../utils/productSchema";
+
+const defaultValues = {
+  name: "",
+  slug: "",
+  price: "",
+  discount: 0,
+  discountPrice: 0,
+  stock: 0,
+  brand: "",
+  category: "",
+  images: [],
+  colors: [],
+  ram: [],
+  storage: [],
+  description: "",
+  specifications: {},
+  rating: 0,
+  isFeatured: false,
+  view: 0,
+};
 
 const ProductCreatePage = () => {
   const { control, handleSubmit } = useForm({
     mode: "onSubmit",
-    defaultValues: {
-      name: "",
-      price: "",
-      discount: "",
-      description: "",
-      stock: "",
-      brand: "",
-      ram: [],
-      storage: [],
-      images: [],
-    },
-    // resolver: yupResolver(productSchema),
+    defaultValues,
+    resolver: yupResolver(productSchema),
   });
 
   const { data: brands, isLoading } = useBrand();
@@ -54,13 +63,8 @@ const ProductCreatePage = () => {
                 control={control}
                 name="name"
                 label="Tên sản phẩm"
-                render={({ value, onChange, name }) => (
-                  <InputField
-                    value={value}
-                    onChange={onChange}
-                    name={name}
-                    placeholder="tên sản phẩm"
-                  />
+                render={(field) => (
+                  <InputField {...field} placeholder="tên sản phẩm" />
                 )}
               />
               {/* price n discount */}
@@ -70,11 +74,9 @@ const ProductCreatePage = () => {
                     control={control}
                     name="price"
                     label="giá sản phẩm"
-                    render={({ value, onChange, name }) => (
+                    render={(field) => (
                       <InputField
-                        value={value}
-                        onChange={onChange}
-                        name={name}
+                        {...field}
                         type="number"
                         placeholder="nhập giá sản phẩm"
                       />
@@ -86,11 +88,9 @@ const ProductCreatePage = () => {
                     control={control}
                     name="discount"
                     label="phần trăm giảm giá"
-                    render={({ value, onChange, name }) => (
+                    render={(field) => (
                       <InputField
-                        value={value}
-                        onChange={onChange}
-                        name={name}
+                        {...field}
                         type="number"
                         placeholder="nhập phần trăm giảm giá"
                       />
@@ -105,10 +105,9 @@ const ProductCreatePage = () => {
                     control={control}
                     name="brand"
                     label="thương hiệu"
-                    render={({ value, onChange }) => (
+                    render={(field) => (
                       <SelectField
-                        value={value}
-                        onChange={onChange}
+                        {...field}
                         options={brands?.data?.map((brand) => ({
                           label: brand.name,
                           value: brand._id,
@@ -122,12 +121,8 @@ const ProductCreatePage = () => {
                     control={control}
                     name="category"
                     label="danh mục"
-                    render={({ value, onChange }) => (
-                      <SelectField
-                        isMulti={true}
-                        value={value}
-                        onChange={onChange}
-                      />
+                    render={(field) => (
+                      <SelectField {...field} isMulti={true} />
                     )}
                   />
                 </div>
@@ -138,10 +133,12 @@ const ProductCreatePage = () => {
                   <FormFieldControl
                     name="ram"
                     control={control}
-                    label="Chọn Bộ nhớ"
+                    label="Bộ nhớ"
                     render={(field) => (
-                      <MultiSelectField
-                        field={field}
+                      <SelectField
+                        {...field}
+                        isMulti={true}
+                        placeholder="chọn bộ nhớ"
                         options={[
                           { label: "64GB", value: "64GB" },
                           { label: "128GB", value: "128GB" },
@@ -155,14 +152,18 @@ const ProductCreatePage = () => {
                   <FormFieldControl
                     name="storage"
                     control={control}
-                    label="Chọn Bộ nhớ"
+                    label="dung lượng"
                     render={(field) => (
-                      <MultiSelectField
-                        field={field}
+                      <SelectField
+                        {...field}
+                        isMulti={true}
+                        placeholder="chọn dung lượng"
                         options={[
                           { label: "64GB", value: "64GB" },
                           { label: "128GB", value: "128GB" },
                           { label: "256GB", value: "256GB" },
+                          { label: "512GB", value: "512GB" },
+                          { label: "1024GB", value: "1024GB" },
                         ]}
                       />
                     )}
@@ -185,26 +186,22 @@ const ProductCreatePage = () => {
             <h1 className="px-4 py-4 text-base font-semibold border-b border-gray-300">
               Hình ảnh sản phẩm
             </h1>
-            <div className="flex flex-col gap-3 p-5">
-              <div>
-                <h3 className="block mb-2 text-xs font-medium capitalize">
-                  Media <span className="ml-1 text-red-500">*</span>
-                </h3>
-                <FormFieldControl
-                  name="images"
-                  control={control}
-                  render={(field) => (
-                    <ImageUploadField
-                      value={field.value}
-                      onChange={field.onChange}
-                      maxFiles={5}
-                    />
-                  )}
-                />
-              </div>
+            <div className="py-5 px-7">
+              <FormFieldControl
+                name="images"
+                label="Media"
+                control={control}
+                render={(field) => (
+                  <ImageUploadField
+                    value={field.value}
+                    onChange={field.onChange}
+                    maxFiles={5}
+                  />
+                )}
+              />
             </div>
           </div>
-          <ButtonSubmit>tạo sản phẩm</ButtonSubmit>
+          <PrimaryButton type="submit">tạo sản phẩm</PrimaryButton>
         </form>
       </div>
     </div>

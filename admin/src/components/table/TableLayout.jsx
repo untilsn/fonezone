@@ -2,6 +2,7 @@ import React from "react";
 import { FaSearch } from "react-icons/fa";
 import { IoFilterOutline } from "react-icons/io5";
 import Pagination from "../commons/Pagination";
+import SecondaryButton from "../button/SecondaryButton";
 
 /**
  * TableLayout Component - Provides standard layout wrapper for tables
@@ -45,7 +46,7 @@ const TableLayout = ({
     <div className="shadow bg-background-card rounded-2xl">
       {/* Header Section */}
       <div className="flex items-center justify-between p-5">
-        <div className="flex items-center gap-3 p-2 border-b border-gray-300 max-w-[250px] w-full">
+        <div className="flex w-full max-w-[250px] items-center gap-3 border-b border-gray-300 p-2">
           <FaSearch className="text-gray-500" />
           <input
             type="search"
@@ -56,14 +57,13 @@ const TableLayout = ({
         </div>
 
         {showFilter && (
-          <div>
-            <button
-              className="flex items-center gap-3 px-4 py-3 text-gray-600 capitalize transition-all border border-gray-300 rounded-lg shadow hover:text-primary-active hover:shadow-md"
+          <div className="flex">
+            <SecondaryButton
               onClick={handleFilter}
+              icon={<IoFilterOutline size={22} />}
             >
-              <IoFilterOutline size={22} />
-              <span>Filter</span>
-            </button>
+              Filter
+            </SecondaryButton>
           </div>
         )}
       </div>

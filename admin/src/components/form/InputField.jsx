@@ -15,7 +15,7 @@ const InputField = ({
     type === "password" ? (showPassword ? "text" : "password") : type;
 
   return (
-    <div className={clsx("relative w-full", className)}>
+    <div className="relative">
       <input
         id={name}
         name={name}
@@ -27,12 +27,13 @@ const InputField = ({
           "w-full rounded-lg border border-gray-300 p-3 text-sm",
           "focus:ring-primary outline-none placeholder:font-normal placeholder:text-gray-600 placeholder:capitalize focus:ring",
           type === "password" && "pr-10",
+          className,
         )}
       />
       {type === "password" && (
         <button
           type="button"
-          className="absolute text-gray-600 -translate-y-1/2 top-1/2 right-3 focus:outline-none"
+          className="absolute right-0 text-gray-600 -translate-y-1/2 top-1/2 focus:outline-none"
           onClick={() => setShowPassword((prev) => !prev)}
         >
           {showPassword ? <FaEye /> : <FaEyeSlash />}

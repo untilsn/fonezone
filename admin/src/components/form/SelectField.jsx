@@ -15,6 +15,7 @@ const SelectField = ({
   isMulti = false, // Make it multi-selectable
   isDisabled = false,
 }) => {
+  console.log(options);
   const handleChange = (selectedOptions) => {
     // For multi-select, map the selected options to their values
     onChange(
@@ -75,7 +76,7 @@ const SelectField = ({
     }),
     menu: (base) => ({
       ...base,
-      zIndex: 9999, // Ensure the menu is on top
+      zIndex: 40, // Ensure the menu is on top
     }),
   };
 

@@ -2,6 +2,7 @@ import clsx from "clsx";
 import React from "react";
 import { FaSearch } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import SecondaryButton from "../button/SecondaryButton";
 
 const Header = ({ user }) => {
   return (
@@ -18,11 +19,8 @@ const Header = ({ user }) => {
 
       {/* user info */}
       <div className="flex items-center gap-5 text-sm">
-        <Link
-          to="/admin/auth"
-          className="px-4 py-2 font-semibold border border-gray-500 rounded-lg"
-        >
-          Sign up
+        <Link to="/admin/auth">
+          <SecondaryButton>Sign up</SecondaryButton>
         </Link>
 
         <div>

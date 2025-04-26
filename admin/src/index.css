@@ -81,8 +81,9 @@ body {
   @apply bg-background-body text-text-body font-sans text-[14.3px] leading-relaxed font-medium;
 }
 
+/* index.css */
 button {
-  @apply cursor-pointer;
+  @apply cursor-pointer rounded-[0.3125rem] px-4 py-2 font-semibold capitalize shadow-sm transition-all;
 }
 
 ::-webkit-scrollbar {

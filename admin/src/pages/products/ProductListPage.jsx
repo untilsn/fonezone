@@ -1,11 +1,12 @@
-import React, { useState } from "react";
-import HeaderPage from "../../components/header/HeaderPage";
-import TableLayout from "../../components/table/TableLayout";
-import { ProductColumn } from "../../components/table/columns/ProductColumn";
-import Table from "../../components/table/Table";
-import MainButton from "../../components/commons/MainButton";
-import productData from "../../components/table/columns/productData";
+import React from "react";
 import { CiExport } from "react-icons/ci";
+import { Link } from "react-router-dom";
+import PrimaryButton from "../../components/button/PrimaryButton";
+import HeaderPage from "../../components/header/HeaderPage";
+import { ProductColumn } from "../../components/table/columns/ProductColumn";
+import productData from "../../components/table/columns/productData";
+import Table from "../../components/table/Table";
+import TableLayout from "../../components/table/TableLayout";
 
 const ProductListPage = () => {
   const handleView = (product) => {
@@ -27,11 +28,18 @@ const ProductListPage = () => {
   return (
     <div>
       <HeaderPage title="Danh sách sản phẩm">
-        <MainButton>thêm sản phẩm mới</MainButton>
-        <button className="flex items-center gap-2 px-4 py-2 capitalize rounded-sm bg-primary/20 text-primary">
-          <CiExport size={20} />
-          export excel
-        </button>
+        <Link to={"/admin/products/create"} className="w-[180px]">
+          <PrimaryButton isLoading={false}>thêm sản phẩm mới</PrimaryButton>
+        </Link>
+        <div className="w-[160px]">
+          <PrimaryButton
+            isLoading={false}
+            icon={<CiExport size={20} />}
+            variant="secondary"
+          >
+            export excel
+          </PrimaryButton>
+        </div>
       </HeaderPage>
       <TableLayout>
         <Table data={productData} columns={columns} />

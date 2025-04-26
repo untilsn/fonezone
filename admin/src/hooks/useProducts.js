@@ -2,7 +2,13 @@ import { useEffect, useState } from "react";
 import { useDebounce } from "use-debounce";
 import { getAllProduct } from "../api/productApi";
 
-export const useProducts = (filters, sortOption, searchQuery, currentPage, productsPerPage) => {
+export const useProducts = (
+  filters,
+  sortOption,
+  searchQuery,
+  currentPage,
+  productsPerPage,
+) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [filteredProducts, setFilteredProducts] = useState([]);
@@ -45,7 +51,13 @@ export const useProducts = (filters, sortOption, searchQuery, currentPage, produ
     };
 
     fetchProducts();
-  }, [debouncedFilters, debouncedSort, debouncedSearch, debouncedPage, productsPerPage]);
+  }, [
+    debouncedFilters,
+    debouncedSort,
+    debouncedSearch,
+    debouncedPage,
+    productsPerPage,
+  ]);
 
   return { products, filteredProducts, setFilteredProducts, loading };
 };
