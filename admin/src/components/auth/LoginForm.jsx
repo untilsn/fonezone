@@ -15,7 +15,7 @@ const LoginForm = () => {
   const { login, loginWithGoogle } = useAuth();
   const { control, handleSubmit } = useForm({
     mode: "onSubmit",
-    defaultValue: {
+    defaultValues: {
       email: "",
       password: "",
     },
@@ -34,12 +34,12 @@ const LoginForm = () => {
         <img
           src="https://docs.material-tailwind.com/icons/google.svg"
           alt="google"
-          className="w-4 h-4"
+          className="h-4 w-4"
         />
         đăng nhập bằng google
       </SecondaryButton>
       <div className="relative my-10 h-[1px] bg-gray-200">
-        <span className="absolute px-3 text-sm -translate-x-1/2 -translate-y-1/2 bg-background-body top-1/2 left-1/2">
+        <span className="bg-background-body absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 px-3 text-sm">
           or
         </span>
       </div>
@@ -48,7 +48,7 @@ const LoginForm = () => {
         control={control}
         label="địa chỉ email"
         render={(flied) => {
-          return <InputField name="email" placeholder="email@gmail" />;
+          return <InputField {...flied} placeholder="email@gmail" />;
         }}
       />
       <FormFieldControl
@@ -57,17 +57,13 @@ const LoginForm = () => {
         label="mật khẩu"
         render={(flied) => {
           return (
-            <InputField
-              name="password"
-              placeholder="********"
-              type="password"
-            />
+            <InputField {...flied} placeholder="********" type="password" />
           );
         }}
       />
       <Link
         to={"/admin/auth/password-forget"}
-        className="block mb-5 ml-auto text-sm text-left text-gray-800 transition-all hover:text-primary-active"
+        className="hover:text-primary-active mb-5 ml-auto block text-left text-sm text-gray-800 transition-all"
       >
         Quên mật khẩu?
       </Link>

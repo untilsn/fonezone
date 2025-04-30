@@ -6,6 +6,7 @@ const SecondaryButton = ({
   children,
   isLoading,
   disabled,
+  className,
   type = "button",
   onClick,
 }) => {
@@ -18,6 +19,7 @@ const SecondaryButton = ({
         "flex w-full items-center justify-center gap-2 rounded px-4 py-2 font-semibold capitalize shadow",
         "hover:text-primary-active border border-gray-300 text-gray-600 transition-all hover:shadow-md",
         (disabled || isLoading) && "cursor-not-allowed opacity-50",
+        className,
       )}
     >
       {isLoading ? (

@@ -15,7 +15,6 @@ const SelectField = ({
   isMulti = false, // Make it multi-selectable
   isDisabled = false,
 }) => {
-  console.log(options);
   const handleChange = (selectedOptions) => {
     // For multi-select, map the selected options to their values
     onChange(

@@ -5,6 +5,8 @@ export const useQueryHook = ({ queryKey, queryFn, options = {} }) => {
   return useQuery({
     queryKey,
     queryFn,
+    staleTime: 5 * 60 * 1000,
+    refetchOnWindowFocus: false,
     ...options,
     onError: (err) => {
       const message = err?.response?.data?.message || "lỗi tải dữ liệu";

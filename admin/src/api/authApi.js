@@ -44,7 +44,7 @@ export const resetPasswordApi = async (data) => {
 };
 
 export const refreshTokenApi = async () => {
-  const res = await apiClient.post("/api/auth/refresh_token");
+  const res = await apiClient.post("/api/auth/refresh-token");
   return res.data;
 };
 

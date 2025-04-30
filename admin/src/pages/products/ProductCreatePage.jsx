@@ -10,6 +10,8 @@ import HeaderPage from "../../components/header/HeaderPage";
 import { useBrand } from "../../hooks/queries/useBrand";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { productSchema } from "../../utils/productSchema";
+import { useQueryHook } from "../../hooks/useQueryHook";
+import { useBrands } from "../../hooks/useBrands";
 
 const defaultValues = {
   name: "",
@@ -32,6 +34,7 @@ const defaultValues = {
 };
 
 const ProductCreatePage = () => {
+  const { getAllBrands } = useBrands();
   const { control, handleSubmit } = useForm({
     mode: "onSubmit",
     defaultValues,
@@ -39,7 +42,8 @@ const ProductCreatePage = () => {
   });
 
   const { data: brands, isLoading } = useBrand();
-  console.log(brands);
+  const { data } = useQueryHook("brands", getAllBrands());
+  console.log(data);
 
   const handleCreateProduct = (values) => {
     console.log(values);
@@ -53,8 +57,8 @@ const ProductCreatePage = () => {
           onSubmit={handleSubmit(handleCreateProduct)}
           className="flex flex-col gap-5"
         >
-          <div className="border border-gray-300 shadow-lg rounded-xl">
-            <h1 className="px-4 py-4 text-base font-semibold border-b border-gray-300">
+          <div className="rounded-xl border border-gray-300 shadow-lg">
+            <h1 className="border-b border-gray-300 px-4 py-4 text-base font-semibold">
               Thông tin sản phẩm
             </h1>
             <div className="flex flex-col gap-3 p-5">
@@ -68,7 +72,7 @@ const ProductCreatePage = () => {
                 )}
               />
               {/* price n discount */}
-              <div className="flex items-center justify-center w-full gap-10">
+              <div className="flex w-full items-center justify-center gap-10">
                 <div className="w-1/2">
                   <FormFieldControl
                     control={control}
@@ -99,7 +103,7 @@ const ProductCreatePage = () => {
                 </div>
               </div>
               {/* category n brand */}
-              <div className="flex items-center w-full gap-10">
+              <div className="flex w-full items-center gap-10">
                 <div className="w-1/2">
                   <FormFieldControl
                     control={control}
@@ -128,11 +132,11 @@ const ProductCreatePage = () => {
                 </div>
               </div>
               {/* ram n storage */}
-              <div className="flex items-center justify-center w-full gap-10">
+              <div className="flex w-full items-center justify-center gap-10">
                 <div className="w-1/2">
                   <FormFieldControl
-                    name="ram"
                     control={control}
+                    name="ram"
                     label="Bộ nhớ"
                     render={(field) => (
                       <SelectField
@@ -146,6 +150,14 @@ const ProductCreatePage = () => {
                         ]}
                       />
                     )}
+                    onChange={(value) => {
+                      field.onChange(
+                        value.map((item) => ({
+                          size: item,
+                          priceDifference: 0,
+                        })),
+                      );
+                    }}
                   />
                 </div>
                 <div className="w-1/2">
@@ -182,11 +194,11 @@ const ProductCreatePage = () => {
             </div>
           </div>
           {/* uplaod image */}
-          <div className="border border-gray-300 shadow-lg rounded-xl">
-            <h1 className="px-4 py-4 text-base font-semibold border-b border-gray-300">
+          <div className="rounded-xl border border-gray-300 shadow-lg">
+            <h1 className="border-b border-gray-300 px-4 py-4 text-base font-semibold">
               Hình ảnh sản phẩm
             </h1>
-            <div className="py-5 px-7">
+            <div className="px-7 py-5">
               <FormFieldControl
                 name="images"
                 label="Media"

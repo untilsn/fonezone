@@ -143,7 +143,7 @@ export const useAuth = () => {
       await logoutUserApi();
       localStorage.removeItem("access_token");
       dispatch(logoutUser());
-      navigate("/login");
+      // navigate("/login");
     } catch (error) {
       console.error("Lỗi khi đăng xuất:", error);
     }

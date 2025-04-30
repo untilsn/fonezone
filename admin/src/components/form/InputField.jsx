@@ -33,7 +33,7 @@ const InputField = ({
       {type === "password" && (
         <button
           type="button"
-          className="absolute right-0 text-gray-600 -translate-y-1/2 top-1/2 focus:outline-none"
+          className="absolute top-1/2 right-0 -translate-y-1/2 text-gray-600 focus:outline-none"
           onClick={() => setShowPassword((prev) => !prev)}
         >
           {showPassword ? <FaEye /> : <FaEyeSlash />}

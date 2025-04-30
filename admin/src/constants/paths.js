@@ -12,4 +12,8 @@ export const paths = {
     create: "/admin/products/create",
     edit: (slug) => `/admin/products/${slug}/edit`,
   },
+  brands: {
+    list: "/admin/brands",
+    create: "/admin/brands/create",
+  },
 };

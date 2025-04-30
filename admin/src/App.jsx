@@ -18,11 +18,13 @@ import BrandListPage from "./pages/brands/BrandListPage";
 import CategoryListPage from "./pages/categories/CategoryListPage";
 import OrderListPage from "./pages/orders/OrderListPage";
 import ProfilePage from "./pages/ProfilePage";
+import FormModalLayout from "./Layout/FormModalLayout";
 
 const App = () => {
   return (
     <Routes>
       {/* Redirect từ / sang admin */}
+
       <Route path="/" element={<Navigate to="/admin" />} />
 
       {/* Trang không tìm thấy */}

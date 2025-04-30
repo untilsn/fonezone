@@ -16,7 +16,7 @@ const FormFieldControl = ({ name, control, label, render }) => {
                   className={clsx("mb-2 block text-xs font-medium capitalize")}
                   htmlFor={name}
                 >
-                  {label} <span className="ml-1 text-danger">*</span>
+                  {label} <span className="text-danger ml-1">*</span>
                 </label>
               )}
               <div className="w-full">{render(field)}</div>

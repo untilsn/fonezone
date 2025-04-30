@@ -8,8 +8,10 @@ export const useBrands = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const getAllBrands = () => {
-    return getAllBrandsApi();
+  const getAllBrands = async () => {
+    const data = await getAllBrandsApi();
+    console.log(data, "brnad hôk");
+    return data;
   };
 
   return { getAllBrands };
