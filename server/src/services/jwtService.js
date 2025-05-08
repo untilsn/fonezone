@@ -10,14 +10,17 @@ export const verifyRefreshToken = async (refreshToken) => {
 
     const user = await User.findById(decoded.id);
     if (!user) {
-      throw new CustomError(401, "Người dùng không tồn tại. Vui lòng đăng nhập lại!");
+      throw new CustomError(
+        401,
+        "Người dùng không tồn tại. Vui lòng đăng nhập lại!"
+      );
     }
-
-    const { accessToken } = generateTokens({ id: user._id, role: user.role });
-
-    return accessToken;
+    const { access_token } = generateTokens({ id: user._id, role: user.role });
+    return access_token;
   } catch (error) {
-    throw new CustomError(401, "Refresh Token không hợp lệ hoặc đã hết hạn. Vui lòng đăng nhập lại!");
+    throw new CustomError(
+      401,
+      "Refresh Token không hợp lệ hoặc đã hết hạn. Vui lòng đăng nhập lại!"
+    );
   }
 };
-

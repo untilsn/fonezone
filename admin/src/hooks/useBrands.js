@@ -1,18 +1,41 @@
-import { useQueryClient } from "@tanstack/react-query";
-import { apiClient } from "../api/apiClient";
-import { getAllBrandsApi } from "../api/brandsApi";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { brandService } from "../../services/brandService";
+import { useApiHandler } from "./useApiHandler";
 
 export const useBrands = () => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const { useMutationHook, useQueryHook } = useApiHandler();
 
-  const getAllBrands = async () => {
-    const data = await getAllBrandsApi();
-    console.log(data, "brnad hôk");
-    return data;
+  const useGetAllBrands = (params) => {
+    const allBrand = useQueryHook(["brands", params], () =>
+      brandService.getAll(params),
+    );
+    console.log(allBrand);
+    return allBrand;
   };
 
-  return { getAllBrands };
+  const useCreateBrand = (options) => {
+    return useMutationHook(({ ...data }) => brandService.create(data), options);
+  };
+
+  const useUpdateBrand = (options) => {
+    return useMutationHook(
+      ({ id, ...data }) => brandService.update(id, data),
+      options,
+    );
+  };
+
+  const useToogleActiveBrand = (options) => {
+    return useMutationHook(({ id }) => brandService.toggleActive(id), options);
+  };
+
+  const useDeleteBrand = (options) => {
+    return useMutationHook(({ id }) => brandService.delete(id), options);
+  };
+
+  return {
+    useGetAllBrands,
+    useCreateBrand,
+    useUpdateBrand,
+    useToogleActiveBrand,
+    useDeleteBrand,
+  };
 };

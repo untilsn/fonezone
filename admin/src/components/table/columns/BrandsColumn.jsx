@@ -74,8 +74,9 @@ export const BrandsColumn = ({ onEdit, onDelete, onToggleActive }) => {
     }),
 
     // Actions
-    columnHelper.display({
-      id: "actions",
+    columnHelper.accessor("action", {
+      header: "thao tác",
+      enableSorting: false,
       cell: ({ row }) => (
         <TableActionButton
           onEdit={() => onEdit(row.original)}

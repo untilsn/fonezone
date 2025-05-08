@@ -8,6 +8,8 @@ import {
 } from "@tanstack/react-table";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import { FaAnglesLeft, FaAnglesRight } from "react-icons/fa6";
+import { FaCaretDown, FaCaretUp } from "react-icons/fa6";
+import clsx from "clsx";
 
 /**
  * Reusable Table Component with built-in sorting, selection and pagination
@@ -126,14 +128,28 @@ const Table = ({
                         header.getContext(),
                       )}
                       {header.column.getCanSort() && header.id !== "select" && (
-                        <>
-                          {{
-                            asc: <span>▲</span>,
-                            desc: <span>▼</span>,
-                          }[header.column.getIsSorted()] ?? (
-                            <span className="text-xs text-gray-300">▲▼</span>
-                          )}
-                        </>
+                        <div className="flex flex-col justify-center text-[14px] transition-all">
+                          <span
+                            className={clsx(
+                              "-mb-1",
+                              header.column.getIsSorted() === "asc"
+                                ? "text-primary-active"
+                                : "text-gray-300",
+                            )}
+                          >
+                            <FaCaretUp />
+                          </span>
+                          <span
+                            className={clsx(
+                              "-mt-1",
+                              header.column.getIsSorted() === "desc"
+                                ? "text-primary-active"
+                                : "text-gray-300",
+                            )}
+                          >
+                            <FaCaretDown />
+                          </span>
+                        </div>
                       )}
                     </div>
                   )}

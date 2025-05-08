@@ -19,61 +19,66 @@ import CategoryListPage from "./pages/categories/CategoryListPage";
 import OrderListPage from "./pages/orders/OrderListPage";
 import ProfilePage from "./pages/ProfilePage";
 import FormModalLayout from "./Layout/FormModalLayout";
+import CustomToastify from "./components/ui/CustomToastify";
 
 const App = () => {
   return (
-    <Routes>
-      {/* Redirect từ / sang admin */}
+    <div>
+      <CustomToastify></CustomToastify>
 
-      <Route path="/" element={<Navigate to="/admin" />} />
+      <Routes>
+        {/* Redirect từ / sang admin */}
 
-      {/* Trang không tìm thấy */}
-      <Route path="*" element={<NotFoundPage />} />
+        <Route path="/" element={<Navigate to="/admin" />} />
 
-      {/* Trang đăng nhập */}
-      <Route path="/admin/auth" element={<AuthLayout />}>
-        <Route index element={<Navigate to="login" />} />
-        <Route path="login" element={<LoginForm />} />
-        <Route path="password-forget" element={<ForgetPasswordForm />} />
-      </Route>
+        {/* Trang không tìm thấy */}
+        <Route path="*" element={<NotFoundPage />} />
 
-      {/* Admin layout chính */}
-      <Route path="/admin" element={<DashboardLayout />}>
-        {/* Dashboard */}
-        <Route index element={<Navigate to="dashboard" />} />
-        <Route path="dashboard" element={<DashboardPage />} />
-        <Route path="user-profile" element={<ProfilePage />} />
-
-        {/* Users */}
-        <Route path="users">
-          <Route index element={<UserListPage />} />
-          <Route path="create" element={<UserCreatePage />} />
-          <Route path=":id/edit" element={<UserEditPage />} />
+        {/* Trang đăng nhập */}
+        <Route path="/admin/auth" element={<AuthLayout />}>
+          <Route index element={<Navigate to="login" />} />
+          <Route path="login" element={<LoginForm />} />
+          <Route path="password-forget" element={<ForgetPasswordForm />} />
         </Route>
 
-        {/* Products */}
-        <Route path="products">
-          <Route index element={<ProductListPage />} />
-          <Route path="create" element={<ProductCreatePage />} />
-          <Route path=":slug/edit" element={<ProductEditPage />} />
-        </Route>
+        {/* Admin layout chính */}
+        <Route path="/admin" element={<DashboardLayout />}>
+          {/* Dashboard */}
+          <Route index element={<Navigate to="dashboard" />} />
+          <Route path="dashboard" element={<DashboardPage />} />
+          <Route path="user-profile" element={<ProfilePage />} />
 
-        {/* Brands */}
-        <Route path="brands">
-          <Route index element={<BrandListPage />} />
-        </Route>
+          {/* Users */}
+          <Route path="users">
+            <Route index element={<UserListPage />} />
+            <Route path="create" element={<UserCreatePage />} />
+            <Route path=":id/edit" element={<UserEditPage />} />
+          </Route>
 
-        {/* Categories */}
-        <Route path="categories">
-          <Route index element={<CategoryListPage />} />
-        </Route>
+          {/* Products */}
+          <Route path="products">
+            <Route index element={<ProductListPage />} />
+            <Route path="create" element={<ProductCreatePage />} />
+            <Route path=":slug/edit" element={<ProductEditPage />} />
+          </Route>
 
-        {/* Orders */}
-        <Route path="orders">
-          <Route index element={<OrderListPage />} />
+          {/* Brands */}
+          <Route path="brands">
+            <Route index element={<BrandListPage />} />
+          </Route>
+
+          {/* Categories */}
+          <Route path="categories">
+            <Route index element={<CategoryListPage />} />
+          </Route>
+
+          {/* Orders */}
+          <Route path="orders">
+            <Route index element={<OrderListPage />} />
+          </Route>
         </Route>
-      </Route>
-    </Routes>
+      </Routes>
+    </div>
   );
 };
 

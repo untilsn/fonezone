@@ -3,6 +3,7 @@ import { FaSearch } from "react-icons/fa";
 import { IoFilterOutline } from "react-icons/io5";
 import Pagination from "../commons/Pagination";
 import SecondaryButton from "../button/SecondaryButton";
+import SelectField from "../form/SelectField";
 
 /**
  * TableLayout Component - Provides standard layout wrapper for tables
@@ -29,6 +30,8 @@ const TableLayout = ({
   totalItems = 0,
   visibleItems = 0,
   paginationProps = {},
+  pageSize = 10,
+  onchangePageSize,
 }) => {
   const handleSearch = (e) => {
     if (onSearch) {
@@ -72,16 +75,26 @@ const TableLayout = ({
       <div className="w-full">{children}</div>
 
       {/* Footer Section */}
-      {/* {showPagination && (
-        <div className="flex items-center justify-between p-5">
-          {totalItems > 0 && (
-            <div className="text-sm text-gray-600">
-              Hiển thị {visibleItems} trên {totalItems}
-            </div>
-          )}
-          <Pagination {...paginationProps} />
+      <div className="flex items-center justify-between">
+        {showPagination && (
+          <div className="flex items-center justify-between p-5">
+            {/* {totalItems > 0 && (
+              <div className="text-sm text-gray-600">
+                Hiển thị {visibleItems} trên {totalItems}
+              </div>
+            )} */}
+            <Pagination {...paginationProps} />
+          </div>
+        )}
+
+        <div>
+          <SelectField
+            value={pageSize}
+            onChange={onchangePageSize}
+            placeholder=""
+          ></SelectField>
         </div>
-      )} */}
+      </div>
     </div>
   );
 };

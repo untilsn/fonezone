@@ -3,6 +3,7 @@ import {
   createBrandController,
   deleteBrandController,
   getAllBrandsController,
+  toogleActiveBrandController,
   updateBrandController,
 } from "../../controllers/brandController.js";
 import { validate } from "../../middlewares/validateMiddleware.js";
@@ -19,6 +20,7 @@ brandRouter.get("/", getAllBrandsController);
 adminBrandRouter
   .post("/", validate(brandValidation), createBrandController)
   .patch("/:id", checkIdParam, validate(brandValidation), updateBrandController)
+  .patch("/:id/toogle-active", checkIdParam, toogleActiveBrandController)
   .delete("/:id", checkIdParam, deleteBrandController);
 
 export { brandRouter, adminBrandRouter };

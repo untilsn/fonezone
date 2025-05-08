@@ -14,6 +14,8 @@ const Header = ({ user }) => {
         <div className="flex items-center gap-2 rounded-xl border border-gray-400 px-3">
           <FaSearch />
           <input
+            id="search-input"
+            name="search"
             placeholder="Search..."
             className="text-dark border-none p-2 outline-none placeholder:text-gray-500"
             type="text"

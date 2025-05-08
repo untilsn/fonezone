@@ -36,11 +36,11 @@ export const ProductColumn = ({ onView, onEdit, onDelete }) => {
         const { image, name } = row.original;
         return (
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 overflow-hidden bg-gray-100 rounded">
+            <div className="h-10 w-10 overflow-hidden rounded bg-gray-100">
               <img
                 src={image || "/api/placeholder/40/40"}
                 alt={name}
-                className="object-cover w-full h-full"
+                className="h-full w-full object-cover"
               />
             </div>
             <span className="font-medium">{name}</span>
@@ -84,7 +84,7 @@ export const ProductColumn = ({ onView, onEdit, onDelete }) => {
     columnHelper.accessor("price", {
       header: "giá",
       cell: ({ getValue }) => (
-        <span className="font-medium text-success">
+        <span className="text-success font-medium">
           {formatPrice(getValue())}
         </span>
       ),
@@ -107,7 +107,6 @@ export const ProductColumn = ({ onView, onEdit, onDelete }) => {
     columnHelper.display({
       id: "actions",
       cell: ({ row }) => {
-        console.log(row.original);
         return (
           <div className="">
             <TableActionButton

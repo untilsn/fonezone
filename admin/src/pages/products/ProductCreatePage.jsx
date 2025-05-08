@@ -7,7 +7,6 @@ import InputField from "../../components/form/InputField";
 import SelectField from "../../components/form/SelectField";
 import TextEditorField from "../../components/form/TextEditorField";
 import HeaderPage from "../../components/header/HeaderPage";
-import { useBrand } from "../../hooks/queries/useBrand";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { productSchema } from "../../utils/productSchema";
 import { useQueryHook } from "../../hooks/useQueryHook";
@@ -34,16 +33,18 @@ const defaultValues = {
 };
 
 const ProductCreatePage = () => {
-  const { getAllBrands } = useBrands();
+  // const { getAllBrands } = useBrands();
   const { control, handleSubmit } = useForm({
     mode: "onSubmit",
     defaultValues,
     resolver: yupResolver(productSchema),
   });
 
-  const { data: brands, isLoading } = useBrand();
-  const { data } = useQueryHook("brands", getAllBrands());
-  console.log(data);
+  // const { data: brands, isLoading } = useBrand();
+  // const {
+  //   data: [],
+  // } = useQueryHook("brands", getAllBrands());
+  // console.log(data);
 
   const handleCreateProduct = (values) => {
     console.log(values);
@@ -57,8 +58,8 @@ const ProductCreatePage = () => {
           onSubmit={handleSubmit(handleCreateProduct)}
           className="flex flex-col gap-5"
         >
-          <div className="rounded-xl border border-gray-300 shadow-lg">
-            <h1 className="border-b border-gray-300 px-4 py-4 text-base font-semibold">
+          <div className="border border-gray-300 shadow-lg rounded-xl">
+            <h1 className="px-4 py-4 text-base font-semibold border-b border-gray-300">
               Thông tin sản phẩm
             </h1>
             <div className="flex flex-col gap-3 p-5">
@@ -72,7 +73,7 @@ const ProductCreatePage = () => {
                 )}
               />
               {/* price n discount */}
-              <div className="flex w-full items-center justify-center gap-10">
+              <div className="flex items-center justify-center w-full gap-10">
                 <div className="w-1/2">
                   <FormFieldControl
                     control={control}
@@ -103,7 +104,7 @@ const ProductCreatePage = () => {
                 </div>
               </div>
               {/* category n brand */}
-              <div className="flex w-full items-center gap-10">
+              <div className="flex items-center w-full gap-10">
                 <div className="w-1/2">
                   <FormFieldControl
                     control={control}
@@ -112,10 +113,10 @@ const ProductCreatePage = () => {
                     render={(field) => (
                       <SelectField
                         {...field}
-                        options={brands?.data?.map((brand) => ({
-                          label: brand.name,
-                          value: brand._id,
-                        }))}
+                        // options={brands?.data?.map((brand) => ({
+                        //   label: brand.name,
+                        //   value: brand._id,
+                        // }))}
                       />
                     )}
                   />
@@ -132,7 +133,7 @@ const ProductCreatePage = () => {
                 </div>
               </div>
               {/* ram n storage */}
-              <div className="flex w-full items-center justify-center gap-10">
+              <div className="flex items-center justify-center w-full gap-10">
                 <div className="w-1/2">
                   <FormFieldControl
                     control={control}
@@ -194,11 +195,11 @@ const ProductCreatePage = () => {
             </div>
           </div>
           {/* uplaod image */}
-          <div className="rounded-xl border border-gray-300 shadow-lg">
-            <h1 className="border-b border-gray-300 px-4 py-4 text-base font-semibold">
+          <div className="border border-gray-300 shadow-lg rounded-xl">
+            <h1 className="px-4 py-4 text-base font-semibold border-b border-gray-300">
               Hình ảnh sản phẩm
             </h1>
-            <div className="px-7 py-5">
+            <div className="py-5 px-7">
               <FormFieldControl
                 name="images"
                 label="Media"

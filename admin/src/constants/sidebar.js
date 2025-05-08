@@ -50,16 +50,16 @@ export const sidebarMenuItems = [
     basePath: "/admin",
     items: [
       { key: "brandList", title: "Danh sách thương hiệu", to: "/brands" },
-      {
-        key: "brandCreate",
-        title: "Thêm thương hiệu mới",
-        to: "/brands/create",
-      },
-      {
-        key: "brandEdit",
-        title: "Chỉnh sửa thương hiệu",
-        to: "/brands/:id/edit",
-      },
+      // {
+      //   key: "brandCreate",
+      //   title: "Thêm thương hiệu mới",
+      //   to: "/brands/create",
+      // },
+      // {
+      //   key: "brandEdit",
+      //   title: "Chỉnh sửa thương hiệu",
+      //   to: "/brands/:id/edit",
+      // },
     ],
   },
   {
@@ -68,16 +68,16 @@ export const sidebarMenuItems = [
     basePath: "/admin",
     items: [
       { key: "categoryList", title: "Danh sách danh mục", to: "/categories" },
-      {
-        key: "categoryCreate",
-        title: "Thêm danh mục mới",
-        to: "/categories/create",
-      },
-      {
-        key: "categoryEdit",
-        title: "Chỉnh sửa danh mục",
-        to: "/categories/:id/edit",
-      },
+      // {
+      //   key: "categoryCreate",
+      //   title: "Thêm danh mục mới",
+      //   to: "/categories/create",
+      // },
+      // {
+      //   key: "categoryEdit",
+      //   title: "Chỉnh sửa danh mục",
+      //   to: "/categories/:id/edit",
+      // },
     ],
   },
   {

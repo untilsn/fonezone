@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import { FaArrowLeftLong, FaArrowRightLong } from "react-icons/fa6";
 
 const Pagination = ({
@@ -59,16 +60,15 @@ const Pagination = ({
   };
 
   return (
-    <div className="flex items-center justify-center gap-2 ">
+    <div className="flex items-center justify-center gap-2">
       <button
-        className="flex items-center gap-2"
+        className="flex items-center gap-2 text-gray-600 bg-gray-100"
         variant="text"
         color="blue"
         onClick={prev}
         disabled={active === 1}
       >
-        <FaArrowLeftLong className="mb-[2px]" />
-        trang trước
+        <FaAngleLeft />
       </button>
       <div className="flex items-center gap-2">
         {getVisiblePages().map((page, index) =>
@@ -79,25 +79,24 @@ const Pagination = ({
           ) : (
             <button
               key={page}
-              className={` px-2 py-3 hover:border transition-all ${
+              className={`px-2 py-2 transition-all hover:border ${
                 active === page ? "text-yellow border" : ""
               }`}
               {...getItemProps(page)}
             >
               {page}
             </button>
-          )
+          ),
         )}
       </div>
       <button
-        className="flex items-center gap-2"
+        className="flex items-center gap-2 text-gray-600 bg-gray-100"
         variant="text"
         color="blue"
         onClick={next}
         disabled={active === pageCount}
       >
-        trang sau
-        <FaArrowRightLong className="mb-[2px]" />
+        <FaAngleRight />
       </button>
     </div>
   );

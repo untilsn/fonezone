@@ -151,7 +151,6 @@ export const refreshTokenController = async (req, res, next) => {
         message: "Không tìm thấy Refresh Token. Vui lòng đăng nhập lại!",
       });
     }
-
     const newAccessToken = await verifyRefreshToken(refreshToken);
     return res.status(200).json({
       success: true,

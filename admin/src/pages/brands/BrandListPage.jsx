@@ -1,85 +1,131 @@
 import React, { useState } from "react";
-import HeaderPage from "../../components/header/HeaderPage";
-import { Link } from "react-router-dom";
-import PrimaryButton from "../../components/button/PrimaryButton";
-import TableLayout from "../../components/table/TableLayout";
-import Table from "../../components/table/Table";
 import { CiExport } from "react-icons/ci";
-import { useQuery } from "@tanstack/react-query";
-import { getAllBrandsApi } from "../../api/brandsApi";
 import { toast } from "react-toastify";
+import PrimaryButton from "../../components/button/PrimaryButton";
+import HeaderPage from "../../components/header/HeaderPage";
 import BrandsColumn from "../../components/table/columns/BrandsColumn";
+import Table from "../../components/table/Table";
+import TableLayout from "../../components/table/TableLayout";
+import { useBrands } from "../../hooks/useBrands";
 import FormModalLayout from "../../Layout/FormModalLayout";
-import BrandFormModal from "./BrandFormModal";
+import CreateBrandForm from "./CreateBrandForm";
+import EditBrandForm from "./EditBrandForm";
+import swal from "sweetalert";
+import LoadingState from "../../components/commons/LoadingState";
+import ErrorState from "../../components/commons/ErrorState";
 
 const BrandListPage = () => {
   const [showModal, setShowModal] = useState(false);
-  const [editBrand, setEditBrand] = useState(null);
-
-  const handleOpenModal = (brand = null) => {
-    setEditBrand(brand);
-    setShowModal(true);
-  };
-
-  const handleCloseModal = () => {
-    setEditBrand(null);
-    setShowModal(false);
-  };
+  const [formType, setFormType] = useState("create"); // 'create' | 'edit'
+  const [selectedBrand, setSelectedBrand] = useState(null);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [searchTerm, setSearchTerm] = useState("");
+  const {
+    useGetAllBrands,
+    useCreateBrand,
+    useUpdateBrand,
+    useToogleActiveBrand,
+    useDeleteBrand,
+  } = useBrands();
 
   const {
-    data: brands = [],
+    data: brands,
     isLoading,
     isError,
-    error,
     refetch,
-  } = useQuery({
-    queryKey: ["brands"],
-    queryFn: getAllBrandsApi,
-    staleTime: 5 * 60 * 1000,
-    refetchOnWindowFocus: false,
-    onError: (err) => {
-      const message =
-        err?.response?.data?.message || "Lỗi tải danh sách thương hiệu";
-      toast.error(message);
+  } = useGetAllBrands({
+    search: searchTerm,
+    limit: pageSize,
+    page,
+  });
+
+  console.log(brands);
+  const createBrandMutation = useCreateBrand({
+    onSuccess: () => {
+      refetch();
+      handleCloseModal();
     },
   });
 
-  const handleSubmit = async (data) => {
-    try {
-      if (editBrand) {
-        await updateBrandApi(editBrand._id, data);
-        toast.success("Cập nhật thương hiệu thành công");
-      } else {
-        await createBrandApi(data);
-        toast.success("Thêm thương hiệu thành công");
-      }
+  const updateBrandMutation = useUpdateBrand({
+    onSuccess: () => {
       refetch();
       handleCloseModal();
-    } catch (error) {
-      const message = error?.response?.data?.message || "Lỗi xử lý thương hiệu";
-      toast.error(message);
-    }
+    },
+  });
+
+  const toggleActiveMutation = useToogleActiveBrand({
+    onSuccess: () => refetch(),
+  });
+
+  const deleteBrandMutation = useDeleteBrand({
+    onSuccess: () => refetch(),
+  });
+
+  const handleOpenCreate = () => {
+    setFormType("create");
+    setSelectedBrand(null);
+    setShowModal(true);
   };
 
   const handleEdit = (brand) => {
-    handleOpenModal(brand);
+    setFormType("edit");
+    setSelectedBrand(brand);
+    setShowModal(true);
+  };
+
+  const handleCreateBrand = (data) => {
+    createBrandMutation.mutate(data);
+  };
+
+  const handleUpdateBrand = (id, data) => {
+    updateBrandMutation.mutate({ id, ...data });
+  };
+
+  const handleToggleActive = (brand) => {
+    toggleActiveMutation.mutate({ id: brand._id });
   };
 
   const handleDelete = (brand) => {
-    toast.warn(
-      `Chức năng xoá thương hiệu "${brand?.name}" chưa được phát triển`,
-    );
+    swal({
+      title: "Bạn có chắc muốn xóa?",
+      text: `Thương hiệu "${brand.name}" sẽ bị xóa khỏi hệ thống!`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Xóa",
+      cancelButtonText: "Hủy",
+    }).then((result) => {
+      if (result) {
+        deleteBrandMutation.mutate({ id: brand._id });
+        swal(
+          "Đã xóa thương hiệu!",
+          `Thương hiệu ${brand.name} đã được xóa khỏi hệ thống`,
+          "success",
+        );
+      }
+    });
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setSelectedBrand(null);
+    setFormType("create");
   };
 
   const columns = BrandsColumn({
+    onToggleActive: handleToggleActive,
     onEdit: handleEdit,
     onDelete: handleDelete,
   });
 
   return (
     <div>
+      {/* Header và nút thêm */}
       <HeaderPage title="Danh sách thương hiệu">
-        <PrimaryButton onClick={() => handleOpenModal()} className="w-[200px]">
+        <PrimaryButton onClick={handleOpenCreate} className="w-[200px]">
           Thêm thương hiệu mới
         </PrimaryButton>
         <PrimaryButton
@@ -91,25 +137,38 @@ const BrandListPage = () => {
         </PrimaryButton>
       </HeaderPage>
 
-      <TableLayout>
+      {/* Bảng danh sách */}
+      <TableLayout
+        totalItems={brands?.data?.length || 0}
+        visibleItems={Math.min(pageSize, brands?.data?.length || 0)}
+        paginationProps={{ page, pageSize, onPageChange: setPage }}
+        pageSize={pageSize}
+        onChangePageSize={(value) => setPageSize(value)}
+      >
         {isLoading ? (
-          <div className="p-4 text-center">Đang tải danh sách...</div>
+          <LoadingState />
         ) : isError ? (
-          <div className="p-4 text-center text-red-500">
-            Đã xảy ra lỗi khi tải dữ liệu.
-          </div>
+          <ErrorState />
         ) : (
           <Table data={brands?.data || []} columns={columns} />
         )}
       </TableLayout>
 
+      {/* Modal form tạo / sửa */}
       {showModal && (
         <FormModalLayout onClose={handleCloseModal}>
-          <BrandFormModal
-            brand={editBrand}
-            onSubmit={handleSubmit}
-            onClose={handleCloseModal}
-          />
+          {formType === "create" ? (
+            <CreateBrandForm
+              onSubmit={handleCreateBrand}
+              isLoading={createBrandMutation.isPending}
+            />
+          ) : (
+            <EditBrandForm
+              brand={selectedBrand}
+              onSubmit={handleUpdateBrand}
+              isLoading={updateBrandMutation.isPending}
+            />
+          )}
         </FormModalLayout>
       )}
     </div>

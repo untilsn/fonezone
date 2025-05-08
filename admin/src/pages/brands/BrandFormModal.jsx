@@ -1,95 +1,86 @@
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
+import { useBrands } from "../../hooks/useBrands";
+import { useMutationHook } from "../../hooks/useMutation";
 import FormFieldControl from "../../components/form/FormFieldControl";
 import InputField from "../../components/form/InputField";
 import SecondaryButton from "../../components/button/SecondaryButton";
 import PrimaryButton from "../../components/button/PrimaryButton";
 
-const BrandFormModal = ({ brand, onSubmit, onClose }) => {
+const BrandFormModal = ({ brand = null, onClose, onSuccess }) => {
+  const { createBrands, updateBrand } = useBrands();
+  const { mutate: createBrand, isPending: isCreating } =
+    useMutationHook(createBrands);
+  const { mutate: updateBrandMutation, isPending: isUpdating } =
+    useMutationHook(updateBrand);
+
   const {
     control,
-    register,
     handleSubmit,
-    formState: { errors },
     reset,
+    formState: { errors },
   } = useForm({
     defaultValues: {
       name: brand?.name || "",
     },
   });
 
-  // Reset form when brand prop changes
   useEffect(() => {
-    if (brand) {
-      reset({
-        name: brand.name || "",
-      });
-    } else {
-      reset({
-        name: "",
-      });
-    }
+    reset({
+      name: brand?.name || "",
+    });
   }, [brand, reset]);
 
-  const submitForm = (data) => {
-    onSubmit(data);
+  const onSubmit = (data) => {
+    if (brand) {
+      updateBrandMutation(
+        { id: brand._id, ...data },
+        {
+          onSuccess: () => {
+            toast.success("Cập nhật thương hiệu thành công");
+            onSuccess?.();
+          },
+          onError: (err) => {
+            toast.error(err?.response?.data?.message || "Lỗi khi cập nhật");
+          },
+        },
+      );
+    } else {
+      createBrand(data, {
+        onSuccess: () => {
+          toast.success("Thêm thương hiệu thành công");
+          onSuccess?.();
+        },
+        onError: (err) => {
+          toast.error(
+            err?.response?.data?.message || "Lỗi khi thêm thương hiệu",
+          );
+        },
+      });
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit(submitForm)} className="w-full">
+    <form onSubmit={handleSubmit(onSubmit)} className="w-full">
       <h2 className="mb-4 text-xl font-semibold">
         {brand ? "Chỉnh sửa thương hiệu" : "Thêm thương hiệu mới"}
       </h2>
 
       <FormFieldControl
         control={control}
-        name="brand"
-        label="tên thuơng hiệu "
+        name="name"
+        label="Tên thương hiệu"
         render={(field) => (
-          <InputField {...field} placeholder="nhập tên thương hiệu mới" />
+          <InputField {...field} placeholder="Nhập tên thương hiệu" />
         )}
       />
 
-      {/* <div className="mb-4">
-        <label className="block mb-1 text-sm font-medium">Mô tả</label>
-        <textarea
-          className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 focus:outline-none"
-          rows="3"
-          placeholder="Nhập mô tả thương hiệu"
-          {...register("description")}
-        />
-      </div>
-
-      <div className="mb-4">
-        <label className="block mb-1 text-sm font-medium">Logo URL</label>
-        <input
-          type="text"
-          className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 focus:outline-none"
-          placeholder="Nhập đường dẫn logo"
-          {...register("logo")}
-        />
-      </div>
-
-      <div className="mb-4">
-        <label className="block mb-1 text-sm font-medium">Trạng thái</label>
-        <select
-          className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 focus:outline-none"
-          {...register("status")}
-        >
-          <option value="active">Hoạt động</option>
-          <option value="inactive">Không hoạt động</option>
-        </select>
-      </div> */}
-
       <div className="mt-6 flex justify-end gap-2">
-        <SecondaryButton
-          type="button"
-          className="max-w-[100px]"
-          onClick={onClose}
-        >
+        <SecondaryButton type="button" onClick={onClose}>
           Hủy
         </SecondaryButton>
-        <PrimaryButton type="submit" className="max-w-[200px]">
+        <PrimaryButton type="submit" isLoading={isCreating || isUpdating}>
           {brand ? "Cập nhật" : "Tạo mới"}
         </PrimaryButton>
       </div>

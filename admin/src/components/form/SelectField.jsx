@@ -2,9 +2,12 @@ import React from "react";
 import Select from "react-select";
 
 const defaultBrands = [
-  { label: "Apple", value: "apple" },
-  { label: "Samsung", value: "samsung" },
-  { label: "Xiaomi", value: "xiaomi" },
+  // { label: "Apple", value: "apple" },
+  // { label: "Samsung", value: "samsung" },
+  // { label: "Xiaomi", value: "xiaomi" },
+  { label: "10", value: 10 },
+  { label: "20", value: 20 },
+  { label: "30", value: 30 },
 ];
 
 const SelectField = ({
