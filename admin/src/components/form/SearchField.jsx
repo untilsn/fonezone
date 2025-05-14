@@ -11,7 +11,7 @@ const SearchField = ({
   className = "",
 }) => {
   return (
-    <div className="bg-light col-span-2 flex w-full items-center rounded-3xl">
+    <div className="bg-light col-span-2 flex w-full max-w-[250px] items-center border-b border-gray-300">
       <span className="px-5">
         <VscSearch />
       </span>
@@ -23,7 +23,7 @@ const SearchField = ({
         placeholder={placeholder}
         type={type}
         className={clsx(
-          "h-full w-full border-none bg-transparent p-2 py-3 text-sm outline-none",
+          "h-full w-full border-none bg-transparent p-2 py-3 text-sm font-medium outline-none placeholder:text-gray-500",
           className,
         )}
       ></input>

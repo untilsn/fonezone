@@ -1,4 +1,4 @@
-import { apiClient } from "../src/api/apiClient";
+import { apiClient } from "../api/apiClient";
 
 const BASE_ENDPOINT = "api/brands";
 const ADMIN_ENDPOINT = "api/admin/brands";

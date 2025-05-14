@@ -8,7 +8,6 @@ export const useBrands = () => {
     const allBrand = useQueryHook(["brands", params], () =>
       brandService.getAll(params),
     );
-    console.log(allBrand);
     return allBrand;
   };
 

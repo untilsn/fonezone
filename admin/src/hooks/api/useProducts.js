@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDebounce } from "use-debounce";
-import { getAllProduct } from "../api/productApi";
+import { getAllProduct } from "../../api/productApi";
 
 export const useProducts = (
   filters,

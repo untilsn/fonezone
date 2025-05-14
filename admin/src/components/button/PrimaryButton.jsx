@@ -21,7 +21,7 @@ const PrimaryButton = ({
         variant === "primary" &&
           "bg-primary hover:bg-primary-active text-white",
         variant === "secondary" &&
-          "text-primary hover:bg-primary bg-gray-200 shadow-2xl hover:text-white",
+          "text-primary hover:bg-primary bg-gray-300 shadow-2xl hover:text-white",
         (disabled || isLoading) && "cursor-not-allowed opacity-50",
         className,
       )}

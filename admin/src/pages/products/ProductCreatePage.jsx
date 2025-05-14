@@ -1,4 +1,4 @@
-import React from "react";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import PrimaryButton from "../../components/button/PrimaryButton";
 import FormFieldControl from "../../components/form/FormFieldControl";
@@ -7,10 +7,7 @@ import InputField from "../../components/form/InputField";
 import SelectField from "../../components/form/SelectField";
 import TextEditorField from "../../components/form/TextEditorField";
 import HeaderPage from "../../components/header/HeaderPage";
-import { yupResolver } from "@hookform/resolvers/yup";
 import { productSchema } from "../../utils/productSchema";
-import { useQueryHook } from "../../hooks/useQueryHook";
-import { useBrands } from "../../hooks/useBrands";
 
 const defaultValues = {
   name: "",

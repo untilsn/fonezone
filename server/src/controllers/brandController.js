@@ -9,18 +9,12 @@ import {
 
 export const getAllBrandsController = async (req, res, next) => {
   try {
-    const { page = 1, limit = 10, search } = req.query;
+    const { search } = req.query;
 
-    const brands = await getAllBrands({
-      page: parseInt(page),
-      limit: parseInt(limit),
-      search,
-    });
+    const brands = await getAllBrands(search);
     return res.status(200).json({
       success: true,
-      data: brands.brands,
-      total: brands.total,
-      totalPage: brands.totalPage,
+      data: brands,
       message: "Lấy danh sách thương hiệu thành công!",
     });
   } catch (error) {

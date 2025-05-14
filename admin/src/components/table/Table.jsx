@@ -1,15 +1,16 @@
-import React, { useState, useEffect, useMemo } from "react";
 import {
-  useReactTable,
-  getCoreRowModel,
-  getSortedRowModel,
-  getPaginationRowModel,
   flexRender,
+  getCoreRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
 } from "@tanstack/react-table";
-import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
-import { FaAnglesLeft, FaAnglesRight } from "react-icons/fa6";
-import { FaCaretDown, FaCaretUp } from "react-icons/fa6";
 import clsx from "clsx";
+import { useEffect, useMemo, useState } from "react";
+import { FaCaretDown, FaCaretUp } from "react-icons/fa6";
+import LoadingTableSkeleton from "../commons/LoadingTableSkeleton";
+import ErrorState from "../commons/ErrorState";
+import EmptyState from "../commons/EmptyState";
 
 /**
  * Reusable Table Component with built-in sorting, selection and pagination
@@ -28,17 +29,17 @@ const Table = ({
   columns = [],
   enableSelection = true,
   onSelectionChange = null,
-  enablePagination = true,
   tableOptions = {},
+  isLoading = false,
+  isError = false,
+  rowSelection,
+  onRowSelectionChange,
+  emptyMessage = "No data found",
   className = "",
 }) => {
   const [sorting, setSorting] = useState([]);
-  const [rowSelection, setRowSelection] = useState({});
-  const [pagination, setPagination] = useState({
-    pageIndex: 0,
-    pageSize: 10,
-  });
 
+  console.log(rowSelection);
   // Add selection column if enableSelection is true
   const finalColumns = useMemo(() => {
     if (!enableSelection) return columns;
@@ -86,14 +87,11 @@ const Table = ({
     state: {
       sorting,
       rowSelection,
-      pagination,
     },
     onSortingChange: setSorting,
-    onRowSelectionChange: setRowSelection,
-    onPaginationChange: setPagination,
+    onRowSelectionChange,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
     enableRowSelection: enableSelection,
     ...tableOptions,
   });
@@ -159,74 +157,40 @@ const Table = ({
           ))}
         </thead>
         <tbody>
-          {table.getRowModel().rows.map((row) => (
-            <tr
-              key={row.id}
-              className="border-t border-gray-300 hover:bg-gray-100"
-            >
-              {row.getVisibleCells().map((cell) => (
-                <td key={cell.id} className="px-4 py-3">
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </td>
-              ))}
+          {isLoading ? (
+            // Hiển thị 10 hàng skeleton
+            <LoadingTableSkeleton
+              rows={data.length || 10}
+              columnCount={table.getAllLeafColumns().length}
+            />
+          ) : isError ? (
+            <tr>
+              <td colSpan={table.getAllColumns().length}>
+                <ErrorState />
+              </td>
             </tr>
-          ))}
+          ) : data.length === 0 ? (
+            <tr>
+              <td colSpan={table.getAllColumns().length}>
+                <EmptyState />
+              </td>
+            </tr>
+          ) : (
+            table.getRowModel().rows.map((row) => (
+              <tr
+                key={row.id}
+                className="border-t border-gray-300 hover:bg-gray-100"
+              >
+                {row.getVisibleCells().map((cell) => (
+                  <td key={cell.id} className="px-4 py-3">
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </td>
+                ))}
+              </tr>
+            ))
+          )}
         </tbody>
       </table>
-
-      {/* Pagination Controls - Only shown if enablePagination is true */}
-      {enablePagination && (
-        <div className="flex items-center justify-between px-4 py-3 bg-white border-t border-gray-300">
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => table.setPageIndex(0)}
-              disabled={!table.getCanPreviousPage()}
-              className="px-2 py-1 text-sm bg-gray-100 rounded disabled:opacity-50"
-            >
-              <FaAnglesLeft />
-            </button>
-            <button
-              onClick={() => table.previousPage()}
-              disabled={!table.getCanPreviousPage()}
-              className="px-2 py-1 text-sm bg-gray-100 rounded disabled:opacity-50"
-            >
-              <FaAngleLeft />
-            </button>
-            <span className="text-sm">
-              Trang{" "}
-              <strong>
-                {table.getState().pagination.pageIndex + 1} /{" "}
-                {table.getPageCount()}
-              </strong>
-            </span>
-            <button
-              onClick={() => table.nextPage()}
-              disabled={!table.getCanNextPage()}
-              className="px-2 py-1 text-sm bg-gray-100 rounded disabled:opacity-50"
-            >
-              <FaAngleRight />
-            </button>
-            <button
-              onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-              disabled={!table.getCanNextPage()}
-              className="px-2 py-1 text-sm bg-gray-100 rounded disabled:opacity-50"
-            >
-              <FaAnglesRight />
-            </button>
-          </div>
-          <select
-            value={table.getState().pagination.pageSize}
-            onChange={(e) => table.setPageSize(Number(e.target.value))}
-            className="px-2 py-1 text-sm bg-white border border-gray-300 rounded"
-          >
-            {[10, 20, 30, 40, 50].map((pageSize) => (
-              <option key={pageSize} value={pageSize}>
-                Hiển thị {pageSize}
-              </option>
-            ))}
-          </select>
-        </div>
-      )}
     </div>
   );
 };

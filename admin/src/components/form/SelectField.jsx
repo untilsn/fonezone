@@ -5,9 +5,9 @@ const defaultBrands = [
   // { label: "Apple", value: "apple" },
   // { label: "Samsung", value: "samsung" },
   // { label: "Xiaomi", value: "xiaomi" },
-  { label: "10", value: 10 },
-  { label: "20", value: 20 },
-  { label: "30", value: 30 },
+  { label: "Hiển thị 10", value: 10 },
+  { label: "Hiển thị 20", value: 20 },
+  { label: "Hiển thị 30", value: 30 },
 ];
 
 const SelectField = ({

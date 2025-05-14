@@ -4,96 +4,103 @@ import { IoFilterOutline } from "react-icons/io5";
 import Pagination from "../commons/Pagination";
 import SecondaryButton from "../button/SecondaryButton";
 import SelectField from "../form/SelectField";
+import SearchField from "../form/SearchField";
 
 /**
- * TableLayout Component - Provides standard layout wrapper for tables
- * with search, filter and pagination controls
- *
- * @param {Object} props
- * @param {ReactNode} props.children - Table component
- * @param {Function} props.onSearch - Search callback function
- * @param {Function} props.onFilter - Filter callback function
- * @param {string} props.searchPlaceholder - Placeholder for search input
- * @param {boolean} props.showFilter - Show filter button
- * @param {boolean} props.showPagination - Show pagination component
- * @param {number} props.totalItems - Total number of items
- * @param {number} props.visibleItems - Number of items visible
- * @param {Object} props.paginationProps - Props for Pagination component
+ * TableLayout Component - A flexible layout wrapper for tables with configurable controls
  */
 const TableLayout = ({
   children,
-  onSearch,
-  onFilter,
-  searchPlaceholder = "Tìm kiếm",
-  showFilter = true,
-  showPagination = true,
-  totalItems = 0,
-  visibleItems = 0,
-  paginationProps = {},
-  pageSize = 10,
-  onchangePageSize,
+  // Table control props
+  controls = {
+    search: true,
+    filter: false,
+    pageSize: false,
+    pagination: true,
+  },
+  // Table data props
+  tableData = {
+    totalItems: 0,
+    visibleItems: 0,
+    currentPage: 1,
+    pageSize: 10,
+  },
+  // Callback handlers
+  handlers = {
+    onSearch: () => {},
+    onFilter: () => {},
+    onChangePageSize: () => {},
+    onPageChange: () => {},
+  },
 }) => {
-  const handleSearch = (e) => {
-    if (onSearch) {
-      onSearch(e.target.value);
-    }
-  };
+  // Destructure for easier access
+  const { search, filter, pageSize, pagination } = controls;
+  const { totalItems, visibleItems } = tableData;
+  const { onSearch, onFilter, onChangePageSize, onPageChange } = handlers;
 
-  const handleFilter = () => {
-    if (onFilter) {
-      onFilter();
-    }
-  };
+  // Handler for search input
+  const handleSearch = (e) => onSearch(e.target.value);
+
+  // Page size options
+  const pageSizeOptions = [
+    { value: "10", label: "10 / trang" },
+    { value: "20", label: "20 / trang" },
+    { value: "50", label: "50 / trang" },
+    { value: "100", label: "100 / trang" },
+  ];
 
   return (
-    <div className="shadow bg-background-card rounded-2xl">
-      {/* Header Section */}
-      <div className="flex items-center justify-between p-5">
-        <div className="flex w-full max-w-[250px] items-center gap-3 border-b border-gray-300 p-2">
-          <FaSearch className="text-gray-500" />
-          <input
-            type="search"
-            className="w-full border-none outline-none placeholder:text-gray-600"
-            placeholder={searchPlaceholder}
-            onChange={handleSearch}
-          />
-        </div>
+    <div className="p-4 bg-white rounded-lg shadow-sm">
+      {/* Header Controls */}
+      <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
+        <div className="flex items-center flex-grow gap-2">
+          {search && (
+            <div className="w-full max-w-[300px]">
+              <SearchField placeholder="Tìm kiếm..." onChange={handleSearch} />
+            </div>
+          )}
 
-        {showFilter && (
-          <div className="flex">
+          {filter && (
             <SecondaryButton
-              onClick={handleFilter}
-              icon={<IoFilterOutline size={22} />}
+              onClick={onFilter}
+              icon={<IoFilterOutline size={18} />}
+              className="ml-2"
             >
               Filter
             </SecondaryButton>
+          )}
+        </div>
+
+        {pageSize && (
+          <div className="w-[150px]">
+            <SelectField
+              options={pageSizeOptions}
+              onChange={(e) => onChangePageSize(e.target.value)}
+              value={tableData.pageSize.toString()}
+            />
           </div>
         )}
       </div>
 
       {/* Table Content */}
-      <div className="w-full">{children}</div>
+      <div className="mb-4">{children}</div>
 
-      {/* Footer Section */}
-      <div className="flex items-center justify-between">
-        {showPagination && (
-          <div className="flex items-center justify-between p-5">
-            {/* {totalItems > 0 && (
-              <div className="text-sm text-gray-600">
-                Hiển thị {visibleItems} trên {totalItems}
-              </div>
-            )} */}
-            <Pagination {...paginationProps} />
+      {/* Footer */}
+      <div className="flex flex-wrap items-center justify-between mt-4">
+        {totalItems > 0 && (
+          <div className="text-sm text-gray-500">
+            Hiển thị {visibleItems} trên {totalItems}
           </div>
         )}
 
-        <div>
-          <SelectField
-            value={pageSize}
-            onChange={onchangePageSize}
-            placeholder=""
-          ></SelectField>
-        </div>
+        {pagination && totalItems > 0 && (
+          <Pagination
+            currentPage={tableData.currentPage}
+            totalItems={totalItems}
+            itemsPerPage={tableData.pageSize}
+            onPageChange={onPageChange}
+          />
+        )}
       </div>
     </div>
   );

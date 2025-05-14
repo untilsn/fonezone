@@ -1,26 +1,29 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { CiExport } from "react-icons/ci";
 import { toast } from "react-toastify";
+import { useDebounce } from "use-debounce";
+
 import PrimaryButton from "../../components/button/PrimaryButton";
 import HeaderPage from "../../components/header/HeaderPage";
 import BrandsColumn from "../../components/table/columns/BrandsColumn";
 import Table from "../../components/table/Table";
 import TableLayout from "../../components/table/TableLayout";
-import { useBrands } from "../../hooks/useBrands";
 import FormModalLayout from "../../Layout/FormModalLayout";
+import { utils, write, writeFileXLSX } from "xlsx";
+
+import { useBrands } from "../../hooks/api/useBrands";
+import { confirmDelete } from "../../utils/confirmDelete";
 import CreateBrandForm from "./CreateBrandForm";
 import EditBrandForm from "./EditBrandForm";
-import swal from "sweetalert";
-import LoadingState from "../../components/commons/LoadingState";
-import ErrorState from "../../components/commons/ErrorState";
 
 const BrandListPage = () => {
   const [showModal, setShowModal] = useState(false);
-  const [formType, setFormType] = useState("create"); // 'create' | 'edit'
+  const [formType, setFormType] = useState("create");
   const [selectedBrand, setSelectedBrand] = useState(null);
-  const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
+  const [rowSelection, setRowSelection] = useState({});
   const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearchTerm] = useDebounce(searchTerm, 500);
+
   const {
     useGetAllBrands,
     useCreateBrand,
@@ -35,12 +38,9 @@ const BrandListPage = () => {
     isError,
     refetch,
   } = useGetAllBrands({
-    search: searchTerm,
-    limit: pageSize,
-    page,
+    search: debouncedSearchTerm,
   });
 
-  console.log(brands);
   const createBrandMutation = useCreateBrand({
     onSuccess: () => {
       refetch();
@@ -62,6 +62,11 @@ const BrandListPage = () => {
   const deleteBrandMutation = useDeleteBrand({
     onSuccess: () => refetch(),
   });
+
+  const handleSearch = (value) => {
+    setSearchTerm(value);
+    setPage(1);
+  };
 
   const handleOpenCreate = () => {
     setFormType("create");
@@ -88,24 +93,10 @@ const BrandListPage = () => {
   };
 
   const handleDelete = (brand) => {
-    swal({
+    confirmDelete({
       title: "Bạn có chắc muốn xóa?",
       text: `Thương hiệu "${brand.name}" sẽ bị xóa khỏi hệ thống!`,
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#d33",
-      cancelButtonColor: "#3085d6",
-      confirmButtonText: "Xóa",
-      cancelButtonText: "Hủy",
-    }).then((result) => {
-      if (result) {
-        deleteBrandMutation.mutate({ id: brand._id });
-        swal(
-          "Đã xóa thương hiệu!",
-          `Thương hiệu ${brand.name} đã được xóa khỏi hệ thống`,
-          "success",
-        );
-      }
+      onConfirm: () => deleteBrandMutation.mutate({ id: brand._id }),
     });
   };
 
@@ -113,6 +104,24 @@ const BrandListPage = () => {
     setShowModal(false);
     setSelectedBrand(null);
     setFormType("create");
+  };
+
+  const exportToExcel = (selectedRows, allData) => {
+    const dataToExport = selectedRows.length > 0 ? selectedRows : allData;
+
+    const ws = utils.json_to_sheet(dataToExport);
+
+    const wb = utils.book_new();
+    utils.book_append_sheet(wb, ws, "Brands");
+
+    writeFileXLSX(wb, "brands_data.xlsx");
+  };
+
+  const handleExport = () => {
+    const selectedRows = Object.keys(rowSelection)
+      .filter((key) => rowSelection[key]) // Lọc các dòng được chọn
+      .map((key) => brands.data[key]); // Lấy dữ liệu từ các dòng đã chọn
+    exportToExcel(selectedRows, brands.data);
   };
 
   const columns = BrandsColumn({
@@ -123,38 +132,42 @@ const BrandListPage = () => {
 
   return (
     <div>
-      {/* Header và nút thêm */}
       <HeaderPage title="Danh sách thương hiệu">
-        <PrimaryButton onClick={handleOpenCreate} className="w-[200px]">
-          Thêm thương hiệu mới
-        </PrimaryButton>
+        <div className="w-[250px]">
+          <PrimaryButton onClick={handleOpenCreate}>
+            Thêm thương hiệu mới
+          </PrimaryButton>
+        </div>
         <PrimaryButton
           icon={<CiExport size={20} />}
           variant="secondary"
-          onClick={() => toast.info("Chức năng đang phát triển")}
+          onClick={handleExport}
+          className="max-w-[200px]"
         >
           Export Excel
         </PrimaryButton>
       </HeaderPage>
 
-      {/* Bảng danh sách */}
       <TableLayout
-        totalItems={brands?.data?.length || 0}
-        visibleItems={Math.min(pageSize, brands?.data?.length || 0)}
-        paginationProps={{ page, pageSize, onPageChange: setPage }}
-        pageSize={pageSize}
-        onChangePageSize={(value) => setPageSize(value)}
+        controls={{
+          search: true,
+          filter: false,
+          pageSize: false,
+          pagination: false,
+        }}
+        handlers={{ onSearch: handleSearch }}
       >
-        {isLoading ? (
-          <LoadingState />
-        ) : isError ? (
-          <ErrorState />
-        ) : (
-          <Table data={brands?.data || []} columns={columns} />
-        )}
+        <Table
+          data={brands?.data || []}
+          columns={columns}
+          isLoading={isLoading}
+          isError={isError}
+          rowSelection={rowSelection}
+          onRowSelectionChange={setRowSelection}
+          emptyMessage="Không tìm thấy sản phẩm"
+        />
       </TableLayout>
 
-      {/* Modal form tạo / sửa */}
       {showModal && (
         <FormModalLayout onClose={handleCloseModal}>
           {formType === "create" ? (

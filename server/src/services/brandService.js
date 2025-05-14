@@ -1,24 +1,13 @@
 import Brand from "../models/Brand.js";
 import CustomError from "../utils/customError.js";
 
-export const getAllBrands = async ({ page, limit, search }) => {
-  console.log(page, limit, search);
+export const getAllBrands = async (search) => {
   let query = {};
 
   if (search) query.name = { $regex: search, $options: "i" };
 
-  const skip = Number(page - 1) * Number(limit);
-
-  const [brands, total] = await Promise.all([
-    Brand.find(query).skip(skip).limit(Number(limit)),
-    Brand.countDocuments(query),
-  ]);
-  console.log(brands, total, "brand total");
-  return {
-    brands,
-    total,
-    totalPage: Math.ceil(total / limit),
-  };
+  const brands = await Brand.find(query);
+  return brands;
 };
 
 export const getBrandById = async (id) => {
