@@ -10,13 +10,11 @@ export const loginWithGoogleApi = async () => {
 };
 
 export const registerUserApi = async (data) => {
-  console.log(data);
   const res = await apiClient.post("/api/auth/register", data);
   return res.data;
 };
 
 export const verifyAccountApi = async (data) => {
-  console.log(data);
   const res = await apiClient.post("/api/auth/verify-account", data);
   return res.data;
 };

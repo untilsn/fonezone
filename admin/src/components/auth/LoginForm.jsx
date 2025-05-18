@@ -1,18 +1,17 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import React from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../hooks/api/useAuth";
 import { loginSchema } from "../../utils/authSchema";
 import PrimaryButton from "../button/PrimaryButton";
 import SecondaryButton from "../button/SecondaryButton";
+import FormFieldControl from "../form/FormFieldControl";
 import InputField from "../form/InputField";
 import AuthHeader from "./AuthHeader";
-import FormFieldControl from "../form/FormFieldControl";
-import { useAuth } from "../../hooks/api/useAuth";
-import { useApiHandler } from "../../hooks/api/useApiHandler";
 
 const LoginForm = () => {
-  const { login, loginWithGoogle } = useAuth();
+  const { useLogin } = useAuth();
+  const navigate = useNavigate();
   const { control, handleSubmit } = useForm({
     mode: "onSubmit",
     defaultValues: {
@@ -21,9 +20,12 @@ const LoginForm = () => {
     },
     resolver: yupResolver(loginSchema),
   });
-  const { useMutationHook } = useApiHandler();
 
-  const { mutate: loginMutate, data, isPending } = useMutationHook(login);
+  const { mutate: loginMutate, isPending } = useLogin({
+    onSuccess: () => {
+      navigate("/");
+    },
+  });
 
   return (
     <form
@@ -63,12 +65,14 @@ const LoginForm = () => {
         }}
       />
       <Link
-        to={"/admin/auth/password-forget"}
+        to={"/admin/auth/forget-password"}
         className="block mb-5 ml-auto text-sm text-left text-gray-800 transition-all hover:text-primary-active"
       >
         Quên mật khẩu?
       </Link>
-      <PrimaryButton type="submit">đăng nhập</PrimaryButton>
+      <PrimaryButton isLoading={isPending} type="submit">
+        đăng nhập
+      </PrimaryButton>
     </form>
   );
 };

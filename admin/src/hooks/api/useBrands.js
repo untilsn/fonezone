@@ -5,10 +5,7 @@ export const useBrands = () => {
   const { useMutationHook, useQueryHook } = useApiHandler();
 
   const useGetAllBrands = (params) => {
-    const allBrand = useQueryHook(["brands", params], () =>
-      brandService.getAll(params),
-    );
-    return allBrand;
+    return useQueryHook(["brands", params], () => brandService.getAll(params));
   };
 
   const useCreateBrand = (options) => {

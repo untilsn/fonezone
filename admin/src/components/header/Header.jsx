@@ -1,12 +1,17 @@
 import clsx from "clsx";
-import React from "react";
 import { FaSearch } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import SecondaryButton from "../button/SecondaryButton";
-import { useAuth } from "../../hooks/useAuth";
+import { useAuth } from "../../hooks/api/useAuth";
 
 const Header = ({ user }) => {
-  const { logout } = useAuth();
+  const { useLogout } = useAuth(); // ✅ gọi trong body function component
+
+  const logoutMutation = useLogout(); // ✅ hook được gọi đúng chỗ
+
+  const handleLogout = () => {
+    logoutMutation.mutate();
+  };
+
   return (
     <div className="sticky top-0 left-0 right-0 z-50 px-5 py-2 bg-white border-b border-gray-200 shadow-sm">
       <div className="flex items-center justify-between mx-auto max-w-7xl">
@@ -24,20 +29,26 @@ const Header = ({ user }) => {
 
         {/* Right section */}
         <div className="flex items-center gap-5 text-sm">
-          {/* Actions */}
-
           {/* User info */}
           <div className="text-right">
-            <h1 className="font-medium capitalize text-dark">
-              {user?.name || "User Name"}
-            </h1>
-            <h2 className="text-xs text-gray-500">
-              {user?.email || "usernameemail@gmail.com"}
-            </h2>
+            {user ? (
+              <>
+                <h1 className="font-medium capitalize text-dark">
+                  {user.name || "username"}
+                </h1>
+                <h2 className="text-xs text-gray-500">
+                  {user.email || "user@gmail.com"}
+                </h2>
+              </>
+            ) : (
+              <h1 className="italic font-medium text-gray-400">
+                Chưa đăng nhập
+              </h1>
+            )}
           </div>
 
           {/* Avatar dropdown */}
-          <div className="relative group">
+          <div className="relative cursor-pointer group">
             <img
               className="object-cover w-10 h-10 rounded-full"
               src={
@@ -73,20 +84,23 @@ const Header = ({ user }) => {
                 </div>
                 <ul className="flex flex-col py-2 capitalize">
                   <li className="px-4 py-2 transition-all rounded-lg hover:text-primary hover:bg-gray-100">
-                    <Link to="/admin/auth">
-                      <button>đăng nhập</button>
+                    <Link to="/admin/auth" className="block w-full text-left">
+                      đăng nhập
                     </Link>
                   </li>
                   <li className="px-4 py-2 transition-all rounded-lg hover:text-primary hover:bg-gray-100">
-                    <button>
-                      <Link to={"/admin/user-profile"}>hồ sơ & tài khoản</Link>
-                    </button>
+                    <Link
+                      to="/admin/user-profile"
+                      className="block w-full text-left"
+                    >
+                      hồ sơ & tài khoản
+                    </Link>
                   </li>
                   <li
-                    onClick={() => logout()}
-                    className="px-4 py-2 transition-all rounded-lg hover:text-primary hover:bg-gray-100"
+                    onClick={handleLogout}
+                    className="px-4 py-2 transition-all rounded-lg cursor-pointer hover:text-primary hover:bg-gray-100"
                   >
-                    <button>đăng xuất</button>
+                    đăng xuất
                   </li>
                 </ul>
               </div>

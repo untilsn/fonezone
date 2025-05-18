@@ -11,7 +11,6 @@ const extractToken = (req) => {
 
 export const isAdmin = (req, res, next) => {
   const token = extractToken(req);
-  console.log(token, "admin");
   if (!token) {
     return res
       .status(401)

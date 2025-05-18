@@ -11,7 +11,6 @@ export const createBrandsApi = async (data) => {
 };
 
 export const editBrandsApi = async (id, data) => {
-  console.log(id, data);
   const res = await apiClient.patch(`/api/admin/brands/${id}`, data);
   return res.data;
 };

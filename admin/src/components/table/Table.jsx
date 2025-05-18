@@ -39,7 +39,6 @@ const Table = ({
 }) => {
   const [sorting, setSorting] = useState([]);
 
-  console.log(rowSelection);
   // Add selection column if enableSelection is true
   const finalColumns = useMemo(() => {
     if (!enableSelection) return columns;
@@ -53,7 +52,7 @@ const Table = ({
               type="checkbox"
               checked={table.getIsAllRowsSelected()}
               onChange={table.getToggleAllRowsSelectedHandler()}
-              className="w-4 h-4 border-gray-300 rounded"
+              className="h-4 w-4 rounded border-gray-300"
             />
           </div>
         ),
@@ -63,7 +62,7 @@ const Table = ({
               type="checkbox"
               checked={row.getIsSelected()}
               onChange={row.getToggleSelectedHandler()}
-              className="w-4 h-4 border-gray-300 rounded"
+              className="h-4 w-4 rounded border-gray-300"
             />
           </div>
         ),
@@ -98,7 +97,7 @@ const Table = ({
 
   return (
     <div className={`w-full overflow-x-auto ${className}`}>
-      <table className="min-w-full text-sm bg-white border-gray-300 border-y">
+      <table className="min-w-full border-y border-gray-300 bg-white text-sm">
         <thead className="bg-gray-50">
           {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
@@ -106,7 +105,7 @@ const Table = ({
                 <th
                   key={header.id}
                   colSpan={header.colSpan}
-                  className="px-4 py-3 font-semibold text-left text-gray-600 capitalize select-none"
+                  className="px-4 py-3 text-left font-semibold text-gray-600 capitalize select-none"
                 >
                   {header.isPlaceholder ? null : (
                     <div

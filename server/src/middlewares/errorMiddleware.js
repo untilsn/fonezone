@@ -1,8 +1,6 @@
 import CustomError from "../utils/customError.js";
 
 const errorHandle = (err, req, res, next) => {
-  console.error("Lỗi:", err);
-
   if (err instanceof CustomError) {
     return res.status(err.status).json({
       success: false,
@@ -10,7 +8,9 @@ const errorHandle = (err, req, res, next) => {
     });
   }
 
-  return res.status(500).json({ success: false, message: "Lỗi máy chủ!", error: err });
+  return res
+    .status(500)
+    .json({ success: false, message: "Lỗi máy chủ!", error: err });
 };
 
 export default errorHandle;

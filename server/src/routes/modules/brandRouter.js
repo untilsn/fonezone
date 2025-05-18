@@ -20,7 +20,7 @@ brandRouter.get("/", getAllBrandsController);
 adminBrandRouter
   .post("/", validate(brandValidation), createBrandController)
   .patch("/:id", checkIdParam, validate(brandValidation), updateBrandController)
-  .patch("/:id/toogle-active", checkIdParam, toogleActiveBrandController)
+  .patch("/:id/toggle-active", checkIdParam, toogleActiveBrandController)
   .delete("/:id", checkIdParam, deleteBrandController);
 
 export { brandRouter, adminBrandRouter };
