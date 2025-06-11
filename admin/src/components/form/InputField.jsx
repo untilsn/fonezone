@@ -11,8 +11,6 @@ const InputField = ({
   className = "",
 }) => {
   const [showPassword, setShowPassword] = useState(false);
-  const inputType =
-    type === "password" ? (showPassword ? "text" : "password") : type;
 
   return (
     <div className="relative">
@@ -21,22 +19,27 @@ const InputField = ({
         name={name}
         value={value}
         onChange={onChange}
-        type={inputType}
+        type={type === "password" ? (showPassword ? "text" : "password") : type}
         placeholder={placeholder}
         className={clsx(
-          "w-full rounded-lg border border-gray-300 p-3 text-sm",
-          "focus:ring-primary outline-none placeholder:font-normal placeholder:text-gray-600 placeholder:capitalize focus:ring",
-          type === "password" && "pr-10",
+          "block w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-3 text-sm text-gray-900",
+          "focus:border-primary focus:ring-primary transition-all outline-none",
+          "placeholder:text-gray-400",
+          type === "password" && "pr-12",
           className,
         )}
       />
       {type === "password" && (
         <button
           type="button"
-          className="absolute top-1/2 right-0 -translate-y-1/2 text-gray-600 focus:outline-none"
+          className="absolute top-1/2 right-1 -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none"
           onClick={() => setShowPassword((prev) => !prev)}
         >
-          {showPassword ? <FaEye /> : <FaEyeSlash />}
+          {showPassword ? (
+            <FaEyeSlash className="h-4 w-4" />
+          ) : (
+            <FaEye className="h-4 w-4" />
+          )}
         </button>
       )}
     </div>

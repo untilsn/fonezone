@@ -2,27 +2,29 @@ import OtpInput from "react-otp-input";
 
 const InputOtpField = ({ value, onChange }) => {
   return (
-    <div>
+    <div className="mb-1">
       <OtpInput
         value={value}
         onChange={onChange}
-        containerStyle="flex justify-center w-full gap-2"
+        containerStyle="flex justify-center w-full gap-3"
         numInputs={6}
         inputStyle={{
-          width: "3rem",
-          height: "3rem",
-          borderRadius: "0.375rem",
-          backgroundColor: "white",
-          color: "black",
-          fontSize: "1.25rem",
+          width: "3.2rem",
+          height: "3.2rem",
+          borderRadius: "0.5rem",
+          backgroundColor: "#f8fafc",
+          color: "#1e293b",
+          fontSize: "1.2rem",
+          fontWeight: "600",
           textAlign: "center",
-          border: "1px solid #212529",
+          border: "1px solid #e2e8f0",
           outline: "none",
-          transition: "all 0.3s ease-in-out",
+          transition: "all 0.2s ease",
         }}
         focusStyle={{
-          border: "2px solid #6366F1",
-          boxShadow: "0 0 8px #6366F1",
+          border: "2px solid #6366f1",
+          boxShadow: "0 0 0 3px rgba(99, 102, 241, 0.2)",
+          backgroundColor: "#ffffff",
         }}
         renderInput={(props) => <input {...props} />}
       />

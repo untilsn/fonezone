@@ -19,14 +19,11 @@ export const registerValidation = Joi.object({
     "string.max": "Mật khẩu không được vượt quá 20 ký tự",
     "any.required": "Mật khẩu là bắt buộc",
   }),
-  confirmPassword: Joi.string()
-    .valid(Joi.ref("password"))
-    .required()
-    .messages({
-      "any.only": "Mật khẩu xác nhận không khớp",
-      "string.empty": "Mật khẩu xác nhận không được để trống",
-      "any.required": "Mật khẩu xác nhận là bắt buộc",
-    }),
+  confirmPassword: Joi.string().valid(Joi.ref("password")).required().messages({
+    "any.only": "Mật khẩu xác nhận không khớp",
+    "string.empty": "Mật khẩu xác nhận không được để trống",
+    "any.required": "Mật khẩu xác nhận là bắt buộc",
+  }),
 });
 
 // Validation xác thực đăng nhập (Login)
@@ -43,7 +40,6 @@ export const loginValidation = Joi.object({
     "any.required": "Mật khẩu là bắt buộc",
   }),
 });
-
 
 export const verifyAccountValidation = Joi.object({
   email: Joi.string()
@@ -67,14 +63,12 @@ export const verifyAccountValidation = Joi.object({
     }),
 });
 
-
 export const forgotPasswordValidation = Joi.object({
   email: Joi.string().email().required().messages({
     "string.email": "Email không hợp lệ",
     "any.required": "Email là bắt buộc",
   }),
 });
-
 
 export const verifyOtpValidation = Joi.object({
   email: Joi.string().email().required().messages({
@@ -88,8 +82,6 @@ export const verifyOtpValidation = Joi.object({
   }),
 });
 
-
-
 export const resetPasswordValidation = Joi.object({
   email: Joi.string().email().required().messages({
     "string.email": "Email không hợp lệ",
@@ -100,11 +92,8 @@ export const resetPasswordValidation = Joi.object({
     "string.max": "Mật khẩu không được quá 32 ký tự",
     "any.required": "Mật khẩu mới là bắt buộc",
   }),
-  confirmNewPassword: Joi.string()
-    .valid(Joi.ref("newPassword"))
-    .required()
-    .messages({
-      "any.only": "Mật khẩu xác nhận không khớp",
-      "any.required": "Xác nhận mật khẩu là bắt buộc",
-    }),
+  confirmNewPassword: Joi.string().valid(Joi.ref("newPassword")).messages({
+    "any.only": "Mật khẩu xác nhận không khớp",
+    "any.required": "Xác nhận mật khẩu là bắt buộc",
+  }),
 });

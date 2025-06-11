@@ -1,6 +1,6 @@
 import config from "../config/env.js";
 import transporter from "../config/nodeMailer.js";
-import CustomError from "../utils/customError.js";  
+import CustomError from "../utils/customError.js";
 
 const sendEmail = async (to, subject, html) => {
   try {

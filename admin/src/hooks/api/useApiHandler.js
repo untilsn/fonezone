@@ -1,7 +1,13 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 
+/**
+ * Custom React Query hook wrapper để chuẩn hóa xử lý API, toast và callback
+ */
 export const useApiHandler = () => {
+  /**
+   * Custom useQuery với xử lý lỗi toast và callback riêng
+   */
   const useQueryHook = (queryKey, queryFn, options = {}) => {
     return useQuery({
       queryKey,
@@ -9,39 +15,42 @@ export const useApiHandler = () => {
       ...options,
       onError: (err) => {
         toast.error(err?.response?.data?.message || "Lỗi tải dữ liệu!");
-        //call back onSuccess thêm các hành động cho onSuccess
-        if (options.onError) {
+        console.error("Lỗi gọi API:", err);
+
+        if (typeof options.onError === "function") {
           options.onError(err);
         }
-
-        console.log("lỗi gọi API", err);
       },
     });
   };
 
+  /**
+   * Custom useMutation với xử lý toast, callback thành công/thất bại
+   */
   const useMutationHook = (mutationFn, options = {}) => {
     return useMutation({
       mutationFn,
       ...options,
-      onSuccess: (data) => {
-        toast.success(data.message || "Thao tác thành công");
-        //call back onSuccess thêm các hành động cho onSuccess
-        if (options.onSuccess) {
-          options.onSuccess(data);
+      onSuccess: (data, variables, context) => {
+        toast.success(data?.message || "Thao tác thành công");
+
+        if (typeof options.onSuccess === "function") {
+          options.onSuccess(data, variables, context);
         }
       },
-      onError: (err) => {
+      onError: (err, variables, context) => {
         toast.error(
-          err?.response?.data?.message || "Có lỗi xảy ra vui lòng thử lại!",
+          err?.response?.data?.message || "Có lỗi xảy ra, vui lòng thử lại!",
         );
-        //call back onError thêm các hành động cho onError
-        if (options.onError) {
-          options.onError(err);
+        console.error("Lỗi chức năng API:", err);
+
+        if (typeof options.onError === "function") {
+          options.onError(err, variables, context);
         }
-        console.log("lỗi chức năng API", err);
       },
     });
   };
+
   return {
     useQueryHook,
     useMutationHook,

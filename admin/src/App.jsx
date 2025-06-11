@@ -10,16 +10,16 @@ import UserEditPage from "./pages/users/UserEditPage";
 import UserListPage from "./pages/users/UserListPage";
 
 // Thêm các component khác nếu có
-import LoginForm from "./components/auth/LoginForm";
 import CustomToastify from "./components/ui/CustomToastify";
 import DashboardLayout from "./Layout/DashboardLayout";
 import EmailResetPassword from "./pages/auth/EmailResetPassword";
+import LoginPage from "./pages/auth/LoginPage";
+import OtpResetPassword from "./pages/auth/OtpResetPassword";
+import ResetNewPassword from "./pages/auth/ResetNewPassword";
 import BrandListPage from "./pages/brands/BrandListPage";
 import CategoryListPage from "./pages/categories/CategoryListPage";
 import OrderListPage from "./pages/orders/OrderListPage";
 import ProfilePage from "./pages/ProfilePage";
-import OtpResetPassword from "./pages/auth/OtpResetPassword";
-import ResetNewPassword from "./pages/auth/ResetNewPassword";
 
 const App = () => {
   return (
@@ -37,7 +37,7 @@ const App = () => {
         {/* Trang đăng nhập */}
         <Route path="/admin/auth" element={<AuthLayout />}>
           <Route index element={<Navigate to="login" />} />
-          <Route path="login" element={<LoginForm />} />
+          <Route path="login" element={<LoginPage />} />
           <Route path="forget-password" element={<EmailResetPassword />} />
           <Route path="forget-password/otp" element={<OtpResetPassword />} />
           <Route path="forget-password/reset" element={<ResetNewPassword />} />

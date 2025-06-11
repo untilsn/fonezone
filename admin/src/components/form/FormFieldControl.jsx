@@ -4,35 +4,27 @@ import { Controller } from "react-hook-form";
 
 const FormFieldControl = ({ name, control, label, render }) => {
   return (
-    <div>
-      <Controller
-        control={control}
-        name={name}
-        render={({ field, fieldState: { error } }) => {
-          return (
-            <div className="w-full">
-              {label && (
-                <label
-                  className={clsx("mb-2 block text-xs font-medium capitalize")}
-                  htmlFor={name}
-                >
-                  {label} <span className="text-danger ml-1">*</span>
-                </label>
-              )}
-              <div className="w-full">{render(field)}</div>
-              <p
-                className={clsx(
-                  "mt-1 min-h-[20px] text-xs",
-                  error ? "text-danger" : "text-transparent",
-                )}
-              >
-                {error ? error.message : "placeholder"}
-              </p>
-            </div>
-          );
-        }}
-      ></Controller>
-    </div>
+    <Controller
+      control={control}
+      name={name}
+      render={({ field, fieldState: { error } }) => (
+        <div className="w-full space-y-1.5">
+          {label && (
+            <label
+              className="block text-sm font-medium text-gray-700"
+              htmlFor={name}
+            >
+              {label}
+              <span className="text-danger ml-0.5">*</span>
+            </label>
+          )}
+          <div className="w-full">{render(field)}</div>
+          <p className={`text-xs ${error ? "text-danger" : "invisible"}`}>
+            {error?.message || "placeholder"}
+          </p>
+        </div>
+      )}
+    />
   );
 };
 

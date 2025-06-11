@@ -53,14 +53,13 @@ export const authService = {
 
   /** Đặt lại mật khẩu */
   resetPassword: async (data) => {
-    const res = await axiosJWT.post(`${BASE_ENDPOINT}/password/reset`, data);
+    const res = await axiosBase.post(`${BASE_ENDPOINT}/password/reset`, data);
     return res.data;
   },
 
   /** Làm mới token */
   refreshToken: async () => {
     const res = await axiosBase.post(`${BASE_ENDPOINT}/refresh-token`);
-    console.log(res.data);
     return res.data;
   },
 
