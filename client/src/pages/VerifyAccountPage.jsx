@@ -1,62 +1,73 @@
-import React from 'react';
-import { useForm } from 'react-hook-form';
-import { useLocation } from 'react-router-dom';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { Link } from 'react-router-dom';
-import { Button } from '@material-tailwind/react';
-import { FaArrowRight } from 'react-icons/fa';
-import Logo from '../components/ui/Logo';
-import InputOtp from '../components/input/InputOtp';
-import { useMutationHook } from '../hooks/useMutation';
-import { otpSchema } from '../utils/authSchema';
-import { useAuth } from '../hooks/useAuth';
-
+import React from "react";
+import { useForm } from "react-hook-form";
+import { useLocation } from "react-router-dom";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { Link } from "react-router-dom";
+import { FaArrowRight } from "react-icons/fa";
+import Logo from "../components/ui/Logo";
+import InputOtp from "../components/input/InputOtp";
+import { useMutationHook } from "../hooks/useMutation";
+import { otpSchema } from "../utils/authSchema";
+import { useAuth } from "../hooks/useAuth";
 
 const VerifyAccountPage = () => {
-  const { verifyAccount } = useAuth()
+  const { verifyAccount } = useAuth();
   const location = useLocation();
-  const email = location.state?.email || '';
+  const email = location.state?.email || "";
 
-  const { control, handleSubmit, formState: { errors } } = useForm({
-    defaultValues: { otp: '' },
-    mode: 'onSubmit',
+  const { control, handleSubmit } = useForm({
+    defaultValues: { otp: "" },
+    mode: "onSubmit",
     resolver: yupResolver(otpSchema),
   });
-  console.log(errors)
-  const { mutate, isPending } = useMutationHook((values) => verifyAccount({ ...values, email }));
+
+  const { mutate, isPending } = useMutationHook((values) =>
+    verifyAccount({ ...values, email })
+  );
 
   return (
-    <div className="bg-gradient">
-      <div className="relative container flex items-center justify-center">
-        <div className="max-w-[500px] w-full px-12 py-5 bg-white shadow-lg rounded-sm">
-          <Link to="/" className="mb-10 block">
-            <Logo width="100px" subColor="#FFD700" />
+    <div className="flex items-center justify-center min-h-screen p-4 bg-gradient-to-b from-gray-50 to-gray-100">
+      <div className="w-full max-w-md overflow-hidden bg-white border border-gray-100 shadow-sm rounded-xl">
+        <div className="p-8">
+          <Link to="/" className="inline-block mb-6">
+            <Logo width="120px" subColor="#F59E0B" />
           </Link>
 
-          <h1 className="text-lg font-semibold text-dark">Xác minh tài khoản</h1>
-          <p className="text-[13px] text-gray mb-6">
-            Vui lòng nhập mã OTP đã được gửi đến email <b>{email}</b> để xác minh tài khoản của bạn.
+          <h1 className="mb-2 text-2xl font-bold text-gray-800">
+            Xác minh tài khoản
+          </h1>
+          <p className="mb-6 text-gray-500">
+            Mã OTP đã được gửi đến <span className="font-medium">{email}</span>
           </p>
 
-          <form onSubmit={handleSubmit((values) => mutate(values))} className="flex flex-col gap-5">
-            <InputOtp name="otp" control={control} errors={errors} />
-            <Button
+          <form
+            onSubmit={handleSubmit((values) => mutate(values))}
+            className="space-y-6"
+          >
+            <InputOtp name="otp" control={control} />
+
+            <button
               type="submit"
-              loading={isPending}
-              className="flex items-center justify-center w-full rounded-lg gap-3 bg-dark hover:bg-yellowDark text-light px-6 py-3"
+              disabled={isPending}
+              className="flex items-center justify-center w-full gap-2 px-6 py-3 font-medium text-white transition-colors bg-gray-800 rounded-lg hover:bg-gray-900"
             >
-              Xác minh tài khoản <FaArrowRight className="text-sm" />
-            </Button>
+              {isPending ? (
+                "Đang xử lý..."
+              ) : (
+                <>
+                  Xác minh tài khoản <FaArrowRight className="text-sm" />
+                </>
+              )}
+            </button>
           </form>
 
-          <p className="text-center text-gray text-[13px] mt-7">
-            <button
-              onClick={() => navigate(-1)}
-              className="text-blue-400 hover:text-yellow-dark transition-colors underline"
+          <p className="mt-6 text-sm text-center text-gray-500">
+            <Link
+              to="/login"
+              className="font-medium text-blue-500 hover:text-blue-600"
             >
-              Quay lại trang trước
-            </button>
-            .
+              Quay lại trang đăng nhập
+            </Link>
           </p>
         </div>
       </div>

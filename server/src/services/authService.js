@@ -72,7 +72,7 @@ export const loginUser = async (email, password) => {
   return { access_token, refresh_token };
 };
 
-export const googleAuth = async (profile) => {
+export const googleAuth = async (profile, clientType) => {
   if (!profile.emails || profile.emails.length === 0) {
     throw new CustomError(404, "Không tìm thấy email trong tài khoản Google.");
   }
@@ -92,6 +92,7 @@ export const googleAuth = async (profile) => {
       googleId: profile.id,
       isAccountVerify: true,
       loginMethod: "google",
+      role: clientType === "admin" ? "admin" : "user",
     });
     await user.save();
   }

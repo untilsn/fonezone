@@ -10,7 +10,7 @@ import {
 } from "../services/authService.js";
 import { verifyRefreshToken } from "../services/jwtService.js";
 import { setRefreshTokenCookie } from "../utils/cookieHelper.js";
-import handleGoogleAuthError from "../middlewares/googleAuthError.js";
+// import handleGoogleAuthError from "../middlewares/googleAuthError.js";
 import generateTokens from "../utils/jwtHelper.js";
 
 const isProduction = config.NODE_ENV === "production";
@@ -37,28 +37,45 @@ export const googleAuthController = {
       "google",
       { session: false },
       async (err, user, info) => {
+        // Lấy clientType từ state parameter
+        const clientType = req.query.state || "user";
+        const redirectBase =
+          clientType === "admin" ? config.ADMIN_URL : config.CLIENT_URL;
+
         try {
           if (err) {
-            return handleGoogleAuthError(err, req, res);
+            return handleGoogleAuthError(err, req, res, clientType);
           }
           if (!user) {
             return res.redirect(
-              `${config.CLIENT_URL}/login-fail?error=authentication_failed`
+              `${redirectBase}/login-fail?error=authentication_failed`
             );
           }
 
+          console.log(user, "user");
           const { access_token, refresh_token } = await generateTokens(user);
           setRefreshTokenCookie(res, refresh_token);
+          console.log(access_token, "ac");
 
           return res.redirect(
-            `${config.CLIENT_URL}/login-success?access_token=${access_token}`
+            `${redirectBase}/login-success?access_token=${access_token}`
           );
-        } catch (error) {
-          return handleGoogleAuthError(error, req, res);
+        } catch (err) {
+          return handleGoogleAuthError(err, req, res, clientType);
         }
       }
     )(req, res, next);
   },
+};
+
+// Cập nhật handleGoogleAuthError
+const handleGoogleAuthError = (err, req, res, clientType = "user") => {
+  const redirectBase =
+    clientType === "admin" ? config.ADMIN_URL : config.CLIENT_URL;
+  console.log(err.message);
+  return res.redirect(
+    `${redirectBase}/login-fail?error=${encodeURIComponent(err.message)}`
+  );
 };
 
 // * create user

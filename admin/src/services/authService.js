@@ -13,7 +13,11 @@ export const authService = {
 
   /** Đăng nhập với Google */
   loginWithGoogle: () => {
-    window.location.href = `${import.meta.env.VITE_BACKEND_URL}${BASE_ENDPOINT}/google`;
+    window.location.href = `${import.meta.env.VITE_BACKEND_URL}${BASE_ENDPOINT}/google/admin`;
+    // Hoặc nếu muốn debug, thêm log
+    console.log(
+      `Redirecting to: ${import.meta.env.VITE_BACKEND_URL}${BASE_ENDPOINT}/google/admin`,
+    );
   },
 
   // /** Đăng ký tài khoản */

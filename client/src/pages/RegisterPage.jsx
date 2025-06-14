@@ -1,86 +1,96 @@
-import React from 'react';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { Link } from 'react-router-dom';
-import { Button } from '@material-tailwind/react';
-import { FaArrowRight } from 'react-icons/fa';
-import InputField from '../components/input/InputField';
-import Logo from '../components/ui/Logo';
-import { registerSchema } from '../utils/authSchema';
-import { useMutationHook } from '../hooks/useMutation';
-import { registerFields } from '../utils/formField';
-import { useAuth } from '../hooks/useAuth';
-
+import React from "react";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { Link } from "react-router-dom";
+import { FaArrowRight, FaGoogle } from "react-icons/fa";
+import InputField from "../components/input/InputField";
+import Logo from "../components/ui/Logo";
+import { registerSchema } from "../utils/authSchema";
+import { registerFields } from "../utils/formField";
+import { useMutationHook } from "../hooks/useMutation";
+import { useAuth } from "../hooks/useAuth";
 
 const RegisterPage = () => {
-  const { register } = useAuth()
-
+  const { register } = useAuth();
   const { control, handleSubmit } = useForm({
-    defaultValues: { email: '', password: '' },
-    mode: 'onSubmit',
+    defaultValues: { email: "", password: "" },
+    mode: "onSubmit",
     resolver: yupResolver(registerSchema),
   });
 
-  const { mutate, data, isSuccess, isPending } =
-    useMutationHook((values) => register(values))
-
+  const { mutate, isPending } = useMutationHook((values) => register(values));
 
   return (
-    <div className="py-20 bg-gradient">
-      <div className="container flex items-center justify-center">
-        {/* Card login */}
-        <div className="max-w-[500px] w-full px-12 py-5 bg-white shadow-lg rounded-sm">
-          <Link to="/" className="mb-10 block">
-            <Logo width="100px" subColor="#FFD700" />
+    <div className="flex items-center justify-center min-h-screen p-4 py-20 bg-gradient">
+      <div className="w-full max-w-md overflow-hidden bg-white border border-gray-100 shadow-sm ">
+        <div className="p-8">
+          <Link to="/" className="inline-block mb-6">
+            <Logo width="120px" subColor="#F59E0B" />
           </Link>
 
-          <h1 className="text-lg font-semibold text-dark mb-5">Đăng ký tài khoản!</h1>
-          {/* Form login */}
-          <form onSubmit={handleSubmit((values) => mutate(values))} className="flex flex-col gap-5">
-            {registerFields.map(({ name, label, icon, placeholder, type }) => (
-              <InputField
-                key={name}
-                name={name}
-                control={control}
-                label={label}
-                icon={icon}
-                placeholder={placeholder}
-                type={type}
-              />
+          <h1 className="mb-2 text-2xl font-bold text-gray-800">
+            Đăng ký tài khoản
+          </h1>
+          <p className="mb-6 text-gray-500">
+            Tạo tài khoản để bắt đầu trải nghiệm
+          </p>
+
+          <form
+            onSubmit={handleSubmit((values) => mutate(values))}
+            className="space-y-4"
+          >
+            {registerFields.map((field) => (
+              <InputField key={field.name} control={control} {...field} />
             ))}
-            <Button
+
+            <button
               type="submit"
-              loading={isPending}
-              className="flex items-center justify-center w-full mt-4 rounded-lg gap-3 bg-dark hover:bg-yellowDark text-light px-6 py-3">
-              Đăng ký <FaArrowRight className="text-sm" />
-            </Button>
-            <div className="relative my-3 h-[1px] bg-gray-200">
-              <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-3 text-sm">or</span>
+              disabled={isPending}
+              className="flex items-center justify-center w-full gap-2 px-6 py-3 font-medium text-white transition-colors bg-gray-800 rounded-lg hover:bg-gray-900"
+            >
+              {isPending ? (
+                "Đang xử lý..."
+              ) : (
+                <>
+                  Đăng ký <FaArrowRight className="text-sm" />
+                </>
+              )}
+            </button>
+
+            <div className="relative my-4">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-gray-200"></div>
+              </div>
+              <div className="relative flex justify-center">
+                <span className="px-3 text-sm text-gray-500 bg-white">
+                  hoặc
+                </span>
+              </div>
             </div>
-            {/* Login Google */}
-            <Button
+
+            <button
               type="button"
-              loading={false}
-              variant="outlined"
-              className="flex w-full items-center justify-center gap-2 rounded-lg">
-              <img src="https://docs.material-tailwind.com/icons/google.svg" alt="google" className="h-4 w-4" />
+              onClick={() => loginWithGoogle()}
+              className="flex items-center justify-center w-full gap-2 px-6 py-3 font-medium text-gray-700 transition-colors border border-gray-300 rounded-lg hover:bg-gray-50"
+            >
+              <FaGoogle className="text-blue-500" />
               Đăng ký bằng Google
-            </Button>
+            </button>
           </form>
-          {/* Register link */}
-          <p className="text-center text-gray text-[13px] mt-7">
-            Đã có tài khoản?
-            {" "}
+
+          <p className="mt-6 text-sm text-center text-gray-500">
+            Đã có tài khoản?{" "}
             <Link
               to="/login"
-              className="text-blue-400 hover:text-yellow-dark transition-colors underline">
+              className="font-medium text-blue-500 hover:text-blue-600"
+            >
               Đăng nhập
             </Link>
           </p>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default RegisterPage
+export default RegisterPage;

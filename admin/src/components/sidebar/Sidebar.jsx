@@ -1,20 +1,19 @@
-import React from "react";
+import clsx from "clsx";
+import { FaChartPie } from "react-icons/fa";
+import { NavLink } from "react-router-dom";
 import { sidebarMenuItems } from "../../constants/sidebar";
 import Logo from "../ui/Logo";
 import SidebarAccordion from "./SidebarAccodian";
-import { Link, NavLink } from "react-router-dom";
-import { FaChartPie } from "react-icons/fa";
-import clsx from "clsx";
 
 const Sidebar = () => {
   return (
-    <aside className="fixed top-0 left-0 flex flex-col justify-between w-64 h-screen text-white bg-dark">
+    <aside className="bg-dark fixed top-0 left-0 flex h-screen w-64 flex-col justify-between text-white">
       {/* Logo */}
-      <div className="px-5 py-5 border-b border-gray-800 shrink-0">
+      <div className="shrink-0 border-b border-gray-800 px-5 py-5">
         <Logo height="24px" color="#fff" subColor="#1b84ff" />
       </div>
       {/* content */}
-      <nav className="flex-1 pr-2 my-4 ml-4 mr-2 overflow-y-scroll scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-transparent">
+      <nav className="scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-transparent my-4 mr-2 ml-4 flex-1 overflow-y-scroll pr-2">
         <NavLink
           to="/admin/dashboard"
           end
@@ -23,7 +22,7 @@ const Sidebar = () => {
               "flex items-center gap-2 py-3 text-sm font-semibold transition-colors duration-200",
               isActive
                 ? "text-primary-light"
-                : "text-text-muted hover:text-primary-light"
+                : "text-text-muted hover:text-primary-light",
             )
           }
         >
@@ -41,8 +40,8 @@ const Sidebar = () => {
         ))}
       </nav>
       {/* logout */}
-      <div className="px-3 pb-3 shrink-0">
-        <button className="w-full p-2 capitalize border border-gray-800 rounded-xl">
+      <div className="shrink-0 px-3 pb-3">
+        <button className="w-full rounded-xl border border-gray-800 p-2 capitalize">
           logout
         </button>
       </div>

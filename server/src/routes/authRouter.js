@@ -20,6 +20,7 @@ import {
   verifyOtpValidation,
   forgotPasswordValidation,
 } from "../validation/authValidation.js";
+import config from "../config/env.js";
 
 const authRouter = express.Router();
 
@@ -53,11 +54,30 @@ authRouter
   )
 
   // Google Auth
+  .get("/google/:clientType", (req, res, next) => {
+    const clientType = req.params.clientType;
+    if (!["user", "admin"].includes(clientType)) {
+      return res
+        .status(404)
+        .json({ success: false, message: "url không hợp lệ" });
+    }
+
+    passport.authenticate("google", {
+      scope: ["profile", "email"],
+      state: clientType, // Truyền clientType qua state
+    })(req, res, next);
+  })
+
   .get(
-    "/google",
-    passport.authenticate("google", { scope: ["profile", "email"] })
+    "/google/callback/:clientType",
+    googleAuthController.handleGoogleCallback
   )
-  .get("/google/callback", googleAuthController.handleGoogleCallback)
+
+  // .get(
+  //   "/google",
+  //   passport.authenticate("google", { scope: ["profile", "email"] })
+  // )
+  // .get("/google/callback", googleAuthController.handleGoogleCallback)
 
   /*ADMIN AUTH ROUTES*/
   .post("/admin/login", validate(loginValidation));

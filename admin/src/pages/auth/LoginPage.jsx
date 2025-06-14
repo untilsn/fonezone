@@ -9,7 +9,7 @@ import PrimaryButton from "../../components/button/PrimaryButton";
 import { loginSchema } from "../../utils/authSchema";
 
 const LoginPage = () => {
-  const { useLogin } = useAuth();
+  const { useLogin, loginWithGoogle } = useAuth();
   const navigate = useNavigate();
   const { control, handleSubmit } = useForm({
     mode: "onSubmit",
@@ -25,6 +25,12 @@ const LoginPage = () => {
       navigate("/");
     },
   });
+  const BASE_ENDPOINT = "/api/auth";
+
+  console.log(
+    `${import.meta.env.VITE_CLIENT_URL}${BASE_ENDPOINT}/google/admin`,
+  );
+  const handleLoginGoogle = () => {};
 
   return (
     <form
@@ -38,6 +44,7 @@ const LoginPage = () => {
 
       <button
         type="button"
+        onClick={loginWithGoogle}
         className="hover:border-primary focus:ring-primary/30 flex h-11 w-full items-center justify-center gap-3 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 shadow-sm transition-all hover:bg-gray-50 hover:shadow-md focus:ring-2 focus:outline-none"
       >
         <img

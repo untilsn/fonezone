@@ -7,7 +7,7 @@ const errorHandle = (err, req, res, next) => {
       message: err.message,
     });
   }
-
+  console.log(err);
   return res
     .status(500)
     .json({ success: false, message: "Lỗi máy chủ!", error: err });

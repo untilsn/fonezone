@@ -11,7 +11,8 @@ const config = {
   //google auth
   GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID || "",
   GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET || "",
-  GOOGLE_REDIRECT_URl: process.env.GOOGLE_REDIRECT_URI || "",
+  GOOGLE_REDIRECT_URL_USER: process.env.GOOGLE_REDIRECT_URL_USER || "",
+  GOOGLE_REDIRECT_URL_ADMIN: process.env.GOOGLE_REDIRECT_URL_ADMIN || "",
   // send email
   EMAIL_CLIENT: process.env.EMAIL_CLIENT || "",
   EMAIL_APP_PASSWORD: process.env.EMAIL_APP_PASSWORD || "",

@@ -5,13 +5,13 @@ import CustomError from "../utils/customError.js";
 const generateTokens = (user) => {
   try {
     const access_token = jwt.sign(
-      { id: user._id, role: user.role },
+      { id: user._id, email: user.email, role: user.role },
       config.ACCESS_TOKEN_SECRET,
       { expiresIn: "30m" }
     );
 
     const refresh_token = jwt.sign(
-      { id: user._id },
+      { id: user._id, email: user.email, role: user.role },
       config.REFRESH_TOKEN_SECRET,
       { expiresIn: "7d" }
     );

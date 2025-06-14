@@ -22,87 +22,93 @@ const LoginPage = () => {
   const { mutate, isPending } = useMutationHook((values) => login(values));
 
   return (
-    <div className="py-20 bg-gradient">
-      <div className="container flex items-center justify-center ">
-        {/* Card login */}
-        <div className="max-w-[500px] w-full px-12 py-5 bg-white shadow-lg rounded-sm">
-          <Link to="/" className="block mb-10">
-            <Logo width="100px" subColor="#FFD700" />
+    <div className="flex items-center justify-center min-h-screen p-4 py-20 bg-gradient">
+      {/* Login Card */}
+      <div className="w-full max-w-md px-8 py-10 bg-white border border-gray-100 shadow-sm ">
+        {/* Logo and Header */}
+        <div className="mb-8 text-left">
+          <Link to="/" className="inline-block mb-6">
+            <Logo width="120px" subColor="#F59E0B" />
           </Link>
 
-          <h1 className="text-lg font-semibold text-dark">
+          <h1 className="mb-2 text-2xl font-bold text-gray-800">
             Đăng nhập Electro!
           </h1>
-          <p className="text-[13px] text-gray mb-6">
+          <p className="text-sm text-gray-500">
             Vui lòng đăng nhập vào tài khoản của bạn và bắt đầu cuộc phiêu lưu.
           </p>
+        </div>
 
-          {/* Form login */}
-          <form
-            onSubmit={handleSubmit((values) => mutate(values))}
-            className="flex flex-col gap-5"
-          >
-            {loginFields.map(({ name, label, icon, placeholder, type }) => (
-              <InputField
-                id={name}
-                key={name}
-                name={name}
-                control={control}
-                label={label}
-                icon={icon}
-                placeholder={placeholder}
-                type={type}
-              />
-            ))}
+        {/* Login Form */}
+        <form
+          onSubmit={handleSubmit((values) => mutate(values))}
+          className="space-y-6"
+        >
+          {loginFields.map(({ name, label, icon, placeholder, type }) => (
+            <InputField
+              key={name}
+              name={name}
+              control={control}
+              label={label}
+              icon={icon}
+              placeholder={placeholder}
+              type={type}
+            />
+          ))}
 
+          <div className="flex justify-end">
             <Link
               to="/reset-password"
-              className="text-[13px] text-gray self-end hover:text-yellow-dark transition-colors"
+              className="text-sm text-blue-500 transition-colors hover:text-blue-600"
             >
               Quên mật khẩu?
             </Link>
+          </div>
 
-            <Button
-              type="submit"
-              loading={isPending}
-              className="flex items-center justify-center w-full gap-3 px-6 py-3 rounded-lg bg-dark hover:bg-yellowDark text-light"
-            >
-              Đăng nhập <FaArrowRight className="text-sm" />
-            </Button>
+          <Button
+            type="submit"
+            loading={isPending}
+            className="flex items-center justify-center w-full gap-2 py-3 text-white transition-colors bg-gray-800 rounded-lg hover:bg-gray-900"
+          >
+            Đăng nhập <FaArrowRight className="text-sm" />
+          </Button>
 
-            <div className="relative my-3 h-[1px] bg-gray-200">
-              <span className="absolute px-3 text-sm -translate-x-1/2 -translate-y-1/2 bg-white top-1/2 left-1/2">
-                or
-              </span>
+          {/* Divider */}
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-gray-200" />
             </div>
+            <div className="relative flex justify-center">
+              <span className="px-3 text-sm text-gray-500 bg-white">hoặc</span>
+            </div>
+          </div>
 
-            {/* Login Google */}
-            <Button
-              type="button"
-              onClick={loginWithGoogle}
-              variant="outlined"
-              className="flex items-center justify-center w-full gap-2 rounded-lg"
-            >
-              <img
-                src="https://docs.material-tailwind.com/icons/google.svg"
-                alt="google"
-                className="w-4 h-4"
-              />
-              Đăng nhập bằng Google
-            </Button>
-          </form>
+          {/* Google Login */}
+          <Button
+            type="button"
+            onClick={loginWithGoogle}
+            variant="outlined"
+            className="flex items-center justify-center w-full gap-2 py-3 text-gray-700 transition-colors border-gray-300 rounded-lg hover:bg-gray-50"
+          >
+            <img
+              src="https://docs.material-tailwind.com/icons/google.svg"
+              alt="google"
+              className="w-5 h-5"
+            />
+            Đăng nhập bằng Google
+          </Button>
+        </form>
 
-          {/* Register link */}
-          <p className="text-center text-gray text-[13px] mt-7">
-            Bạn chưa có tài khoản?{" "}
-            <Link
-              to="/register"
-              className="text-blue-400 underline transition-colors hover:text-yellow-dark"
-            >
-              Đăng ký tại đây
-            </Link>
-          </p>
-        </div>
+        {/* Registration Link */}
+        <p className="mt-8 text-sm text-center text-gray-500">
+          Bạn chưa có tài khoản?{" "}
+          <Link
+            to="/register"
+            className="font-medium text-blue-500 transition-colors hover:text-blue-600"
+          >
+            Đăng ký tại đây
+          </Link>
+        </p>
       </div>
     </div>
   );
